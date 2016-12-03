@@ -1,0 +1,12 @@
+{
+  "name": "admin",
+  "version": "0.0.1",
+  "description": "gamma admin",
+  "main": "index.js",
+  "repository": "https://github.com/hypergamma/admin.git",
+  "author": "cacaocake",
+  "license": "None",
+  "dependencies": {
+    "express": "^4.14.0"
+  }
+}

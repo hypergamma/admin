@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 
 function NavItem(props) {
-  const { name, params, options, router, navigateTo, children } = props;
+  const { name, params, options, router, navigateTo, children, setTitle, title } = props;
   const href = "#"; //router.buildUrl(name, params);
   const onClick = (evt) => {
     evt.preventDefault();
-    navigateTo(name, params, options)
+    navigateTo(name, params, options);
+    setTitle(title);
   };
   const className = 'nav-link';
 

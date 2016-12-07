@@ -29,7 +29,7 @@ class Compose extends Component {
     }
 
     render() {
-        const { title, message, error, updateTitle, updateMessage } = this.props
+        const { title, message, error, updateTitle, updateMessage } = this.props;
         this.router.canDeactivate('compose', !title && !message);
 
         return (

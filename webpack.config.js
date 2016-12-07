@@ -18,7 +18,7 @@ module.exports = {
         loader: 'babel',
         query:
         {
-          presets:['es2015','react', 'stage-2']
+          presets:['es2015','react', 'stage-1', 'stage-2']
         }
       }
     ]
@@ -33,7 +33,7 @@ module.exports = {
   },
   plugins: [
     // 압축하는 겁니다.
-    // new webpack.optimize.UglifyJsPlugin({minimize: true}),
+    // new webpack.optimize.UglifyJsPlugin({minimize: true})
     // new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'})
   ]
 };

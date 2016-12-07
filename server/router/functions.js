@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var func = require('../db/func');
+var func = require('../mariadb/func');
 var file = require('../file/file');
 
 router.post('/create', function (req, res) {

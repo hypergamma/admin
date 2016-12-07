@@ -15,6 +15,7 @@
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
     "generic-pool": "^3.1.4",
+    "influx": "^5.0.3",
     "mariasql": "^0.2.6",
     "react": "^15.4.1",
     "react-dom": "^15.4.1",

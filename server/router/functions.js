@@ -5,6 +5,7 @@ var file = require('../file/file');
 
 router.post('/create', function (req, res) {
   var body = req.body;
+  
   file.writeFunc(body, function(path) {
     body.path = path;
     func.addFunc(body, function(){

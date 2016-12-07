@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { createSelector } from 'reselect';
 import { setTitle } from '../../actions/breadcrumb';
-import Line from './ReactGraphLine';
+import Line from '../graph/Line';
 
 
 const reducerSelector = createSelector(

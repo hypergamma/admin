@@ -5823,9 +5823,9 @@
 
 	var _breadcrumb = __webpack_require__(52);
 
-	var _ReactGraphLine = __webpack_require__(64);
+	var _Line = __webpack_require__(64);
 
-	var _ReactGraphLine2 = _interopRequireDefault(_ReactGraphLine);
+	var _Line2 = _interopRequireDefault(_Line);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -5888,7 +5888,7 @@
 	              _react2.default.createElement(
 	                'div',
 	                { className: 'chart-wrapper' },
-	                _react2.default.createElement(_ReactGraphLine2.default, null)
+	                _react2.default.createElement(_Line2.default, null)
 	              )
 	            )
 	          )

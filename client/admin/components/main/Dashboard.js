@@ -39,6 +39,9 @@ class Dashboard extends Component {
       <div className="row">
         <div className="col-md-8">
           <div className="card">
+            <div className="card-header">
+              <strong>UserName</strong> Function
+            </div>
             <div className="card-block">
               <div className="chart-wrapper">
                 <Line />

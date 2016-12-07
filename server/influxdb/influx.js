@@ -11,15 +11,16 @@ influx.schema = [
     fields: {
       num_invokes: Influx.FieldType.INTEGER,
       num_errors: Influx.FieldType.INTEGER,
-      latency: Influx.FieldType.FLOAT
+      latency: Influx.FieldType.FLOAT,
+      cpu_usage_percent: Influx.FieldType.FLOAT,
+      mem_usage_bytes: Influx.FieldType.INTEGER
     },
     tags: [
-      'funcname',
+      'nfunc',
+      'nuser',
       'host'
     ]
   }
 ];
-
-module.exports = influx;
 
 module.exports = influx;

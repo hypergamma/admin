@@ -46,6 +46,10 @@
 
 	'use strict';
 
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
@@ -58,21 +62,25 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _App = __webpack_require__(40);
+	var _App = __webpack_require__(78);
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _createRouter = __webpack_require__(61);
+	var _createRouter = __webpack_require__(41);
 
 	var _createRouter2 = _interopRequireDefault(_createRouter);
 
-	var _store = __webpack_require__(83);
+	var _store = __webpack_require__(91);
 
 	var _store2 = _interopRequireDefault(_store);
 
+	var _routes = __webpack_require__(95);
+
+	var _routes2 = _interopRequireDefault(_routes);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var router = (0, _createRouter2.default)();
+	var router = (0, _createRouter2.default)(_routes2.default);
 	var store = (0, _store2.default)(router);
 	var wrappedApp = _react2.default.createElement(
 	    _reactRedux.Provider,
@@ -87,6 +95,8 @@
 	router.start(function (err, state) {
 	    _reactDom2.default.render(wrappedApp, document.getElementById('app'));
 	});
+
+	exports.default = wrappedApp;
 
 /***/ },
 /* 1 */
@@ -2646,135 +2656,52 @@
 	module.exports = ReactDOM;
 
 /***/ },
-/* 40 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = App;
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _Nav = __webpack_require__(41);
-
-	var _Nav2 = _interopRequireDefault(_Nav);
-
-	var _Main = __webpack_require__(51);
-
-	var _Main2 = _interopRequireDefault(_Main);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function App(props) {
-	    return _react2.default.createElement(
-	        'div',
-	        { className: 'mail-client' },
-	        _react2.default.createElement(
-	            'aside',
-	            null,
-	            _react2.default.createElement(_Nav2.default, null)
-	        ),
-	        _react2.default.createElement(
-	            'main',
-	            null,
-	            _react2.default.createElement(_Main2.default, null)
-	        )
-	    );
-	}
-
-/***/ },
+/* 40 */,
 /* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
+	exports.default = configureRouter;
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	var _router = __webpack_require__(42);
 
-	var _react = __webpack_require__(1);
+	var _router2 = _interopRequireDefault(_router);
 
-	var _react2 = _interopRequireDefault(_react);
+	var _logger = __webpack_require__(58);
 
-	var _Link = __webpack_require__(42);
+	var _logger2 = _interopRequireDefault(_logger);
 
-	var _Link2 = _interopRequireDefault(_Link);
+	var _listeners = __webpack_require__(59);
 
-	var _reactRedux = __webpack_require__(2);
+	var _listeners2 = _interopRequireDefault(_listeners);
 
-	var _redux = __webpack_require__(10);
+	var _browser = __webpack_require__(60);
 
-	var _reduxRouter = __webpack_require__(43);
+	var _browser2 = _interopRequireDefault(_browser);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function configureRouter(routes) {
+	  var useListenersPlugin = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
 
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	  var router = (0, _router2.default)(routes.routes, {
+	    defaultRoute: routes.defaultRoute
+	  })
+	  // Plugins
+	  .usePlugin(_logger2.default).usePlugin((0, _browser2.default)({
+	    useHash: true
+	  }));
 
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	  if (useListenersPlugin) {
+	    router.usePlugin((0, _listeners2.default)());
+	  }
 
-	var Nav = function (_Component) {
-	    _inherits(Nav, _Component);
-
-	    function Nav(props, context) {
-	        _classCallCheck(this, Nav);
-
-	        var _this = _possibleConstructorReturn(this, (Nav.__proto__ || Object.getPrototypeOf(Nav)).call(this, props));
-
-	        _this.router = context.router;
-	        return _this;
-	    }
-
-	    _createClass(Nav, [{
-	        key: 'render',
-	        value: function render() {
-	            var _props = this.props,
-	                navigateTo = _props.navigateTo,
-	                route = _props.route;
-
-
-	            return _react2.default.createElement(
-	                'nav',
-	                null,
-	                _react2.default.createElement(
-	                    _Link2.default,
-	                    { router: this.router, navigateTo: navigateTo, name: 'inbox', options: { reload: true } },
-	                    'Inbox'
-	                ),
-	                _react2.default.createElement(
-	                    _Link2.default,
-	                    { router: this.router, navigateTo: navigateTo, name: 'compose' },
-	                    'Compose'
-	                ),
-	                _react2.default.createElement(
-	                    _Link2.default,
-	                    { router: this.router, navigateTo: navigateTo, name: 'contacts' },
-	                    'Contacts'
-	                )
-	            );
-	        }
-	    }]);
-
-	    return Nav;
-	}(_react.Component);
-
-	Nav.contextTypes = {
-	    router: _react.PropTypes.object.isRequired
-	};
-
-	exports.default = (0, _reactRedux.connect)(function (state) {
-	    return state.router.route;
-	}, function (dispatch) {
-	    return (0, _redux.bindActionCreators)({ navigateTo: _reduxRouter.actions.navigateTo }, dispatch);
-	})(Nav);
+	  return router;
+	}
 
 /***/ },
 /* 42 */
@@ -2785,361 +2712,42 @@
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+	exports.constants = exports.transitionPath = exports.errorCodes = exports.loggerPlugin = exports.RouteNode = exports.createRouter = undefined;
 
-	var _react = __webpack_require__(1);
+	var _createRouter = __webpack_require__(43);
 
-	var _react2 = _interopRequireDefault(_react);
+	var _createRouter2 = _interopRequireDefault(_createRouter);
 
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	var _routeNode = __webpack_require__(44);
 
-	function Link(props) {
-	    var name = props.name,
-	        params = props.params,
-	        options = props.options,
-	        router = props.router,
-	        navigateTo = props.navigateTo;
+	var _routeNode2 = _interopRequireDefault(_routeNode);
 
+	var _logger = __webpack_require__(58);
 
-	    var href = router.buildUrl(name, params);
-	    var onClick = function onClick(evt) {
-	        evt.preventDefault();
-	        navigateTo(name, params, options);
-	    };
-	    var className = router.isActive(name, params) ? 'active' : '';
+	var _logger2 = _interopRequireDefault(_logger);
 
-	    return _react2.default.createElement(
-	        'a',
-	        { href: href, onClick: onClick, className: className },
-	        props.children
-	    );
+	var _router = __webpack_require__(52);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
 	}
 
-	Link.propTypes = {
-	    name: _react.PropTypes.string.isRequired,
-	    params: _react.PropTypes.object,
-	    options: _react.PropTypes.object,
-	    navigateTo: _react.PropTypes.func.isRequired
-	};
-
-	Link.defaultProps = {
-	    params: {},
-	    options: {}
-	};
-
-	exports.default = Link;
+	exports.default = _createRouter2.default;
+	exports.createRouter = _createRouter2.default;
+	exports.RouteNode = _routeNode2.default;
+	exports.loggerPlugin = _logger2.default;
+	exports.errorCodes = _constants.errorCodes;
+	exports.transitionPath = _router2.default;
+	exports.constants = _constants2.default;
 
 /***/ },
 /* 43 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.reduxPlugin = exports.routeNodeSelector = exports.actionTypes = exports.actions = exports.router5Reducer = exports.router5Middleware = undefined;
-
-	var _router5Middleware = __webpack_require__(44);
-
-	var _router5Middleware2 = _interopRequireDefault(_router5Middleware);
-
-	var _router5Reducer = __webpack_require__(48);
-
-	var _router5Reducer2 = _interopRequireDefault(_router5Reducer);
-
-	var _routeNodeSelector = __webpack_require__(49);
-
-	var _routeNodeSelector2 = _interopRequireDefault(_routeNodeSelector);
-
-	var _actions = __webpack_require__(47);
-
-	var actions = _interopRequireWildcard(_actions);
-
-	var _actionTypes = __webpack_require__(45);
-
-	var actionTypes = _interopRequireWildcard(_actionTypes);
-
-	var _reduxPlugin = __webpack_require__(46);
-
-	var _reduxPlugin2 = _interopRequireDefault(_reduxPlugin);
-
-	function _interopRequireWildcard(obj) {
-	    if (obj && obj.__esModule) {
-	        return obj;
-	    } else {
-	        var newObj = {};if (obj != null) {
-	            for (var key in obj) {
-	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	            }
-	        }newObj.default = obj;return newObj;
-	    }
-	}
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	exports.router5Middleware = _router5Middleware2.default;
-	exports.router5Reducer = _router5Reducer2.default;
-	exports.actions = actions;
-	exports.actionTypes = actionTypes;
-	exports.routeNodeSelector = _routeNodeSelector2.default;
-	exports.reduxPlugin = _reduxPlugin2.default;
-
-/***/ },
-/* 44 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _actionTypes = __webpack_require__(45);
-
-	var actionTypes = _interopRequireWildcard(_actionTypes);
-
-	var _reduxPlugin = __webpack_require__(46);
-
-	var _reduxPlugin2 = _interopRequireDefault(_reduxPlugin);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _interopRequireWildcard(obj) {
-	    if (obj && obj.__esModule) {
-	        return obj;
-	    } else {
-	        var newObj = {};if (obj != null) {
-	            for (var key in obj) {
-	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	            }
-	        }newObj.default = obj;return newObj;
-	    }
-	}
-
-	var router5ReduxMiddleware = function router5ReduxMiddleware(router) {
-	    return function (store) {
-	        var dispatch = store.dispatch;
-
-	        router.setDependency('store', store);
-	        router.usePlugin((0, _reduxPlugin2.default)(dispatch));
-
-	        return function (next) {
-	            return function (action) {
-	                switch (action.type) {
-	                    case actionTypes.NAVIGATE_TO:
-	                        var _action$payload = action.payload;
-	                        var name = _action$payload.name;
-	                        var params = _action$payload.params;
-	                        var opts = _action$payload.opts;
-
-	                        router.navigate(name, params, opts);
-	                        break;
-
-	                    case actionTypes.CANCEL_TRANSITION:
-	                        router.cancel();
-	                        break;
-
-	                    case actionTypes.CAN_DEACTIVATE:
-	                        router.canDeactivate(action.payload.name, action.payload.canDeactivate);
-	                        break;
-
-	                    case actionTypes.CAN_ACTIVATE:
-	                        router.canActivate(action.payload.name, action.payload.canDeactivate);
-	                        break;
-
-	                    default:
-	                        return next(action);
-	                }
-	            };
-	        };
-	    };
-	};
-
-	exports.default = router5ReduxMiddleware;
-
-/***/ },
-/* 45 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var NAVIGATE_TO = exports.NAVIGATE_TO = '@@router5/NAVIGATE';
-	var CANCEL_TRANSITION = exports.CANCEL_TRANSITION = '@@router5/CANCEL';
-	var TRANSITION_ERROR = exports.TRANSITION_ERROR = '@@router5/TRANSITION_ERROR';
-	var TRANSITION_SUCCESS = exports.TRANSITION_SUCCESS = '@@router5/TRANSITION_SUCCESS';
-	var TRANSITION_START = exports.TRANSITION_START = '@@router5/TRANSITION_START';
-	var CLEAR_ERRORS = exports.CLEAR_ERRORS = '@@router5/CLEAR_ERRORS';
-	var CAN_DEACTIVATE = exports.CAN_DEACTIVATE = '@@router5/CAN_DEACTIVATE';
-	var CAN_ACTIVATE = exports.CAN_ACTIVATE = '@@router5/CAN_ACTIVATE';
-
-/***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _actions = __webpack_require__(47);
-
-	var actions = _interopRequireWildcard(_actions);
-
-	function _interopRequireWildcard(obj) {
-	    if (obj && obj.__esModule) {
-	        return obj;
-	    } else {
-	        var newObj = {};if (obj != null) {
-	            for (var key in obj) {
-	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	            }
-	        }newObj.default = obj;return newObj;
-	    }
-	}
-
-	function reduxPluginFactory(dispatch) {
-	    function reduxPlugin() {
-	        return {
-	            onTransitionStart: function onTransitionStart(toState, fromState) {
-	                dispatch(actions.transitionStart(toState, fromState));
-	            },
-	            onTransitionSuccess: function onTransitionSuccess(toState, fromState) {
-	                dispatch(actions.transitionSuccess(toState, fromState));
-	            },
-	            onTransitionError: function onTransitionError(toState, fromState, err) {
-	                dispatch(actions.transitionError(toState, fromState, err));
-	            }
-	        };
-	    };
-
-	    reduxPlugin.pluginName = 'REDUX_PLUGIN';
-
-	    return reduxPlugin;
-	}
-
-	exports.default = reduxPluginFactory;
-
-/***/ },
-/* 47 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.navigateTo = navigateTo;
-	exports.cancelTransition = cancelTransition;
-	exports.clearErrors = clearErrors;
-	exports.transitionStart = transitionStart;
-	exports.transitionSuccess = transitionSuccess;
-	exports.transitionError = transitionError;
-	exports.canActivate = canActivate;
-	exports.canDeactivate = canDeactivate;
-
-	var _actionTypes = __webpack_require__(45);
-
-	var actionTypes = _interopRequireWildcard(_actionTypes);
-
-	function _interopRequireWildcard(obj) {
-	    if (obj && obj.__esModule) {
-	        return obj;
-	    } else {
-	        var newObj = {};if (obj != null) {
-	            for (var key in obj) {
-	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	            }
-	        }newObj.default = obj;return newObj;
-	    }
-	}
-
-	function navigateTo(name) {
-	    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	    var opts = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-	    return {
-	        type: actionTypes.NAVIGATE_TO,
-	        payload: {
-	            name: name,
-	            params: params,
-	            opts: opts
-	        }
-	    };
-	}
-
-	function cancelTransition() {
-	    return {
-	        type: actionTypes.CANCEL_TRANSITION
-	    };
-	}
-
-	function clearErrors() {
-	    return {
-	        type: actionTypes.CLEAR_ERRORS
-	    };
-	}
-
-	function transitionStart(route, previousRoute) {
-	    return {
-	        type: actionTypes.TRANSITION_START,
-	        payload: {
-	            route: route,
-	            previousRoute: previousRoute
-	        }
-	    };
-	}
-
-	function transitionSuccess(route, previousRoute) {
-	    return {
-	        type: actionTypes.TRANSITION_SUCCESS,
-	        payload: {
-	            route: route,
-	            previousRoute: previousRoute
-	        }
-	    };
-	}
-
-	function transitionError(route, previousRoute, transitionError) {
-	    return {
-	        type: actionTypes.TRANSITION_ERROR,
-	        payload: {
-	            route: route,
-	            previousRoute: previousRoute,
-	            transitionError: transitionError
-	        }
-	    };
-	}
-
-	function canActivate(name, canActivate) {
-	    return {
-	        type: actionTypes.CAN_ACTIVATE,
-	        payload: {
-	            name: name,
-	            canActivate: canActivate
-	        }
-	    };
-	}
-
-	function canDeactivate(name, canDeactivate) {
-	    return {
-	        type: actionTypes.CAN_DEACTIVATE,
-	        payload: {
-	            name: name,
-	            canDeactivate: canDeactivate
-	        }
-	    };
-	}
-
-/***/ },
-/* 48 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3158,69 +2766,838 @@
 	    }return target;
 	};
 
-	var _actionTypes = __webpack_require__(45);
+	var _routeNode = __webpack_require__(44);
 
-	var actionTypes = _interopRequireWildcard(_actionTypes);
+	var _routeNode2 = _interopRequireDefault(_routeNode);
 
-	function _interopRequireWildcard(obj) {
-	    if (obj && obj.__esModule) {
-	        return obj;
+	var _utils = __webpack_require__(47);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	var _routerLifecycle = __webpack_require__(49);
+
+	var _routerLifecycle2 = _interopRequireDefault(_routerLifecycle);
+
+	var _navigation = __webpack_require__(50);
+
+	var _navigation2 = _interopRequireDefault(_navigation);
+
+	var _middleware = __webpack_require__(54);
+
+	var _middleware2 = _interopRequireDefault(_middleware);
+
+	var _plugins = __webpack_require__(55);
+
+	var _plugins2 = _interopRequireDefault(_plugins);
+
+	var _routeLifecycle = __webpack_require__(56);
+
+	var _routeLifecycle2 = _interopRequireDefault(_routeLifecycle);
+
+	var _clone = __webpack_require__(57);
+
+	var _clone2 = _interopRequireDefault(_clone);
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _toConsumableArray(arr) {
+	    if (Array.isArray(arr)) {
+	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	            arr2[i] = arr[i];
+	        }return arr2;
 	    } else {
-	        var newObj = {};if (obj != null) {
-	            for (var key in obj) {
-	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	            }
-	        }newObj.default = obj;return newObj;
+	        return Array.from(arr);
 	    }
 	}
 
-	var initialState = {
-	    route: null,
-	    previousRoute: null,
-	    transitionRoute: null,
-	    transitionError: null
+	var defaultOptions = {
+	    trailingSlash: 0,
+	    useTrailingSlash: undefined,
+	    autoCleanUp: true,
+	    strictQueryParams: true,
+	    allowNotFound: false,
+	    strongMatching: true
 	};
 
-	function router5Reducer() {
-	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
-	    var action = arguments[1];
+	/**
+	 * Create a router
+	 * @param  {Array}  [routes]          The routes
+	 * @param  {Object} [options={}]      The router options
+	 * @param  {Object} [dependencies={}] The router dependencies
+	 * @return {Object}                   The router instance
+	 */
+	function createRouter(routes) {
+	    var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	    var deps = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
-	    switch (action.type) {
-	        case actionTypes.TRANSITION_START:
-	            return _extends({}, state, {
-	                transitionRoute: action.payload.route,
-	                transitionError: null
-	            });
+	    var routerState = null;
+	    var callbacks = {};
+	    var dependencies = deps;
+	    var options = _extends({}, defaultOptions);
 
-	        case actionTypes.TRANSITION_SUCCESS:
-	            return _extends({}, state, {
-	                transitionRoute: null,
-	                transitionError: null,
-	                previousRoute: action.payload.previousRoute,
-	                route: action.payload.route
-	            });
+	    Object.keys(opts).forEach(function (opt) {
+	        return setOption(opt, opts[opt]);
+	    });
 
-	        case actionTypes.TRANSITION_ERROR:
-	            return _extends({}, state, {
-	                transitionRoute: action.payload.route,
-	                transitionError: action.payload.transitionError
-	            });
+	    var router = {
+	        rootNode: rootNode,
+	        getOptions: getOptions,
+	        setOption: setOption,
+	        getState: getState,
+	        setState: setState,
+	        makeState: makeState,
+	        makeNotFoundState: makeNotFoundState,
+	        setDependency: setDependency,
+	        setDependencies: setDependencies,
+	        getDependencies: getDependencies,
+	        add: add,
+	        addNode: addNode,
+	        executeFactory: executeFactory,
+	        addEventListener: addEventListener,
+	        removeEventListener: removeEventListener,
+	        invokeEventListeners: invokeEventListeners
+	    };
 
-	        case actionTypes.CLEAR_ERRORS:
-	            return _extends({}, state, {
-	                transitionRoute: null,
-	                transitionError: null
-	            });
+	    /**
+	     * Invoke all event listeners by event name. Possible event names are listed under constants
+	     * (`import { constants } from 'router5'`): `ROUTER_START`, `ROUTER_STOP`, `TRANSITION_START`,
+	     * `TRANSITION_CANCEL`, `TRANSITION_SUCCESS`, `TRANSITION_ERROR`.
+	     * This method is used internally and should not be invoked directly, but it can be useful for
+	     * testing purposes.
+	     * @private
+	     * @name invokeEventListeners
+	     * @param  {String}    eventName The event name
+	     */
+	    function invokeEventListeners(eventName) {
+	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+	            args[_key - 1] = arguments[_key];
+	        }
 
-	        default:
-	            return state;
+	        (callbacks[eventName] || []).forEach(function (cb) {
+	            return cb.apply(undefined, args);
+	        });
+	    }
+
+	    /**
+	     * Removes an event listener
+	     * @private
+	     * @param  {String}   eventName The event name
+	     * @param  {Function} cb        The callback to remove
+	     */
+	    function removeEventListener(eventName, cb) {
+	        callbacks[eventName] = callbacks[eventName].filter(function (_cb) {
+	            return _cb !== cb;
+	        });
+	    }
+
+	    /**
+	     * Add an event listener
+	     * @private
+	     * @param {String}   eventName The event name
+	     * @param {Function} cb        The callback to add
+	     */
+	    function addEventListener(eventName, cb) {
+	        callbacks[eventName] = (callbacks[eventName] || []).concat(cb);
+
+	        return function () {
+	            return removeEventListener(eventName, cb);
+	        };
+	    }
+
+	    (0, _utils2.default)(router);
+	    (0, _plugins2.default)(router);
+	    (0, _middleware2.default)(router);
+	    (0, _routeLifecycle2.default)(router);
+	    (0, _routerLifecycle2.default)(router);
+	    (0, _navigation2.default)(router);
+	    (0, _clone2.default)(router, createRouter);
+
+	    var rootNode = routes instanceof _routeNode2.default ? routes : new _routeNode2.default('', '', routes, addCanActivate);
+
+	    router.rootNode = rootNode;
+
+	    return router;
+
+	    function addCanActivate(route) {
+	        if (route.canActivate) router.canActivate(route.name, route.canActivate);
+	    }
+
+	    /**
+	     * Build a state object
+	     * @param  {String} name         The state name
+	     * @param  {Object} params       The state params
+	     * @param  {String} path         The state path
+	     * @param  {Object} [metaParams] Description of the state params
+	     * @param  {String} [source]     The source of the routing state
+	     * @return {Object}              The state object
+	     */
+	    function makeState(name, params, path, metaParams, source) {
+	        var state = {};
+	        var setProp = function setProp(key, value) {
+	            return Object.defineProperty(state, key, { value: value, enumerable: true });
+	        };
+	        setProp('name', name);
+	        setProp('params', params);
+	        setProp('path', path);
+	        if (metaParams || source) {
+	            var meta = { params: metaParams };
+
+	            if (source) meta.source = source;
+
+	            setProp('meta', meta);
+	        }
+	        return state;
+	    }
+
+	    /**
+	     * Build a not found state for a given path
+	     * @param  {String} path The unmatched path
+	     * @return {Object}      The not found state object
+	     */
+	    function makeNotFoundState(path) {
+	        return makeState(_constants2.default.UNKNOWN_ROUTE, { path: path }, path, {});
+	    }
+
+	    /**
+	     * Get the current router state
+	     * @return {Object} The current state
+	     */
+	    function getState() {
+	        return routerState;
+	    }
+
+	    /**
+	     * Set the current router state
+	     * @param {Object} state The state object
+	     */
+	    function setState(state) {
+	        routerState = state;
+	    }
+
+	    /**
+	     * Get router options
+	     * @return {Object} The router options
+	     */
+	    function getOptions() {
+	        return options;
+	    }
+
+	    /**
+	     * Set an option
+	     * @param  {String} option The option name
+	     * @param  {*}      value  The option value
+	     * @return {Object}       The router instance
+	     */
+	    function setOption(option, value) {
+	        if (option === 'useTrailingSlash' && value !== undefined) {
+	            options.trailingSlash = true;
+	        }
+	        options[option] = value;
+	        return router;
+	    }
+
+	    /**
+	     * Set a router dependency
+	     * @param  {String} dependencyName The dependency name
+	     * @param  {*}      dependency     The dependency
+	     * @return {Object}                The router instance
+	     */
+	    function setDependency(dependencyName, dependency) {
+	        dependencies[dependencyName] = dependency;
+	        return router;
+	    }
+
+	    /**
+	     * Add dependencies
+	     * @param { Object} deps A object of dependencies (key-value pairs)
+	     * @return {Object}      The router instance
+	     */
+	    function setDependencies(deps) {
+	        Object.keys(deps).forEach(function (depName) {
+	            dependencies[depName] = deps[depName];
+	        });
+
+	        return router;
+	    }
+
+	    /**
+	     * Get dependencies
+	     * @return {Object} The dependencies
+	     */
+	    function getDependencies() {
+	        return dependencies;
+	    }
+
+	    function getInjectables() {
+	        return [router, getDependencies()];
+	    }
+
+	    function executeFactory(factoryFunction) {
+	        return factoryFunction.apply(undefined, _toConsumableArray(getInjectables()));
+	    }
+
+	    /**
+	     * Add routes
+	     * @param  {Array} routes A list of routes to add
+	     * @return {Object}       The router instance
+	     */
+	    function add(routes) {
+	        rootNode.add(routes, addCanActivate);
+	        return router;
+	    }
+
+	    /**
+	     * Add a single route (node)
+	     * @param {String} name                   The route name (full name)
+	     * @param {String} path                   The route path (from parent)
+	     * @param {Function} [canActivateHandler] The canActivate handler for this node
+	     */
+	    function addNode(name, path, canActivateHandler) {
+	        router.rootNode.addNode(name, path);
+	        if (canActivateHandler) router.canActivate(name, canActivateHandler);
+	        return router;
 	    }
 	}
 
-	exports.default = router5Reducer;
+	exports.default = createRouter;
 
 /***/ },
-/* 49 */
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	var _createClass = function () {
+	    function defineProperties(target, props) {
+	        for (var i = 0; i < props.length; i++) {
+	            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	        }
+	    }return function (Constructor, protoProps, staticProps) {
+	        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	    };
+	}();
+
+	var _pathParser = __webpack_require__(45);
+
+	var _pathParser2 = _interopRequireDefault(_pathParser);
+
+	var _searchParams = __webpack_require__(46);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _toConsumableArray(arr) {
+	    if (Array.isArray(arr)) {
+	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	            arr2[i] = arr[i];
+	        }return arr2;
+	    } else {
+	        return Array.from(arr);
+	    }
+	}
+
+	function _classCallCheck(instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	        throw new TypeError("Cannot call a class as a function");
+	    }
+	}
+
+	var noop = function noop() {};
+
+	var RouteNode = function () {
+	    function RouteNode() {
+	        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+	        var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+	        var childRoutes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
+	        var cb = arguments[3];
+	        var parent = arguments[4];
+
+	        _classCallCheck(this, RouteNode);
+
+	        this.name = name;
+	        this.absolute = /^~/.test(path);
+	        this.path = this.absolute ? path.slice(1) : path;
+	        this.parser = this.path ? new _pathParser2.default(this.path) : null;
+	        this.children = [];
+	        this.parent = parent;
+
+	        this.checkParents();
+
+	        this.add(childRoutes, cb);
+
+	        return this;
+	    }
+
+	    _createClass(RouteNode, [{
+	        key: 'checkParents',
+	        value: function checkParents() {
+	            if (this.absolute && this.haveParentsParams()) {
+	                throw new Error('[RouteNode] A RouteNode with an abolute path cannot have parents with route parameters');
+	            }
+	        }
+	    }, {
+	        key: 'haveParentsParams',
+	        value: function haveParentsParams() {
+	            if (this.parent && this.parent.parser) {
+	                var parser = this.parent.parser;
+	                var hasParams = parser.hasUrlParams || parser.hasSpatParam || parser.hasMatrixParams || parser.hasQueryParams;
+
+	                return hasParams || this.parent.haveParentsParams();
+	            }
+
+	            return false;
+	        }
+	    }, {
+	        key: 'getNonAbsoluteChildren',
+	        value: function getNonAbsoluteChildren() {
+	            return this.children.filter(function (child) {
+	                return !child.absolute;
+	            });
+	        }
+	    }, {
+	        key: 'findAbsoluteChildren',
+	        value: function findAbsoluteChildren() {
+	            return this.children.reduce(function (absoluteChildren, child) {
+	                return absoluteChildren.concat(child.absolute ? child : []).concat(child.findAbsoluteChildren());
+	            }, []);
+	        }
+	    }, {
+	        key: 'findSlashChild',
+	        value: function findSlashChild() {
+	            var slashChildren = this.getNonAbsoluteChildren().filter(function (child) {
+	                return child.parser && /^\/(\?|$)/.test(child.parser.path);
+	            });
+
+	            return slashChildren[0];
+	        }
+	    }, {
+	        key: 'getParentSegments',
+	        value: function getParentSegments() {
+	            var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+
+	            return this.parent && this.parent.parser ? this.parent.getParentSegments(segments.concat(this.parent)) : segments.reverse();
+	        }
+	    }, {
+	        key: 'setParent',
+	        value: function setParent(parent) {
+	            this.parent = parent;
+	            this.checkParents();
+	        }
+	    }, {
+	        key: 'setPath',
+	        value: function setPath() {
+	            var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+
+	            this.path = path;
+	            this.parser = path ? new _pathParser2.default(path) : null;
+	        }
+	    }, {
+	        key: 'add',
+	        value: function add(route) {
+	            var _this = this;
+
+	            var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
+
+	            var originalRoute = void 0;
+	            if (route === undefined || route === null) return;
+
+	            if (route instanceof Array) {
+	                route.forEach(function (r) {
+	                    return _this.add(r, cb);
+	                });
+	                return;
+	            }
+
+	            if (!(route instanceof RouteNode) && !(route instanceof Object)) {
+	                throw new Error('RouteNode.add() expects routes to be an Object or an instance of RouteNode.');
+	            } else if (route instanceof RouteNode) {
+	                route.setParent(this);
+	            } else {
+	                if (!route.name || !route.path) {
+	                    throw new Error('RouteNode.add() expects routes to have a name and a path defined.');
+	                }
+	                originalRoute = route;
+	                route = new RouteNode(route.name, route.path, route.children, cb, this);
+	            }
+
+	            var names = route.name.split('.');
+
+	            if (names.length === 1) {
+	                // Check duplicated routes
+	                if (this.children.map(function (child) {
+	                    return child.name;
+	                }).indexOf(route.name) !== -1) {
+	                    throw new Error('Alias "' + route.name + '" is already defined in route node');
+	                }
+
+	                // Check duplicated paths
+	                if (this.children.map(function (child) {
+	                    return child.path;
+	                }).indexOf(route.path) !== -1) {
+	                    throw new Error('Path "' + route.path + '" is already defined in route node');
+	                }
+
+	                this.children.push(route);
+	                // Push greedy spats to the bottom of the pile
+	                this.children.sort(function (left, right) {
+	                    var leftPath = left.path.split('?')[0].replace(/(.+)\/$/, '$1');
+	                    var rightPath = right.path.split('?')[0].replace(/(.+)\/$/, '$1');
+	                    // '/' last
+	                    if (leftPath === '/') return 1;
+	                    if (rightPath === '/') return -1;
+	                    // Spat params last
+	                    if (left.parser.hasSpatParam) return 1;
+	                    if (right.parser.hasSpatParam) return -1;
+	                    // No spat, number of segments (less segments last)
+	                    var leftSegments = (leftPath.match(/\//g) || []).length;
+	                    var rightSegments = (rightPath.match(/\//g) || []).length;
+	                    if (leftSegments < rightSegments) return 1;
+	                    if (leftSegments > rightSegments) return -1;
+	                    // Same number of segments, number of URL params ascending
+	                    var leftParamsCount = left.parser.urlParams.length;
+	                    var rightParamsCount = right.parser.urlParams.length;
+	                    if (leftParamsCount < rightParamsCount) return -1;
+	                    if (leftParamsCount > rightParamsCount) return 1;
+	                    // Same number of segments and params, last segment length descending
+	                    var leftParamLength = (leftPath.split('/').slice(-1)[0] || '').length;
+	                    var rightParamLength = (rightPath.split('/').slice(-1)[0] || '').length;
+	                    if (leftParamLength < rightParamLength) return 1;
+	                    if (leftParamLength > rightParamLength) return -1;
+	                    // Same last segment length, preserve definition order
+	                    return 0;
+	                });
+	            } else {
+	                // Locate parent node
+	                var segments = this.getSegmentsByName(names.slice(0, -1).join('.'));
+	                if (segments) {
+	                    segments[segments.length - 1].add(new RouteNode(names[names.length - 1], route.path, route.children));
+	                } else {
+	                    throw new Error('Could not add route named \'' + route.name + '\', parent is missing.');
+	                }
+	            }
+
+	            if (originalRoute) cb(originalRoute);
+
+	            return this;
+	        }
+	    }, {
+	        key: 'addNode',
+	        value: function addNode(name, params) {
+	            this.add(new RouteNode(name, params));
+	            return this;
+	        }
+	    }, {
+	        key: 'getSegmentsByName',
+	        value: function getSegmentsByName(routeName) {
+	            var findSegmentByName = function findSegmentByName(name, routes) {
+	                var filteredRoutes = routes.filter(function (r) {
+	                    return r.name === name;
+	                });
+	                return filteredRoutes.length ? filteredRoutes[0] : undefined;
+	            };
+	            var segments = [];
+	            var routes = this.parser ? [this] : this.children;
+	            var names = (this.parser ? [''] : []).concat(routeName.split('.'));
+
+	            var matched = names.every(function (name) {
+	                var segment = findSegmentByName(name, routes);
+	                if (segment) {
+	                    routes = segment.children;
+	                    segments.push(segment);
+	                    return true;
+	                }
+	                return false;
+	            });
+
+	            return matched ? segments : null;
+	        }
+	    }, {
+	        key: 'getSegmentsMatchingPath',
+	        value: function getSegmentsMatchingPath(path, options) {
+	            var trailingSlash = options.trailingSlash;
+	            var strictQueryParams = options.strictQueryParams;
+	            var strongMatching = options.strongMatching;
+
+	            var matchChildren = function matchChildren(nodes, pathSegment, segments) {
+	                var isRoot = nodes.length === 1 && nodes[0].name === '';
+	                // for (child of node.children) {
+
+	                var _loop = function _loop(i) {
+	                    var child = nodes[i];
+
+	                    // Partially match path
+	                    var match = void 0;
+	                    var remainingPath = void 0;
+
+	                    if (!child.children.length) {
+	                        match = child.parser.test(pathSegment, { trailingSlash: trailingSlash });
+	                    }
+
+	                    if (!match) {
+	                        match = child.parser.partialTest(pathSegment, { delimiter: strongMatching });
+	                    }
+
+	                    if (match) {
+	                        // Remove consumed segment from path
+	                        var consumedPath = child.parser.build(match, { ignoreSearch: true });
+	                        if (trailingSlash && !child.children.length) {
+	                            consumedPath = consumedPath.replace(/\/$/, '');
+	                        }
+	                        remainingPath = pathSegment.replace(consumedPath, '');
+	                        var search = (0, _searchParams.omit)((0, _searchParams.getSearch)(pathSegment.replace(consumedPath, '')), child.parser.queryParams.concat(child.parser.queryParamsBr));
+	                        remainingPath = (0, _searchParams.getPath)(remainingPath) + (search ? '?' + search : '');
+	                        if (trailingSlash && !isRoot && remainingPath === '/' && !/\/$/.test(consumedPath)) {
+	                            remainingPath = '';
+	                        }
+
+	                        segments.push(child);
+	                        Object.keys(match).forEach(function (param) {
+	                            return segments.params[param] = match[param];
+	                        });
+
+	                        if (!isRoot && !remainingPath.length) {
+	                            // fully matched
+	                            return {
+	                                v: segments
+	                            };
+	                        }
+	                        if (!isRoot && !strictQueryParams && remainingPath.indexOf('?') === 0) {
+	                            // unmatched queryParams in non strict mode
+	                            var remainingQueryParams = (0, _searchParams.parse)(remainingPath.slice(1));
+
+	                            remainingQueryParams.forEach(function (_ref) {
+	                                var name = _ref.name;
+	                                var value = _ref.value;
+	                                return segments.params[name] = value;
+	                            });
+	                            return {
+	                                v: segments
+	                            };
+	                        }
+	                        // Continue matching on non absolute children
+	                        var children = child.getNonAbsoluteChildren();
+	                        // If no children to match against but unmatched path left
+	                        if (!children.length) {
+	                            return {
+	                                v: null
+	                            };
+	                        }
+	                        // Else: remaining path and children
+	                        return {
+	                            v: matchChildren(children, remainingPath, segments)
+	                        };
+	                    }
+	                };
+
+	                for (var i = 0; i < nodes.length; i += 1) {
+	                    var _ret = _loop(i);
+
+	                    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	                }
+
+	                return null;
+	            };
+
+	            var topLevelNodes = this.parser ? [this] : this.children;
+	            var startingNodes = topLevelNodes.reduce(function (nodes, node) {
+	                return nodes.concat(node, node.findAbsoluteChildren());
+	            }, []);
+
+	            var segments = [];
+	            segments.params = {};
+
+	            var matched = matchChildren(startingNodes, path, segments);
+	            if (matched && matched.length === 1 && matched[0].name === '') return null;
+	            return matched;
+	        }
+	    }, {
+	        key: 'getPathFromSegments',
+	        value: function getPathFromSegments(segments) {
+	            return segments ? segments.map(function (segment) {
+	                return segment.path;
+	            }).join('') : null;
+	        }
+	    }, {
+	        key: 'getPath',
+	        value: function getPath(routeName) {
+	            return this.getPathFromSegments(this.getSegmentsByName(routeName));
+	        }
+	    }, {
+	        key: 'buildPathFromSegments',
+	        value: function buildPathFromSegments(segments) {
+	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	            if (!segments) return null;
+
+	            var searchParams = segments.filter(function (s) {
+	                return s.parser.hasQueryParams;
+	            }).reduce(function (params, s) {
+	                return params.concat(s.parser.queryParams).concat(s.parser.queryParamsBr.map(function (p) {
+	                    return p + '[]';
+	                }));
+	            }, []);
+
+	            var searchPart = !searchParams.length ? null : searchParams.filter(function (p) {
+	                if (Object.keys(params).indexOf((0, _searchParams.withoutBrackets)(p)) === -1) {
+	                    return false;
+	                }
+
+	                var val = params[(0, _searchParams.withoutBrackets)(p)];
+
+	                return val !== undefined && val !== null;
+	            }).map(function (p) {
+	                var val = params[(0, _searchParams.withoutBrackets)(p)];
+	                var encodedVal = Array.isArray(val) ? val.map(encodeURIComponent) : encodeURIComponent(val);
+
+	                return _pathParser2.default.serialise(p, encodedVal);
+	            }).join('&');
+
+	            var path = segments.reduce(function (path, segment) {
+	                var segmentPath = segment.parser.build(params, { ignoreSearch: true });
+
+	                return segment.absolute ? segmentPath : path + segmentPath;
+	            }, '');
+
+	            return path + (searchPart ? '?' + searchPart : '');
+	        }
+	    }, {
+	        key: 'getMetaFromSegments',
+	        value: function getMetaFromSegments(segments) {
+	            var accName = '';
+
+	            return segments.reduce(function (meta, segment) {
+	                var urlParams = segment.parser.urlParams.reduce(function (params, p) {
+	                    params[p] = 'url';
+	                    return params;
+	                }, {});
+
+	                var allParams = segment.parser.queryParams.reduce(function (params, p) {
+	                    params[p] = 'query';
+	                    return params;
+	                }, urlParams);
+
+	                if (segment.name !== undefined) {
+	                    accName = accName ? accName + '.' + segment.name : segment.name;
+	                    meta[accName] = allParams;
+	                }
+	                return meta;
+	            }, {});
+	        }
+	    }, {
+	        key: 'buildPath',
+	        value: function buildPath(routeName) {
+	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	            var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+
+	            var path = this.buildPathFromSegments(this.getSegmentsByName(routeName), params);
+
+	            if (options.trailingSlash === true) {
+	                return (/\/$/.test(path) ? path : path + '/'
+	                );
+	            } else if (options.trailingSlash === false) {
+	                return (/\/$/.test(path) ? path.slice(0, -1) : path
+	                );
+	            }
+
+	            return path;
+	        }
+	    }, {
+	        key: 'buildStateFromSegments',
+	        value: function buildStateFromSegments(segments) {
+	            if (!segments || !segments.length) return null;
+
+	            var name = segments.map(function (segment) {
+	                return segment.name;
+	            }).filter(function (name) {
+	                return name;
+	            }).join('.');
+	            var params = segments.params;
+
+	            return {
+	                name: name,
+	                params: params,
+	                _meta: this.getMetaFromSegments(segments)
+	            };
+	        }
+	    }, {
+	        key: 'buildState',
+	        value: function buildState(name) {
+	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	            var segments = this.getSegmentsByName(name);
+	            if (!segments || !segments.length) return null;
+
+	            return {
+	                name: name,
+	                params: params,
+	                _meta: this.getMetaFromSegments(segments)
+	            };
+	        }
+	    }, {
+	        key: 'matchPath',
+	        value: function matchPath(path, options) {
+	            var defaultOptions = { trailingSlash: false, strictQueryParams: true, strongMatching: true };
+	            var opts = _extends({}, defaultOptions, options);
+	            var matchedSegments = this.getSegmentsMatchingPath(path, opts);
+
+	            if (matchedSegments) {
+	                if (matchedSegments[0].absolute) {
+	                    var firstSegmentParams = matchedSegments[0].getParentSegments();
+
+	                    matchedSegments.reverse();
+	                    matchedSegments.push.apply(matchedSegments, _toConsumableArray(firstSegmentParams));
+	                    matchedSegments.reverse();
+	                }
+
+	                var lastSegment = matchedSegments[matchedSegments.length - 1];
+	                var lastSegmentSlashChild = lastSegment.findSlashChild();
+
+	                if (lastSegmentSlashChild) {
+	                    matchedSegments.push(lastSegmentSlashChild);
+	                }
+	            }
+
+	            return this.buildStateFromSegments(matchedSegments);
+	        }
+	    }]);
+
+	    return RouteNode;
+	}();
+
+	exports.default = RouteNode;
+	module.exports = exports['default'];
+
+/***/ },
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3229,44 +3606,1140 @@
 	    value: true
 	});
 
-	var _router = __webpack_require__(50);
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
 
-	var _router2 = _interopRequireDefault(_router);
+	var _createClass = function () {
+	    function defineProperties(target, props) {
+	        for (var i = 0; i < props.length; i++) {
+	            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	        }
+	    }return function (Constructor, protoProps, staticProps) {
+	        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	    };
+	}();
+
+	var _searchParams = __webpack_require__(46);
+
+	function _classCallCheck(instance, Constructor) {
+	    if (!(instance instanceof Constructor)) {
+	        throw new TypeError("Cannot call a class as a function");
+	    }
+	}
+
+	var defaultOrConstrained = function defaultOrConstrained(match) {
+	    return '(' + (match ? match.replace(/(^<|>$)/g, '') : '[a-zA-Z0-9-_.~%\':]+') + ')';
+	};
+
+	var rules = [{
+	    // An URL can contain a parameter :paramName
+	    // - and _ are allowed but not in last position
+	    name: 'url-parameter',
+	    pattern: /^:([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(<(.+?)>)?/,
+	    regex: function regex(match) {
+	        return new RegExp(defaultOrConstrained(match[2]));
+	    }
+	}, {
+	    // Url parameter (splat)
+	    name: 'url-parameter-splat',
+	    pattern: /^\*([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})/,
+	    regex: /([^\?]*)/
+	}, {
+	    name: 'url-parameter-matrix',
+	    pattern: /^\;([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(<(.+?)>)?/,
+	    regex: function regex(match) {
+	        return new RegExp(';' + match[1] + '=' + defaultOrConstrained(match[2]));
+	    }
+	}, {
+	    // Query parameter: ?param1&param2
+	    //                   ?:param1&:param2
+	    name: 'query-parameter-bracket',
+	    pattern: /^(?:\?|&)(?:\:)?([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(?:\[\])/
+	}, {
+	    // Query parameter: ?param1&param2
+	    //                   ?:param1&:param2
+	    name: 'query-parameter',
+	    pattern: /^(?:\?|&)(?:\:)?([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})/
+	}, {
+	    // Delimiter /
+	    name: 'delimiter',
+	    pattern: /^(\/|\?)/,
+	    regex: function regex(match) {
+	        return new RegExp('\\' + match[0]);
+	    }
+	}, {
+	    // Sub delimiters
+	    name: 'sub-delimiter',
+	    pattern: /^(\!|\&|\-|_|\.|;)/,
+	    regex: function regex(match) {
+	        return new RegExp(match[0]);
+	    }
+	}, {
+	    // Unmatched fragment (until delimiter is found)
+	    name: 'fragment',
+	    pattern: /^([0-9a-zA-Z]+)/,
+	    regex: function regex(match) {
+	        return new RegExp(match[0]);
+	    }
+	}];
+
+	var exists = function exists(val) {
+	    return val !== undefined && val !== null;
+	};
+
+	var tokenise = function tokenise(str) {
+	    var tokens = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+	    // Look for a matching rule
+	    var matched = rules.some(function (rule) {
+	        var match = str.match(rule.pattern);
+	        if (!match) return false;
+
+	        tokens.push({
+	            type: rule.name,
+	            match: match[0],
+	            val: match.slice(1, 2),
+	            otherVal: match.slice(2),
+	            regex: rule.regex instanceof Function ? rule.regex(match) : rule.regex
+	        });
+
+	        if (match[0].length < str.length) tokens = tokenise(str.substr(match[0].length), tokens);
+	        return true;
+	    });
+
+	    // If no rules matched, throw an error (possible malformed path)
+	    if (!matched) {
+	        throw new Error('Could not parse path.');
+	    }
+	    // Return tokens
+	    return tokens;
+	};
+
+	var optTrailingSlash = function optTrailingSlash(source, trailingSlash) {
+	    if (!trailingSlash) return source;
+	    return source.replace(/\\\/$/, '') + '(?:\\/)?';
+	};
+
+	var upToDelimiter = function upToDelimiter(source, delimiter) {
+	    if (!delimiter) return source;
+
+	    return (/(\/)$/.test(source) ? source : source + '(\\/|\\?|\\.|;|$)'
+	    );
+	};
+
+	var appendQueryParam = function appendQueryParam(params, param) {
+	    var val = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+
+	    if (/\[\]$/.test(param)) {
+	        param = (0, _searchParams.withoutBrackets)(param);
+	        val = [val];
+	    }
+	    var existingVal = params[param];
+
+	    if (existingVal === undefined) params[param] = val;else params[param] = Array.isArray(existingVal) ? existingVal.concat(val) : [existingVal, val];
+
+	    return params;
+	};
+
+	var parseQueryParams = function parseQueryParams(path) {
+	    var searchPart = (0, _searchParams.getSearch)(path);
+	    if (!searchPart) return {};
+
+	    return (0, _searchParams.toObject)((0, _searchParams.parse)(searchPart));
+	};
+
+	function _serialise(key, val) {
+	    if (Array.isArray(val)) {
+	        return val.map(function (v) {
+	            return _serialise(key, v);
+	        }).join('&');
+	    }
+
+	    if (val === true) {
+	        return key;
+	    }
+
+	    return key + '=' + val;
+	}
+
+	var Path = function () {
+	    _createClass(Path, null, [{
+	        key: 'createPath',
+	        value: function createPath(path) {
+	            return new Path(path);
+	        }
+	    }, {
+	        key: 'serialise',
+	        value: function serialise(key, val) {
+	            return _serialise(key, val);
+	        }
+	    }]);
+
+	    function Path(path) {
+	        _classCallCheck(this, Path);
+
+	        if (!path) throw new Error('Please supply a path');
+	        this.path = path;
+	        this.tokens = tokenise(path);
+
+	        this.hasUrlParams = this.tokens.filter(function (t) {
+	            return (/^url-parameter/.test(t.type)
+	            );
+	        }).length > 0;
+	        this.hasSpatParam = this.tokens.filter(function (t) {
+	            return (/splat$/.test(t.type)
+	            );
+	        }).length > 0;
+	        this.hasMatrixParams = this.tokens.filter(function (t) {
+	            return (/matrix$/.test(t.type)
+	            );
+	        }).length > 0;
+	        this.hasQueryParams = this.tokens.filter(function (t) {
+	            return (/^query-parameter/.test(t.type)
+	            );
+	        }).length > 0;
+	        // Extract named parameters from tokens
+	        this.spatParams = this._getParams('url-parameter-splat');
+	        this.urlParams = this._getParams(/^url-parameter/);
+	        // Query params
+	        this.queryParams = this._getParams('query-parameter');
+	        this.queryParamsBr = this._getParams('query-parameter-bracket');
+	        // All params
+	        this.params = this.urlParams.concat(this.queryParams).concat(this.queryParamsBr);
+	        // Check if hasQueryParams
+	        // Regular expressions for url part only (full and partial match)
+	        this.source = this.tokens.filter(function (t) {
+	            return t.regex !== undefined;
+	        }).map(function (r) {
+	            return r.regex.source;
+	        }).join('');
+	    }
+
+	    _createClass(Path, [{
+	        key: '_getParams',
+	        value: function _getParams(type) {
+	            var predicate = type instanceof RegExp ? function (t) {
+	                return type.test(t.type);
+	            } : function (t) {
+	                return t.type === type;
+	            };
+
+	            return this.tokens.filter(predicate).map(function (t) {
+	                return t.val[0];
+	            });
+	        }
+	    }, {
+	        key: '_isQueryParam',
+	        value: function _isQueryParam(name) {
+	            return this.queryParams.indexOf(name) !== -1 || this.queryParamsBr.indexOf(name) !== -1;
+	        }
+	    }, {
+	        key: '_urlTest',
+	        value: function _urlTest(path, regex) {
+	            var _this = this;
+
+	            var match = path.match(regex);
+	            if (!match) return null;else if (!this.urlParams.length) return {};
+	            // Reduce named params to key-value pairs
+	            return match.slice(1, this.urlParams.length + 1).reduce(function (params, m, i) {
+	                params[_this.urlParams[i]] = decodeURIComponent(m);
+	                return params;
+	            }, {});
+	        }
+	    }, {
+	        key: 'test',
+	        value: function test(path, opts) {
+	            var _this2 = this;
+
+	            var options = _extends({ trailingSlash: false }, opts);
+	            // trailingSlash: falsy => non optional, truthy => optional
+	            var source = optTrailingSlash(this.source, options.trailingSlash);
+	            // Check if exact match
+	            var matched = this._urlTest(path, new RegExp('^' + source + (this.hasQueryParams ? '(\\?.*$|$)' : '$')));
+	            // If no match, or no query params, no need to go further
+	            if (!matched || !this.hasQueryParams) return matched;
+	            // Extract query params
+	            var queryParams = parseQueryParams(path);
+	            var unexpectedQueryParams = Object.keys(queryParams).filter(function (p) {
+	                return _this2.queryParams.concat(_this2.queryParamsBr).indexOf(p) === -1;
+	            });
+
+	            if (unexpectedQueryParams.length === 0) {
+	                // Extend url match
+	                Object.keys(queryParams).forEach(function (p) {
+	                    return matched[p] = queryParams[p];
+	                });
+
+	                return matched;
+	            }
+
+	            return null;
+	        }
+	    }, {
+	        key: 'partialTest',
+	        value: function partialTest(path, opts) {
+	            var _this3 = this;
+
+	            var options = _extends({ delimited: true }, opts);
+	            // Check if partial match (start of given path matches regex)
+	            // trailingSlash: falsy => non optional, truthy => optional
+	            var source = upToDelimiter(this.source, options.delimited);
+	            var match = this._urlTest(path, new RegExp('^' + source));
+
+	            if (!match) return match;
+
+	            if (!this.hasQueryParams) return match;
+
+	            var queryParams = parseQueryParams(path);
+
+	            Object.keys(queryParams).filter(function (p) {
+	                return _this3.queryParams.concat(_this3.queryParamsBr).indexOf(p) >= 0;
+	            }).forEach(function (p) {
+	                return appendQueryParam(match, p, queryParams[p]);
+	            });
+
+	            return match;
+	        }
+	    }, {
+	        key: 'build',
+	        value: function build() {
+	            var _this4 = this;
+
+	            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+	            var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	            var options = _extends({ ignoreConstraints: false, ignoreSearch: false }, opts);
+	            var encodedParams = Object.keys(params).reduce(function (acc, key) {
+	                if (!exists(params[key])) {
+	                    return acc;
+	                }
+
+	                var val = params[key];
+	                var encode = _this4._isQueryParam(key) ? encodeURIComponent : encodeURI;
+
+	                if (typeof val === 'boolean') {
+	                    acc[key] = val;
+	                } else if (Array.isArray(val)) {
+	                    acc[key] = val.map(encode);
+	                } else {
+	                    acc[key] = encode(val);
+	                }
+
+	                return acc;
+	            }, {});
+
+	            // Check all params are provided (not search parameters which are optional)
+	            if (this.urlParams.some(function (p) {
+	                return !exists(encodedParams[p]);
+	            })) throw new Error('Missing parameters');
+
+	            // Check constraints
+	            if (!options.ignoreConstraints) {
+	                var constraintsPassed = this.tokens.filter(function (t) {
+	                    return (/^url-parameter/.test(t.type) && !/-splat$/.test(t.type)
+	                    );
+	                }).every(function (t) {
+	                    return new RegExp('^' + defaultOrConstrained(t.otherVal[0]) + '$').test(encodedParams[t.val]);
+	                });
+
+	                if (!constraintsPassed) throw new Error('Some parameters are of invalid format');
+	            }
+
+	            var base = this.tokens.filter(function (t) {
+	                return (/^query-parameter/.test(t.type) === false
+	                );
+	            }).map(function (t) {
+	                if (t.type === 'url-parameter-matrix') return ';' + t.val + '=' + encodedParams[t.val[0]];
+	                return (/^url-parameter/.test(t.type) ? encodedParams[t.val[0]] : t.match
+	                );
+	            }).join('');
+
+	            if (options.ignoreSearch) return base;
+
+	            var queryParams = this.queryParams.concat(this.queryParamsBr.map(function (p) {
+	                return p + '[]';
+	            }));
+
+	            var searchPart = queryParams.filter(function (p) {
+	                return Object.keys(encodedParams).indexOf((0, _searchParams.withoutBrackets)(p)) !== -1;
+	            }).map(function (p) {
+	                return _serialise(p, encodedParams[(0, _searchParams.withoutBrackets)(p)]);
+	            }).join('&');
+
+	            return base + (searchPart ? '?' + searchPart : '');
+	        }
+	    }]);
+
+	    return Path;
+	}();
+
+	exports.default = Path;
+	module.exports = exports['default'];
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	// Split path
+	var getPath = exports.getPath = function getPath(path) {
+	    return path.split('?')[0];
+	};
+	var getSearch = exports.getSearch = function getSearch(path) {
+	    return path.split('?')[1];
+	};
+
+	// Search param value
+	var isSerialisable = function isSerialisable(val) {
+	    return val !== undefined && val !== null && val !== '';
+	};
+
+	// Search param name
+	var bracketTest = /\[\]$/;
+	var hasBrackets = exports.hasBrackets = function hasBrackets(paramName) {
+	    return bracketTest.test(paramName);
+	};
+	var withoutBrackets = exports.withoutBrackets = function withoutBrackets(paramName) {
+	    return paramName.replace(bracketTest, '');
+	};
+
+	/**
+	 * Parse a querystring and return a list of params (Objects with name and value properties)
+	 * @param  {String} querystring The querystring to parse
+	 * @return {Array[Object]}      The list of params
+	 */
+	var parse = exports.parse = function parse(querystring) {
+	    return querystring.split('&').reduce(function (params, param) {
+	        var split = param.split('=');
+	        var name = split[0];
+	        var value = split[1];
+
+	        return params.concat(split.length === 1 ? { name: name, value: true } : { name: name, value: decodeURIComponent(value) });
+	    }, []);
+	};
+
+	/**
+	 * Reduce a list of parameters (returned by `.parse()``) to an object (key-value pairs)
+	 * @param  {Array} paramList The list of parameters returned by `.parse()`
+	 * @return {Object}          The object of parameters (key-value pairs)
+	 */
+	var toObject = exports.toObject = function toObject(paramList) {
+	    return paramList.reduce(function (params, _ref) {
+	        var name = _ref.name;
+	        var value = _ref.value;
+
+	        var isArray = hasBrackets(name);
+	        var currentValue = params[withoutBrackets(name)];
+
+	        if (currentValue === undefined) {
+	            params[withoutBrackets(name)] = isArray ? [value] : value;
+	        } else {
+	            params[withoutBrackets(name)] = [].concat(currentValue, value);
+	        }
+
+	        return params;
+	    }, {});
+	};
+
+	/**
+	 * Build a querystring from a list of parameters
+	 * @param  {Array} paramList The list of parameters (see `.parse()`)
+	 * @return {String}          The querystring
+	 */
+	var build = exports.build = function build(paramList) {
+	    return paramList.filter(function (_ref2) {
+	        var value = _ref2.value;
+	        return value !== undefined && value !== null;
+	    }).map(function (_ref3) {
+	        var name = _ref3.name;
+	        var value = _ref3.value;
+	        return value === true ? name : name + '=' + encodeURIComponent(value);
+	    }).join('&');
+	};
+
+	/**
+	 * Remove a list of parameters from a querystring
+	 * @param  {String} querystring  The original querystring
+	 * @param  {Array}  paramsToOmit The parameters to omit
+	 * @return {String}              The querystring
+	 */
+	var omit = exports.omit = function omit(querystring, paramsToOmit) {
+	    if (!querystring) return '';
+
+	    var remainingQueryParams = parse(querystring).filter(function (_ref4) {
+	        var name = _ref4.name;
+	        return paramsToOmit.indexOf(withoutBrackets(name)) === -1;
+	    });
+	    var remainingQueryString = build(remainingQueryParams);
+
+	    return remainingQueryString || '';
+	};
+
+/***/ },
+/* 47 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = withUtils;
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
 
 	function _interopRequireDefault(obj) {
 	    return obj && obj.__esModule ? obj : { default: obj };
 	}
 
-	function routeNodeSelector(routeNode) {
-	    var reducerKey = arguments.length <= 1 || arguments[1] === undefined ? 'router' : arguments[1];
+	function withUtils(router) {
+	    var options = router.getOptions();
 
-	    var routerStateSelector = function routerStateSelector(state) {
-	        return state[reducerKey] || state.get && state.get(reducerKey);
-	    };
-	    var lastReturnedValue = void 0;
+	    router.isActive = isActive;
+	    router.areStatesEqual = areStatesEqual;
+	    router.areStatesDescendants = areStatesDescendants;
+	    router.buildPath = buildPath;
+	    router.buildState = buildState;
+	    router.matchPath = matchPath;
+	    router.setRootPath = setRootPath;
 
-	    return function (state) {
-	        var _routerStateSelector = routerStateSelector(state);
+	    /**
+	     * Check if a route is currently active
+	     * @param  {String}  name                     The route name
+	     * @param  {Object}  params                   The route params
+	     * @param  {Boolean} [strictEquality=false]   Whether to check if the given route is the active route, or part of the active route
+	     * @param  {Boolean} [ignoreQueryParams=true] Whether to ignore query parameters
+	     * @return {Boolean}                          Whether the given route is active
+	     */
+	    function isActive(name) {
+	        var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	        var strictEquality = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
+	        var ignoreQueryParams = arguments.length <= 3 || arguments[3] === undefined ? true : arguments[3];
 
-	        var route = _routerStateSelector.route;
-	        var previousRoute = _routerStateSelector.previousRoute;
+	        var activeState = router.getState();
 
-	        var intersection = route ? (0, _router2.default)(route, previousRoute).intersection : '';
+	        if (!activeState) return false;
 
-	        if (!lastReturnedValue) {
-	            lastReturnedValue = { route: route, previousRoute: previousRoute };
-	        } else if (!previousRoute || previousRoute !== route && intersection === routeNode) {
-	            lastReturnedValue = { route: route, previousRoute: previousRoute };
+	        if (strictEquality || activeState.name === name) {
+	            return areStatesEqual(router.makeState(name, params), activeState, ignoreQueryParams);
 	        }
 
-	        return lastReturnedValue;
-	    };
+	        return areStatesDescendants(router.makeState(name, params), activeState);
+	    }
+
+	    /**
+	     * Compare two route state objects
+	     * @param  {Object}  state1            The route state
+	     * @param  {Object}  state2            The other route state
+	     * @param  {Boolean} ignoreQueryParams Whether to ignore query parameters or not
+	     * @return {Boolean}                   Whether the two route state are equal or not
+	     */
+	    function areStatesEqual(state1, state2) {
+	        var ignoreQueryParams = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+
+	        if (state1.name !== state2.name) return false;
+
+	        var getUrlParams = function getUrlParams(name) {
+	            return router.rootNode.getSegmentsByName(name).map(function (segment) {
+	                return segment.parser[ignoreQueryParams ? 'urlParams' : 'params'];
+	            }).reduce(function (params, p) {
+	                return params.concat(p);
+	            }, []);
+	        };
+
+	        var state1Params = getUrlParams(state1.name);
+	        var state2Params = getUrlParams(state2.name);
+
+	        return state1Params.length === state2Params.length && state1Params.every(function (p) {
+	            return state1.params[p] === state2.params[p];
+	        });
+	    }
+
+	    /**
+	     * Check if two states are related
+	     * @param  {State} parentState  The parent state
+	     * @param  {State} childState   The child state
+	     * @return {Boolean}            Whether the two states are descendants or not
+	     */
+	    function areStatesDescendants(parentState, childState) {
+	        var regex = new RegExp('^' + parentState.name + '\\.(.*)$');
+	        if (!regex.test(childState.name)) return false;
+	        // If child state name extends parent state name, and all parent state params
+	        // are in child state params.
+	        return Object.keys(parentState.params).every(function (p) {
+	            return parentState.params[p] === childState.params[p];
+	        });
+	    }
+
+	    /**
+	     * Build a path
+	     * @param  {String} route  The route name
+	     * @param  {Object} params The route params
+	     * @return {String}        The path
+	     */
+	    function buildPath(route, params) {
+	        if (route === _constants2.default.UNKNOWN_ROUTE) {
+	            return params.path;
+	        }
+
+	        var useTrailingSlash = options.useTrailingSlash;
+
+	        return router.rootNode.buildPath(route, params, { trailingSlash: useTrailingSlash });
+	    }
+
+	    function buildState(route, params) {
+	        return router.rootNode.buildState(route, params);
+	    }
+
+	    /**
+	     * Match a path
+	     * @param  {String} path     The path to match
+	     * @param  {String} [source] The source (optional, used internally)
+	     * @return {Object}          The matched state (null if unmatched)
+	     */
+	    function matchPath(path, source) {
+	        var trailingSlash = options.trailingSlash;
+	        var strictQueryParams = options.strictQueryParams;
+	        var strongMatching = options.strongMatching;
+
+	        var match = router.rootNode.matchPath(path, { trailingSlash: trailingSlash, strictQueryParams: strictQueryParams, strongMatching: strongMatching });
+
+	        if (match) {
+	            var name = match.name;
+	            var params = match.params;
+	            var _meta = match._meta;
+
+	            var builtPath = options.useTrailingSlash === undefined ? path : router.buildPath(name, params);
+
+	            return router.makeState(name, params, builtPath, _meta, source);
+	        }
+
+	        return null;
+	    }
+
+	    /**
+	     * Set the root node patch, use carefully. It can be used to set app-wide allowed query parameters.
+	     * @param {String} rootPath The root node path
+	     */
+	    function setRootPath(rootPath) {
+	        router.rootNode.setPath(rootPath);
+	    }
 	}
 
-	exports.default = routeNodeSelector;
+/***/ },
+/* 48 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	var errorCodes = exports.errorCodes = {
+	    ROUTER_NOT_STARTED: 'NOT_STARTED',
+	    NO_START_PATH_OR_STATE: 'NO_START_PATH_OR_STATE',
+	    ROUTER_ALREADY_STARTED: 'ALREADY_STARTED',
+	    ROUTE_NOT_FOUND: 'ROUTE_NOT_FOUND',
+	    SAME_STATES: 'SAME_STATES',
+	    CANNOT_DEACTIVATE: 'CANNOT_DEACTIVATE',
+	    CANNOT_ACTIVATE: 'CANNOT_ACTIVATE',
+	    TRANSITION_ERR: 'TRANSITION_ERR',
+	    TRANSITION_CANCELLED: 'CANCELLED'
+	};
+
+	var constants = {
+	    UNKNOWN_ROUTE: '@@router5/UNKNOWN_ROUTE',
+	    ROUTER_START: '$start',
+	    ROUTER_STOP: '$stop',
+	    TRANSITION_START: '$$start',
+	    TRANSITION_CANCEL: '$$cancel',
+	    TRANSITION_SUCCESS: '$$success',
+	    TRANSITION_ERROR: '$$error'
+	};
+
+	exports.default = constants;
+
+/***/ },
+/* 49 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	exports.default = withRouterLifecycle;
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var noop = function noop() {};
+
+	function withRouterLifecycle(router) {
+	    var started = false;
+	    var options = router.getOptions();
+
+	    router.isStarted = isStarted;
+	    router.start = start;
+	    router.stop = stop;
+
+	    /**
+	     * Check if the router is started
+	     * @return {Boolean} Whether the router is started or not
+	     */
+	    function isStarted() {
+	        return started;
+	    }
+
+	    /**
+	     * Start the router
+	     * @param  {String|Object} startPathOrState The start path or state. This is optional when using the browser plugin.
+	     * @param  {Function}      done             A done node style callback (err, state)
+	     * @return {Object}                         The router instance
+	     */
+	    function start() {
+	        var lastArg = arguments.length <= arguments.length - 1 + 0 ? undefined : arguments[arguments.length - 1 + 0];
+	        var done = typeof lastArg === 'function' ? lastArg : noop;
+	        var startPathOrState = typeof (arguments.length <= 0 ? undefined : arguments[0]) !== 'function' ? arguments.length <= 0 ? undefined : arguments[0] : undefined;
+
+	        if (started) {
+	            done({ code: _constants.errorCodes.ROUTER_ALREADY_STARTED });
+	            return router;
+	        }
+
+	        var startPath = void 0,
+	            startState = void 0;
+
+	        started = true;
+	        router.invokeEventListeners(_constants2.default.ROUTER_START);
+
+	        // callback
+	        var cb = function cb(err, state) {
+	            var invokeErrCb = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
+
+	            if (!err) router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, state, null, { replace: true });
+	            if (err && invokeErrCb) router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, state, null, err);
+	            done(err, state);
+	        };
+
+	        if (startPathOrState === undefined && !options.defaultRoute) {
+	            return cb({ code: _constants.errorCodes.NO_START_PATH_OR_STATE });
+	        }if (typeof startPathOrState === 'string') {
+	            startPath = startPathOrState;
+	        } else if ((typeof startPathOrState === 'undefined' ? 'undefined' : _typeof(startPathOrState)) === 'object') {
+	            startState = startPathOrState;
+	        }
+
+	        if (!startState) {
+	            (function () {
+	                // If no supplied start state, get start state
+	                startState = startPath === undefined ? null : router.matchPath(startPath);
+	                // Navigate to default function
+	                var navigateToDefault = function navigateToDefault() {
+	                    return router.navigateToDefault({ replace: true }, done);
+	                };
+	                var redirect = function redirect(route) {
+	                    return router.navigate(route.name, route.params, { replace: true, reload: true }, done);
+	                };
+	                // If matched start path
+	                if (startState) {
+	                    router.transitionToState(startState, router.getState(), {}, function (err, state) {
+	                        if (!err) cb(null, state);else if (err.redirect) redirect(err.redirect);else if (options.defaultRoute) navigateToDefault();else cb(err, null, false);
+	                    });
+	                } else if (options.defaultRoute) {
+	                    // If default, navigate to default
+	                    navigateToDefault();
+	                } else if (options.allowNotFound) {
+	                    cb(null, router.makeNotFoundState(startPath));
+	                } else {
+	                    // No start match, no default => do nothing
+	                    cb({ code: _constants.errorCodes.ROUTE_NOT_FOUND, path: startPath }, null);
+	                }
+	            })();
+	        } else {
+	            // Initialise router with provided start state
+	            router.setState(startState);
+	            cb(null, startState);
+	        }
+
+	        return router;
+	    }
+
+	    /**
+	     * Stop the router
+	     * @return {Object} The router instance
+	     */
+	    function stop() {
+	        if (started) {
+	            router.setState(null);
+	            started = false;
+	            router.invokeEventListeners(_constants2.default.ROUTER_STOP);
+	        }
+
+	        return router;
+	    }
+	}
 
 /***/ },
 /* 50 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	exports.default = withNavigation;
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _transition = __webpack_require__(51);
+
+	var _transition2 = _interopRequireDefault(_transition);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var noop = function noop() {};
+
+	function withNavigation(router) {
+	    var cancelCurrentTransition = void 0;
+
+	    router.navigate = navigate;
+	    router.navigateToDefault = navigateToDefault;
+	    router.transitionToState = transitionToState;
+	    router.cancel = cancel;
+
+	    /**
+	     * Cancel the current transition if there is one
+	     * @return {Object} The router instance
+	     */
+	    function cancel() {
+	        if (cancelCurrentTransition) {
+	            cancelCurrentTransition('navigate');
+	            cancelCurrentTransition = null;
+	        }
+
+	        return router;
+	    }
+
+	    /**
+	     * Navigate to a route
+	     * @param  {String}   routeName      The route name
+	     * @param  {Object}   [routeParams]  The route params
+	     * @param  {Object}   [options]      The navigation options (`replace`, `reload`)
+	     * @param  {Function} [done]         A done node style callback (err, state)
+	     * @return {Function}                A cancel function
+	     */
+	    function navigate() {
+	        var name = arguments.length <= 0 ? undefined : arguments[0];
+	        var lastArg = arguments.length <= arguments.length - 1 + 0 ? undefined : arguments[arguments.length - 1 + 0];
+	        var done = typeof lastArg === 'function' ? lastArg : noop;
+	        var params = _typeof(arguments.length <= 1 ? undefined : arguments[1]) === 'object' ? arguments.length <= 1 ? undefined : arguments[1] : {};
+	        var opts = _typeof(arguments.length <= 2 ? undefined : arguments[2]) === 'object' ? arguments.length <= 2 ? undefined : arguments[2] : {};
+
+	        if (!router.isStarted()) {
+	            done({ code: _constants.errorCodes.ROUTER_NOT_STARTED });
+	            return;
+	        }
+
+	        var route = router.buildState(name, params);
+
+	        if (!route) {
+	            var err = { code: _constants.errorCodes.ROUTE_NOT_FOUND };
+	            done(err);
+	            router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, null, router.getState(), err);
+	            return;
+	        }
+
+	        var toState = router.makeState(route.name, route.params, router.buildPath(name, params), route._meta);
+	        var sameStates = router.getState() ? router.areStatesEqual(router.getState(), toState, false) : false;
+
+	        // Do not proceed further if states are the same and no reload
+	        // (no desactivation and no callbacks)
+	        if (sameStates && !opts.reload) {
+	            var _err = { code: _constants.errorCodes.SAME_STATES };
+	            done(_err);
+	            router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, toState, router.getState(), _err);
+	            return;
+	        }
+
+	        var fromState = sameStates ? null : router.getState();
+
+	        // Transitio
+	        return transitionToState(toState, fromState, opts, function (err, state) {
+	            if (err) {
+	                if (err.redirect) {
+	                    var _err$redirect = err.redirect;
+	                    var _name = _err$redirect.name;
+	                    var _params = _err$redirect.params;
+
+	                    navigate(_name, _params, _extends({}, opts, { reload: true }), done);
+	                } else {
+	                    done(err);
+	                }
+	            } else {
+	                router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, state, fromState, opts);
+	                done(null, state);
+	            }
+	        });
+	    }
+
+	    /**
+	     * Navigate to the default route (if defined)
+	     * @param  {Object}   [opts] The navigation options
+	     * @param  {Function} [done] A done node style callback (err, state)
+	     * @return {Function}        A cancel function
+	     */
+	    function navigateToDefault() {
+	        var opts = _typeof(arguments.length <= 0 ? undefined : arguments[0]) === 'object' ? arguments.length <= 0 ? undefined : arguments[0] : {};
+	        var done = arguments.length === 2 ? arguments.length <= 1 ? undefined : arguments[1] : typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'function' ? arguments.length <= 0 ? undefined : arguments[0] : noop;
+	        var options = router.getOptions();
+
+	        if (options.defaultRoute) {
+	            return navigate(options.defaultRoute, options.defaultParams, opts, done);
+	        }
+
+	        return function () {};
+	    }
+
+	    function transitionToState(toState, fromState) {
+	        var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+	        var done = arguments.length <= 3 || arguments[3] === undefined ? noop : arguments[3];
+
+	        cancel();
+	        router.invokeEventListeners(_constants2.default.TRANSITION_START, toState, fromState);
+
+	        cancelCurrentTransition = (0, _transition2.default)(router, toState, fromState, options, function (err, state) {
+	            cancelCurrentTransition = null;
+	            state = state || toState;
+
+	            if (err) {
+	                if (err.code === _constants.errorCodes.TRANSITION_CANCELLED) {
+	                    router.invokeEventListeners(_constants2.default.TRANSITION_CANCEL, toState, fromState);
+	                } else {
+	                    router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, toState, fromState, err);
+	                }
+	                done(err);
+	            } else {
+	                router.setState(state);
+	                done(null, state);
+	            }
+	        });
+
+	        return cancelCurrentTransition;
+	    }
+	}
+
+/***/ },
+/* 51 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _slicedToArray = function () {
+	    function sliceIterator(arr, i) {
+	        var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+	            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+	                _arr.push(_s.value);if (i && _arr.length === i) break;
+	            }
+	        } catch (err) {
+	            _d = true;_e = err;
+	        } finally {
+	            try {
+	                if (!_n && _i["return"]) _i["return"]();
+	            } finally {
+	                if (_d) throw _e;
+	            }
+	        }return _arr;
+	    }return function (arr, i) {
+	        if (Array.isArray(arr)) {
+	            return arr;
+	        } else if (Symbol.iterator in Object(arr)) {
+	            return sliceIterator(arr, i);
+	        } else {
+	            throw new TypeError("Invalid attempt to destructure non-iterable instance");
+	        }
+	    };
+	}();
+
+	var _router = __webpack_require__(52);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	var _resolve = __webpack_require__(53);
+
+	var _resolve2 = _interopRequireDefault(_resolve);
+
+	var _constants = __webpack_require__(48);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _defineProperty(obj, key, value) {
+	    if (key in obj) {
+	        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	    } else {
+	        obj[key] = value;
+	    }return obj;
+	}
+
+	exports.default = transition;
+
+	function transition(router, toState, fromState, opts, callback) {
+	    var cancelled = false;
+	    var completed = false;
+	    var options = router.getOptions();
+
+	    var _router$getLifecycleF = router.getLifecycleFunctions();
+
+	    var _router$getLifecycleF2 = _slicedToArray(_router$getLifecycleF, 2);
+
+	    var canDeactivateFunctions = _router$getLifecycleF2[0];
+	    var canActivateFunctions = _router$getLifecycleF2[1];
+
+	    var middlewareFunctions = router.getMiddlewareFunctions();
+	    var isCancelled = function isCancelled() {
+	        return cancelled;
+	    };
+	    var cancel = function cancel() {
+	        if (!cancelled && !completed) {
+	            cancelled = true;
+	            callback({ code: _constants.errorCodes.TRANSITION_CANCELLED }, null);
+	        }
+	    };
+	    var done = function done(err, state) {
+	        completed = true;
+
+	        if (isCancelled()) {
+	            return;
+	        }
+
+	        if (!err && options.autoCleanUp) {
+	            (function () {
+	                var activeSegments = (0, _router.nameToIDs)(toState.name);
+	                Object.keys(canDeactivateFunctions).forEach(function (name) {
+	                    if (activeSegments.indexOf(name) === -1) router.clearCanDeactivate(name);
+	                });
+	            })();
+	        }
+
+	        callback(err, state || toState);
+	    };
+	    var makeError = function makeError(base, err) {
+	        return _extends({}, base, err instanceof Object ? err : { error: err });
+	    };
+
+	    var _transitionPath = (0, _router2.default)(toState, fromState);
+
+	    var toDeactivate = _transitionPath.toDeactivate;
+	    var toActivate = _transitionPath.toActivate;
+
+	    var asyncBase = { isCancelled: isCancelled, toState: toState, fromState: fromState };
+
+	    var canDeactivate = function canDeactivate(toState, fromState, cb) {
+	        var canDeactivateFunctionMap = toDeactivate.filter(function (name) {
+	            return canDeactivateFunctions[name];
+	        }).reduce(function (fnMap, name) {
+	            return _extends({}, fnMap, _defineProperty({}, name, canDeactivateFunctions[name]));
+	        }, {});
+
+	        (0, _resolve2.default)(canDeactivateFunctionMap, _extends({}, asyncBase, { errorKey: 'segment' }), function (err) {
+	            return cb(err ? makeError({ code: _constants.errorCodes.CANNOT_DEACTIVATE }, err) : null);
+	        });
+	    };
+
+	    var canActivate = function canActivate(toState, fromState, cb) {
+	        var canActivateFunctionMap = toActivate.filter(function (name) {
+	            return canActivateFunctions[name];
+	        }).reduce(function (fnMap, name) {
+	            return _extends({}, fnMap, _defineProperty({}, name, canActivateFunctions[name]));
+	        }, {});
+
+	        (0, _resolve2.default)(canActivateFunctionMap, _extends({}, asyncBase, { errorKey: 'segment' }), function (err) {
+	            return cb(err ? makeError({ code: _constants.errorCodes.CANNOT_ACTIVATE }, err) : null);
+	        });
+	    };
+
+	    var middleware = !middlewareFunctions.length ? [] : function (toState, fromState, cb) {
+	        return (0, _resolve2.default)(middlewareFunctions, _extends({}, asyncBase), function (err, state) {
+	            return cb(err ? makeError({ code: _constants.errorCodes.TRANSITION_ERR }, err) : null, state || toState);
+	        });
+	    };
+
+	    var pipeline = (fromState && !opts.forceDeactivate ? [canDeactivate] : []).concat(canActivate).concat(middleware);
+
+	    (0, _resolve2.default)(pipeline, asyncBase, done);
+
+	    return cancel;
+	}
+
+/***/ },
+/* 52 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -3381,7 +4854,2394 @@
 	exports.default = transitionPath;
 
 /***/ },
-/* 51 */
+/* 53 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
+	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	} : function (obj) {
+	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
+	};
+
+	exports.default = resolve;
+
+	function _defineProperty(obj, key, value) {
+	    if (key in obj) {
+	        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
+	    } else {
+	        obj[key] = value;
+	    }return obj;
+	}
+
+	function resolve(functions, _ref, callback) {
+	    var isCancelled = _ref.isCancelled;
+	    var toState = _ref.toState;
+	    var fromState = _ref.fromState;
+	    var errorKey = _ref.errorKey;
+
+	    var remainingFunctions = Array.isArray(functions) ? functions : Object.keys(functions);
+
+	    var isState = function isState(obj) {
+	        return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj.name !== undefined && obj.params !== undefined && obj.path !== undefined;
+	    };
+	    var hasStateChanged = function hasStateChanged(state) {
+	        return state.name !== toState.name || state.params !== toState.params || state.path !== toState.path;
+	    };
+
+	    var processFn = function processFn(done) {
+	        if (!remainingFunctions.length) return true;
+
+	        var isMapped = typeof remainingFunctions[0] === 'string';
+	        var errBase = errorKey && isMapped ? _defineProperty({}, errorKey, remainingFunctions[0]) : {};
+	        var stepFn = isMapped ? functions[remainingFunctions[0]] : remainingFunctions[0];
+
+	        // const len = stepFn.length;
+	        var res = stepFn.call(null, toState, fromState, done);
+	        if (isCancelled()) {
+	            done(null);
+	        } else if (typeof res === 'boolean') {
+	            done(res ? null : errBase);
+	        } else if (res && typeof res.then === 'function') {
+	            res.then(function (resVal) {
+	                if (resVal instanceof Error) done({ error: resVal }, null);else done(null, resVal);
+	            }, function (err) {
+	                if (err instanceof Error) {
+	                    console.error(err.stack || err);
+	                    done(_extends({}, errBase, { promiseError: err }), null);
+	                } else {
+	                    done((typeof err === 'undefined' ? 'undefined' : _typeof(err)) === 'object' ? _extends({}, errBase, err) : errBase, null);
+	                }
+	            });
+	        }
+	        // else: wait for done to be called
+
+	        return false;
+	    };
+
+	    var iterate = function iterate(err, val) {
+	        if (isCancelled()) {
+	            callback();
+	        } else if (err) {
+	            callback(err);
+	        } else {
+	            if (val && isState(val)) {
+	                if (hasStateChanged(val)) console.error('[router5][transition] Warning: state values changed during transition process.');
+	                toState = val;
+	            }
+	            remainingFunctions = remainingFunctions.slice(1);
+	            next();
+	        }
+	    };
+
+	    var next = function next() {
+	        if (isCancelled()) {
+	            callback();
+	        } else {
+	            var finished = processFn(iterate);
+	            if (finished) callback(null, toState);
+	        }
+	    };
+
+	    next();
+	}
+
+/***/ },
+/* 54 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = withMiddleware;
+	function withMiddleware(router) {
+	    var middlewareFactories = [];
+	    var middlewareFunctions = [];
+
+	    router.useMiddleware = useMiddleware;
+	    router.getMiddlewareFactories = getMiddlewareFactories;
+	    router.getMiddlewareFunctions = getMiddlewareFunctions;
+	    router.clearMiddleware = clearMiddleware;
+
+	    /**
+	     * Register middleware functions.
+	     * @param  {...Function} middlewares The middleware functions
+	     * @return {Object}                  The router instance
+	     */
+	    function useMiddleware() {
+	        for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
+	            middlewares[_key] = arguments[_key];
+	        }
+
+	        middlewares.forEach(addMiddleware);
+
+	        return router;
+	    }
+
+	    /**
+	     * Remove all middleware functions
+	     * @return {Object} The router instance
+	     */
+	    function clearMiddleware() {
+	        middlewareFactories = [];
+	        middlewareFunctions = [];
+
+	        return router;
+	    }
+
+	    function getMiddlewareFactories() {
+	        return middlewareFactories;
+	    }
+
+	    function getMiddlewareFunctions() {
+	        return middlewareFunctions;
+	    }
+
+	    function addMiddleware(middleware) {
+	        middlewareFactories.push(middleware);
+	        middlewareFunctions.push(router.executeFactory(middleware));
+	    }
+	}
+
+/***/ },
+/* 55 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = withPlugins;
+
+	function _toConsumableArray(arr) {
+	    if (Array.isArray(arr)) {
+	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	            arr2[i] = arr[i];
+	        }return arr2;
+	    } else {
+	        return Array.from(arr);
+	    }
+	}
+
+	var pluginMethods = ['onStart', 'onStop', 'onTransitionSuccess', 'onTransitionStart', 'onTransitionError', 'onTransitionCancel'];
+
+	function withPlugins(router) {
+	    var plugins = [];
+	    var removePluginListeners = [];
+
+	    router.usePlugin = usePlugin;
+	    router.hasPlugin = hasPlugin;
+	    router.getPlugins = getPlugins;
+
+	    function getPlugins() {
+	        return plugins;
+	    }
+
+	    /**
+	     * Use plugins
+	     * @param  {...Function} plugins An argument list of plugins
+	     * @return {Object}              The router instance
+	     */
+	    function usePlugin() {
+	        for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
+	            plugins[_key] = arguments[_key];
+	        }
+
+	        plugins.forEach(addPlugin);
+	        return router;
+	    }
+
+	    function addPlugin(plugin) {
+	        if (!hasPlugin(plugin)) {
+	            plugins.push(plugin);
+	            startPlugin(plugin);
+	        }
+	    }
+
+	    /**
+	     * Check if a plugin has already been registered.
+	     * @param  {String}  pluginName The plugin name
+	     * @return {Boolean}            Whether the plugin has been registered
+	     */
+	    function hasPlugin(pluginName) {
+	        return plugins.filter(function (p) {
+	            return p.pluginName === pluginName || p.name === pluginName;
+	        }).length > 0;
+	    }
+
+	    function startPlugin(plugin) {
+	        var appliedPlugin = router.executeFactory(plugin);
+
+	        var removeEventListeners = pluginMethods.map(function (methodName) {
+	            if (appliedPlugin[methodName]) {
+	                return router.addEventListener(methodName.toLowerCase().replace(/^on/, '$$').replace(/transition/, '$$'), appliedPlugin[methodName]);
+	            }
+	        }).filter(Boolean);
+
+	        removePluginListeners.push.apply(removePluginListeners, _toConsumableArray(removeEventListeners));
+	    }
+	}
+
+/***/ },
+/* 56 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = withRouteLifecycle;
+	var toFunction = function toFunction(val) {
+	    return typeof val === 'function' ? val : function () {
+	        return function () {
+	            return val;
+	        };
+	    };
+	};
+
+	function withRouteLifecycle(router) {
+	    var canDeactivateFactories = {};
+	    var canActivateFactories = {};
+	    var canDeactivateFunctions = {};
+	    var canActivateFunctions = {};
+
+	    router.canDeactivate = canDeactivate;
+	    router.canActivate = canActivate;
+	    router.getLifecycleFactories = getLifecycleFactories;
+	    router.getLifecycleFunctions = getLifecycleFunctions;
+	    router.clearCanDeactivate = clearCanDeactivate;
+
+	    function getLifecycleFactories() {
+	        return [canDeactivateFactories, canActivateFactories];
+	    }
+
+	    function getLifecycleFunctions() {
+	        return [canDeactivateFunctions, canActivateFunctions];
+	    }
+
+	    /**
+	     * Register a canDeactivate handler or specify a if a route can be deactivated
+	     * @param  {String} name                           The route name
+	     * @param  {Function|Boolean} canDeactivateHandler The canDeactivate handler or boolean
+	     * @return {Object}                                The router instance
+	     */
+	    function canDeactivate(name, canDeactivateHandler) {
+	        var factory = toFunction(canDeactivateHandler);
+
+	        canDeactivateFactories[name] = factory;
+	        canDeactivateFunctions[name] = router.executeFactory(factory);
+
+	        return router;
+	    }
+
+	    /**
+	     * Remove a canDeactivate handler for a route
+	     * @param  {String} name The route name
+	     * @return {Object}      The router instance
+	     */
+	    function clearCanDeactivate(name) {
+	        canDeactivateFactories[name] = undefined;
+	        canDeactivateFunctions[name] = undefined;
+
+	        return router;
+	    }
+
+	    /**
+	     * Register a canActivate handler or specify a if a route can be deactivated
+	     * @param  {String} name                         The route name
+	     * @param  {Function|Boolean} canActivateHandler The canActivate handler or boolean
+	     * @return {Object}                              The router instance
+	     */
+	    function canActivate(name, canActivateHandler) {
+	        var factory = toFunction(canActivateHandler);
+
+	        canActivateFactories[name] = factory;
+	        canActivateFunctions[name] = router.executeFactory(factory);
+
+	        return router;
+	    }
+	}
+
+/***/ },
+/* 57 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _slicedToArray = function () {
+	    function sliceIterator(arr, i) {
+	        var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
+	            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+	                _arr.push(_s.value);if (i && _arr.length === i) break;
+	            }
+	        } catch (err) {
+	            _d = true;_e = err;
+	        } finally {
+	            try {
+	                if (!_n && _i["return"]) _i["return"]();
+	            } finally {
+	                if (_d) throw _e;
+	            }
+	        }return _arr;
+	    }return function (arr, i) {
+	        if (Array.isArray(arr)) {
+	            return arr;
+	        } else if (Symbol.iterator in Object(arr)) {
+	            return sliceIterator(arr, i);
+	        } else {
+	            throw new TypeError("Invalid attempt to destructure non-iterable instance");
+	        }
+	    };
+	}();
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	exports.default = withCloning;
+
+	function _toConsumableArray(arr) {
+	    if (Array.isArray(arr)) {
+	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	            arr2[i] = arr[i];
+	        }return arr2;
+	    } else {
+	        return Array.from(arr);
+	    }
+	}
+
+	function withCloning(router, createRouter) {
+	    router.clone = clone;
+
+	    /**
+	     * Clone the current router configuration. The new returned router will be non-started,
+	     * with a null state
+	     * @param  {[type]} deps [description]
+	     * @return {[type]}      [description]
+	     */
+	    function clone() {
+	        var deps = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	        var clonedDependencies = _extends({}, router.getDependencies(), deps);
+	        var clonedRouter = createRouter(router.rootNode, router.getOptions(), clonedDependencies);
+
+	        clonedRouter.useMiddleware.apply(clonedRouter, _toConsumableArray(router.getMiddlewareFactories()));
+	        clonedRouter.usePlugin.apply(clonedRouter, _toConsumableArray(router.getPlugins()));
+
+	        var _router$getLifecycleF = router.getLifecycleFactories();
+
+	        var _router$getLifecycleF2 = _slicedToArray(_router$getLifecycleF, 2);
+
+	        var canDeactivateFactories = _router$getLifecycleF2[0];
+	        var canActivateFactories = _router$getLifecycleF2[1];
+
+	        Object.keys(canDeactivateFactories).forEach(function (name) {
+	            return clonedRouter.canDeactivate(name, canDeactivateFactories[name]);
+	        });
+	        Object.keys(canActivateFactories).forEach(function (name) {
+	            return clonedRouter.canActivate(name, canActivateFactories[name]);
+	        });
+
+	        return clonedRouter;
+	    }
+	};
+
+/***/ },
+/* 58 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/* istanbul ignore next */
+	function loggerPlugin() {
+	    var startGroup = function startGroup() {
+	        return console.group('Router transition');
+	    };
+	    var endGroup = function endGroup() {
+	        return console.groupEnd('Router transition');
+	    };
+
+	    console.info('Router started');
+
+	    return {
+	        onStop: function onStop() {
+	            console.info('Router stopped');
+	        },
+	        onTransitionStart: function onTransitionStart(toState, fromState) {
+	            endGroup();
+	            startGroup();
+	            console.log('Transition started from state');
+	            console.log(fromState);
+	            console.log('To state');
+	            console.log(toState);
+	        },
+	        onTransitionCancel: function onTransitionCancel() {
+	            console.warn('Transition cancelled');
+	        },
+	        onTransitionError: function onTransitionError(toState, fromState, err) {
+	            console.warn('Transition error with code ' + err.code);
+	            endGroup();
+	        },
+	        onTransitionSuccess: function onTransitionSuccess() {
+	            console.log('Transition success');
+	            endGroup();
+	        }
+	    };
+	};
+
+	loggerPlugin.pluginName = 'LOGGER_PLUGIN';
+
+	exports.default = loggerPlugin;
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _router = __webpack_require__(52);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var defaultOptions = {
+	    autoCleanUp: true
+	};
+
+	function listenersPluginFactory() {
+	    var options = arguments.length <= 0 || arguments[0] === undefined ? defaultOptions : arguments[0];
+
+	    function listenersPlugin(router) {
+	        var listeners = {};
+
+	        function removeListener(name, cb) {
+	            if (cb) {
+	                if (listeners[name]) listeners[name] = listeners[name].filter(function (callback) {
+	                    return callback !== cb;
+	                });
+	            } else {
+	                listeners[name] = [];
+	            }
+	            return router;
+	        };
+
+	        function addListener(name, cb, replace) {
+	            var normalizedName = name.replace(/^(\*|\^|=)/, '');
+
+	            if (normalizedName && !/^\$/.test(name)) {
+	                var segments = router.rootNode.getSegmentsByName(normalizedName);
+	                if (!segments) console.warn('No route found for ' + normalizedName + ', listener might never be called!');
+	            }
+
+	            if (!listeners[name]) listeners[name] = [];
+	            listeners[name] = (replace ? [] : listeners[name]).concat(cb);
+
+	            return router;
+	        };
+
+	        router.getListeners = function () {
+	            return listeners;
+	        };
+
+	        router.addListener = function (cb) {
+	            return addListener('*', cb);
+	        };
+	        router.removeListener = function (cb) {
+	            return removeListener('*', cb);
+	        };
+
+	        router.addNodeListener = function (name, cb) {
+	            return addListener('^' + name, cb, true);
+	        };
+	        router.removeNodeListener = function (name, cb) {
+	            return removeListener('^' + name, cb);
+	        };
+
+	        router.addRouteListener = function (name, cb) {
+	            return addListener('=' + name, cb);
+	        };
+	        router.removeRouteListener = function (name, cb) {
+	            return removeListener('=' + name, cb);
+	        };
+
+	        function invokeListeners(name, toState, fromState) {
+	            (listeners[name] || []).forEach(function (cb) {
+	                if (listeners[name].indexOf(cb) !== -1) {
+	                    cb(toState, fromState);
+	                }
+	            });
+	        }
+
+	        function onTransitionSuccess(toState, fromState, opts) {
+	            var _transitionPath = (0, _router2.default)(toState, fromState);
+
+	            var intersection = _transitionPath.intersection;
+	            var toDeactivate = _transitionPath.toDeactivate;
+
+	            var intersectionNode = opts.reload ? '' : intersection;
+	            var name = toState.name;
+
+	            if (options.autoCleanUp) {
+	                toDeactivate.forEach(function (name) {
+	                    return removeListener('^' + name);
+	                });
+	            }
+
+	            invokeListeners('^' + intersectionNode, toState, fromState);
+	            invokeListeners('=' + name, toState, fromState);
+	            invokeListeners('*', toState, fromState);
+	        }
+
+	        return { onTransitionSuccess: onTransitionSuccess };
+	    };
+
+	    listenersPlugin.pluginName = 'LISTENERS_PLUGIN';
+
+	    return listenersPlugin;
+	}
+
+	exports.default = listenersPluginFactory;
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _constants = __webpack_require__(48);
+
+	var _constants2 = _interopRequireDefault(_constants);
+
+	var _browser = __webpack_require__(61);
+
+	var _browser2 = _interopRequireDefault(_browser);
+
+	var _utils = __webpack_require__(62);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	var defaultOptions = {
+	    forceDeactivate: true,
+	    useHash: false,
+	    hashPrefix: '',
+	    base: false
+	};
+
+	var source = 'popstate';
+
+	function browserPluginFactory() {
+	    var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+	    var browser = arguments.length <= 1 || arguments[1] === undefined ? _browser2.default : arguments[1];
+
+	    var options = _extends({}, defaultOptions, opts);
+	    var transitionOptions = { forceDeactivate: options.forceDeactivate, source: source };
+
+	    function browserPlugin(router) {
+	        var routerOptions = router.getOptions();
+	        var routerStart = router.start;
+
+	        (0, _utils2.default)(router, options);
+
+	        router.start = function () {
+	            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	                args[_key] = arguments[_key];
+	            }
+
+	            if (args.length === 0 || typeof args[0] === 'function') {
+	                routerStart.apply(undefined, [browser.getLocation(options)].concat(args));
+	            } else {
+	                routerStart.apply(undefined, args);
+	            }
+
+	            return router;
+	        };
+
+	        router.replaceHistoryState = function (name) {
+	            var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+	            var state = router.buildState(name, params);
+	            var url = router.buildUrl(name, params);
+	            router.lastKnownState = state;
+	            browser.replaceState(state, '', url);
+	        };
+
+	        function updateBrowserState(state, url, replace) {
+	            if (replace) browser.replaceState(state, '', url);else browser.pushState(state, '', url);
+	        }
+
+	        function onPopState(evt) {
+	            var routerState = router.getState();
+	            // Do nothing if no state or if last know state is poped state (it should never happen)
+	            var newState = !evt.state || !evt.state.name;
+	            var state = newState ? router.matchPath(browser.getLocation(options), source) : evt.state;
+	            var defaultRoute = routerOptions.defaultRoute;
+	            var defaultParams = routerOptions.defaultParams;
+
+	            if (!state) {
+	                // If current state is already the default route, we will have a double entry
+	                // Navigating back and forth will emit SAME_STATES error
+	                defaultRoute && router.navigateToDefault(_extends({}, transitionOptions, { reload: true, replace: true }));
+	                return;
+	            }
+	            if (routerState && router.areStatesEqual(state, routerState, false)) {
+	                return;
+	            }
+
+	            router.transitionToState(state, routerState, transitionOptions, function (err, toState) {
+	                if (err) {
+	                    if (err.redirect) {
+	                        var _err$redirect = err.redirect;
+	                        var name = _err$redirect.name;
+	                        var params = _err$redirect.params;
+
+	                        router.navigate(name, params, _extends({}, transitionOptions, { replace: true }));
+	                    } else if (err === _constants.errorCodes.CANNOT_DEACTIVATE) {
+	                        var url = router.buildUrl(routerState.name, routerState.params);
+	                        if (!newState) {
+	                            // Keep history state unchanged but use current URL
+	                            updateBrowserState(state, url, true);
+	                        }
+	                        // else do nothing or history will be messed up
+	                        // TODO: history.back()?
+	                    } else {
+	                        // Force navigation to default state
+	                        defaultRoute && router.navigate(defaultRoute, defaultParams, _extends({}, transitionOptions, { reload: true, replace: true }));
+	                    }
+	                } else {
+	                    router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, toState, routerState, { replace: true });
+	                }
+	            });
+	        }
+
+	        function onStart() {
+	            if (options.useHash && !options.base) {
+	                // Guess base
+	                options.base = browser.getBase();
+	            }
+
+	            browser.addPopstateListener(onPopState);
+	        }
+
+	        function onStop() {
+	            browser.removePopstateListener(onPopState);
+	        }
+
+	        function onTransitionSuccess(toState, fromState, opts) {
+	            var historyState = browser.getState();
+	            var replace = opts.replace || fromState && router.areStatesEqual(toState, fromState, false) || opts.reload && historyState && router.areStatesEqual(toState, historyState, false);
+	            updateBrowserState(toState, router.buildUrl(toState.name, toState.params), replace);
+	        }
+
+	        return { onStart: onStart, onStop: onStop, onTransitionSuccess: onTransitionSuccess, onPopState: onPopState };
+	    };
+
+	    browserPlugin.pluginName = 'BROWSER_PLUGIN';
+
+	    return browserPlugin;
+	}
+
+	exports.default = browserPluginFactory;
+
+/***/ },
+/* 61 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	/**
+	 * Dumb functions
+	 */
+	// istanbul ignore next
+	var identity = function identity(arg) {
+	    return function () {
+	        return arg;
+	    };
+	};
+	// istanbul ignore next
+	var noop = function noop() {};
+
+	/**
+	 * Browser detection
+	 */
+	var isBrowser = typeof window !== 'undefined' && window.history;
+
+	/**
+	 * Browser functions needed by router5
+	 */
+	var getBase = function getBase() {
+	    return window.location.pathname.replace(/\/$/, '');
+	};
+
+	var pushState = function pushState(state, title, path) {
+	    return window.history.pushState(state, title, path);
+	};
+
+	var replaceState = function replaceState(state, title, path) {
+	    return window.history.replaceState(state, title, path);
+	};
+
+	var addPopstateListener = function addPopstateListener(fn) {
+	    return window.addEventListener('popstate', fn);
+	};
+
+	var removePopstateListener = function removePopstateListener(fn) {
+	    return window.removeEventListener('popstate', fn);
+	};
+
+	var getLocation = function getLocation(opts) {
+	    var path = opts.useHash ? window.location.hash.replace(new RegExp('^#' + opts.hashPrefix), '') : window.location.pathname.replace(new RegExp('^' + opts.base), '');
+	    return (path || '/') + window.location.search;
+	};
+
+	var getState = function getState() {
+	    return window.history.state;
+	};
+
+	/**
+	 * Export browser object
+	 */
+	var browser = {};
+	if (isBrowser) {
+	    browser = { getBase: getBase, pushState: pushState, replaceState: replaceState, addPopstateListener: addPopstateListener, removePopstateListener: removePopstateListener, getLocation: getLocation, getState: getState };
+	} else {
+	    // istanbul ignore next
+	    browser = {
+	        getBase: identity(''),
+	        pushState: noop,
+	        replaceState: noop,
+	        addPopstateListener: noop,
+	        removePopstateListener: noop,
+	        getLocation: identity(''),
+	        getState: identity(null)
+	    };
+	}
+
+	exports.default = browser;
+
+/***/ },
+/* 62 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = withUtils;
+	function withUtils(router, options) {
+	    router.urlToPath = urlToPath;
+	    router.buildUrl = buildUrl;
+	    router.matchUrl = matchUrl;
+
+	    function buildUrl(route, params) {
+	        var base = options.base || '';
+	        var prefix = options.useHash ? '#' + options.hashPrefix : '';
+	        var path = router.buildPath(route, params);
+
+	        return base + prefix + path;
+	    }
+
+	    function urlToPath(url) {
+	        var match = url.match(/^(?:http|https)\:\/\/(?:[0-9a-z_\-\.\:]+?)(?=\/)(.*)$/);
+	        var path = match ? match[1] : url;
+
+	        var pathParts = path.match(/^(.+?)(#.+?)?(\?.+)?$/);
+
+	        if (!pathParts) throw new Error('[router5] Could not parse url ' + url);
+
+	        var pathname = pathParts[1];
+	        var hash = pathParts[2] || '';
+	        var search = pathParts[3] || '';
+
+	        return (options.useHash ? hash.replace(new RegExp('^#' + options.hashPrefix), '') : options.base ? pathname.replace(new RegExp('^' + options.base), '') : pathname) + search;
+	    }
+
+	    function matchUrl(url) {
+	        return router.matchPath(urlToPath(url));
+	    }
+	}
+
+/***/ },
+/* 63 */,
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.reduxPlugin = exports.routeNodeSelector = exports.actionTypes = exports.actions = exports.router5Reducer = exports.router5Middleware = undefined;
+
+	var _router5Middleware = __webpack_require__(65);
+
+	var _router5Middleware2 = _interopRequireDefault(_router5Middleware);
+
+	var _router5Reducer = __webpack_require__(69);
+
+	var _router5Reducer2 = _interopRequireDefault(_router5Reducer);
+
+	var _routeNodeSelector = __webpack_require__(70);
+
+	var _routeNodeSelector2 = _interopRequireDefault(_routeNodeSelector);
+
+	var _actions = __webpack_require__(68);
+
+	var actions = _interopRequireWildcard(_actions);
+
+	var _actionTypes = __webpack_require__(66);
+
+	var actionTypes = _interopRequireWildcard(_actionTypes);
+
+	var _reduxPlugin = __webpack_require__(67);
+
+	var _reduxPlugin2 = _interopRequireDefault(_reduxPlugin);
+
+	function _interopRequireWildcard(obj) {
+	    if (obj && obj.__esModule) {
+	        return obj;
+	    } else {
+	        var newObj = {};if (obj != null) {
+	            for (var key in obj) {
+	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	            }
+	        }newObj.default = obj;return newObj;
+	    }
+	}
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	exports.router5Middleware = _router5Middleware2.default;
+	exports.router5Reducer = _router5Reducer2.default;
+	exports.actions = actions;
+	exports.actionTypes = actionTypes;
+	exports.routeNodeSelector = _routeNodeSelector2.default;
+	exports.reduxPlugin = _reduxPlugin2.default;
+
+/***/ },
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _actionTypes = __webpack_require__(66);
+
+	var actionTypes = _interopRequireWildcard(_actionTypes);
+
+	var _reduxPlugin = __webpack_require__(67);
+
+	var _reduxPlugin2 = _interopRequireDefault(_reduxPlugin);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _interopRequireWildcard(obj) {
+	    if (obj && obj.__esModule) {
+	        return obj;
+	    } else {
+	        var newObj = {};if (obj != null) {
+	            for (var key in obj) {
+	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	            }
+	        }newObj.default = obj;return newObj;
+	    }
+	}
+
+	var router5ReduxMiddleware = function router5ReduxMiddleware(router) {
+	    return function (store) {
+	        var dispatch = store.dispatch;
+
+	        router.setDependency('store', store);
+	        router.usePlugin((0, _reduxPlugin2.default)(dispatch));
+
+	        return function (next) {
+	            return function (action) {
+	                switch (action.type) {
+	                    case actionTypes.NAVIGATE_TO:
+	                        var _action$payload = action.payload;
+	                        var name = _action$payload.name;
+	                        var params = _action$payload.params;
+	                        var opts = _action$payload.opts;
+
+	                        router.navigate(name, params, opts);
+	                        break;
+
+	                    case actionTypes.CANCEL_TRANSITION:
+	                        router.cancel();
+	                        break;
+
+	                    case actionTypes.CAN_DEACTIVATE:
+	                        router.canDeactivate(action.payload.name, action.payload.canDeactivate);
+	                        break;
+
+	                    case actionTypes.CAN_ACTIVATE:
+	                        router.canActivate(action.payload.name, action.payload.canDeactivate);
+	                        break;
+
+	                    default:
+	                        return next(action);
+	                }
+	            };
+	        };
+	    };
+	};
+
+	exports.default = router5ReduxMiddleware;
+
+/***/ },
+/* 66 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var NAVIGATE_TO = exports.NAVIGATE_TO = '@@router5/NAVIGATE';
+	var CANCEL_TRANSITION = exports.CANCEL_TRANSITION = '@@router5/CANCEL';
+	var TRANSITION_ERROR = exports.TRANSITION_ERROR = '@@router5/TRANSITION_ERROR';
+	var TRANSITION_SUCCESS = exports.TRANSITION_SUCCESS = '@@router5/TRANSITION_SUCCESS';
+	var TRANSITION_START = exports.TRANSITION_START = '@@router5/TRANSITION_START';
+	var CLEAR_ERRORS = exports.CLEAR_ERRORS = '@@router5/CLEAR_ERRORS';
+	var CAN_DEACTIVATE = exports.CAN_DEACTIVATE = '@@router5/CAN_DEACTIVATE';
+	var CAN_ACTIVATE = exports.CAN_ACTIVATE = '@@router5/CAN_ACTIVATE';
+
+/***/ },
+/* 67 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _actions = __webpack_require__(68);
+
+	var actions = _interopRequireWildcard(_actions);
+
+	function _interopRequireWildcard(obj) {
+	    if (obj && obj.__esModule) {
+	        return obj;
+	    } else {
+	        var newObj = {};if (obj != null) {
+	            for (var key in obj) {
+	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	            }
+	        }newObj.default = obj;return newObj;
+	    }
+	}
+
+	function reduxPluginFactory(dispatch) {
+	    function reduxPlugin() {
+	        return {
+	            onTransitionStart: function onTransitionStart(toState, fromState) {
+	                dispatch(actions.transitionStart(toState, fromState));
+	            },
+	            onTransitionSuccess: function onTransitionSuccess(toState, fromState) {
+	                dispatch(actions.transitionSuccess(toState, fromState));
+	            },
+	            onTransitionError: function onTransitionError(toState, fromState, err) {
+	                dispatch(actions.transitionError(toState, fromState, err));
+	            }
+	        };
+	    };
+
+	    reduxPlugin.pluginName = 'REDUX_PLUGIN';
+
+	    return reduxPlugin;
+	}
+
+	exports.default = reduxPluginFactory;
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.navigateTo = navigateTo;
+	exports.cancelTransition = cancelTransition;
+	exports.clearErrors = clearErrors;
+	exports.transitionStart = transitionStart;
+	exports.transitionSuccess = transitionSuccess;
+	exports.transitionError = transitionError;
+	exports.canActivate = canActivate;
+	exports.canDeactivate = canDeactivate;
+
+	var _actionTypes = __webpack_require__(66);
+
+	var actionTypes = _interopRequireWildcard(_actionTypes);
+
+	function _interopRequireWildcard(obj) {
+	    if (obj && obj.__esModule) {
+	        return obj;
+	    } else {
+	        var newObj = {};if (obj != null) {
+	            for (var key in obj) {
+	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	            }
+	        }newObj.default = obj;return newObj;
+	    }
+	}
+
+	function navigateTo(name) {
+	    var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+	    var opts = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+
+	    return {
+	        type: actionTypes.NAVIGATE_TO,
+	        payload: {
+	            name: name,
+	            params: params,
+	            opts: opts
+	        }
+	    };
+	}
+
+	function cancelTransition() {
+	    return {
+	        type: actionTypes.CANCEL_TRANSITION
+	    };
+	}
+
+	function clearErrors() {
+	    return {
+	        type: actionTypes.CLEAR_ERRORS
+	    };
+	}
+
+	function transitionStart(route, previousRoute) {
+	    return {
+	        type: actionTypes.TRANSITION_START,
+	        payload: {
+	            route: route,
+	            previousRoute: previousRoute
+	        }
+	    };
+	}
+
+	function transitionSuccess(route, previousRoute) {
+	    return {
+	        type: actionTypes.TRANSITION_SUCCESS,
+	        payload: {
+	            route: route,
+	            previousRoute: previousRoute
+	        }
+	    };
+	}
+
+	function transitionError(route, previousRoute, transitionError) {
+	    return {
+	        type: actionTypes.TRANSITION_ERROR,
+	        payload: {
+	            route: route,
+	            previousRoute: previousRoute,
+	            transitionError: transitionError
+	        }
+	    };
+	}
+
+	function canActivate(name, canActivate) {
+	    return {
+	        type: actionTypes.CAN_ACTIVATE,
+	        payload: {
+	            name: name,
+	            canActivate: canActivate
+	        }
+	    };
+	}
+
+	function canDeactivate(name, canDeactivate) {
+	    return {
+	        type: actionTypes.CAN_DEACTIVATE,
+	        payload: {
+	            name: name,
+	            canDeactivate: canDeactivate
+	        }
+	    };
+	}
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _extends = Object.assign || function (target) {
+	    for (var i = 1; i < arguments.length; i++) {
+	        var source = arguments[i];for (var key in source) {
+	            if (Object.prototype.hasOwnProperty.call(source, key)) {
+	                target[key] = source[key];
+	            }
+	        }
+	    }return target;
+	};
+
+	var _actionTypes = __webpack_require__(66);
+
+	var actionTypes = _interopRequireWildcard(_actionTypes);
+
+	function _interopRequireWildcard(obj) {
+	    if (obj && obj.__esModule) {
+	        return obj;
+	    } else {
+	        var newObj = {};if (obj != null) {
+	            for (var key in obj) {
+	                if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	            }
+	        }newObj.default = obj;return newObj;
+	    }
+	}
+
+	var initialState = {
+	    route: null,
+	    previousRoute: null,
+	    transitionRoute: null,
+	    transitionError: null
+	};
+
+	function router5Reducer() {
+	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
+	    var action = arguments[1];
+
+	    switch (action.type) {
+	        case actionTypes.TRANSITION_START:
+	            return _extends({}, state, {
+	                transitionRoute: action.payload.route,
+	                transitionError: null
+	            });
+
+	        case actionTypes.TRANSITION_SUCCESS:
+	            return _extends({}, state, {
+	                transitionRoute: null,
+	                transitionError: null,
+	                previousRoute: action.payload.previousRoute,
+	                route: action.payload.route
+	            });
+
+	        case actionTypes.TRANSITION_ERROR:
+	            return _extends({}, state, {
+	                transitionRoute: action.payload.route,
+	                transitionError: action.payload.transitionError
+	            });
+
+	        case actionTypes.CLEAR_ERRORS:
+	            return _extends({}, state, {
+	                transitionRoute: null,
+	                transitionError: null
+	            });
+
+	        default:
+	            return state;
+	    }
+	}
+
+	exports.default = router5Reducer;
+
+/***/ },
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _router = __webpack_require__(52);
+
+	var _router2 = _interopRequireDefault(_router);
+
+	function _interopRequireDefault(obj) {
+	    return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function routeNodeSelector(routeNode) {
+	    var reducerKey = arguments.length <= 1 || arguments[1] === undefined ? 'router' : arguments[1];
+
+	    var routerStateSelector = function routerStateSelector(state) {
+	        return state[reducerKey] || state.get && state.get(reducerKey);
+	    };
+	    var lastReturnedValue = void 0;
+
+	    return function (state) {
+	        var _routerStateSelector = routerStateSelector(state);
+
+	        var route = _routerStateSelector.route;
+	        var previousRoute = _routerStateSelector.previousRoute;
+
+	        var intersection = route ? (0, _router2.default)(route, previousRoute).intersection : '';
+
+	        if (!lastReturnedValue) {
+	            lastReturnedValue = { route: route, previousRoute: previousRoute };
+	        } else if (!previousRoute || previousRoute !== route && intersection === routeNode) {
+	            lastReturnedValue = { route: route, previousRoute: previousRoute };
+	        }
+
+	        return lastReturnedValue;
+	    };
+	}
+
+	exports.default = routeNodeSelector;
+
+/***/ },
+/* 71 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _core = __webpack_require__(72);
+
+	var _helpers = __webpack_require__(73);
+
+	var _defaults = __webpack_require__(76);
+
+	var _defaults2 = _interopRequireDefault(_defaults);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	/**
+	 * Creates logger with following options
+	 *
+	 * @namespace
+	 * @param {object} options - options for logger
+	 * @param {string | function | object} options.level - console[level]
+	 * @param {boolean} options.duration - print duration of each action?
+	 * @param {boolean} options.timestamp - print timestamp with each action?
+	 * @param {object} options.colors - custom colors
+	 * @param {object} options.logger - implementation of the `console` API
+	 * @param {boolean} options.logErrors - should errors in action execution be caught, logged, and re-thrown?
+	 * @param {boolean} options.collapsed - is group collapsed?
+	 * @param {boolean} options.predicate - condition which resolves logger behavior
+	 * @param {function} options.stateTransformer - transform state before print
+	 * @param {function} options.actionTransformer - transform action before print
+	 * @param {function} options.errorTransformer - transform error before print
+	 *
+	 * @returns {function} logger middleware
+	 */
+	function createLogger() {
+	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+	  var loggerOptions = _extends({}, _defaults2.default, options);
+
+	  var logger = loggerOptions.logger;
+	  var transformer = loggerOptions.transformer;
+	  var stateTransformer = loggerOptions.stateTransformer;
+	  var errorTransformer = loggerOptions.errorTransformer;
+	  var predicate = loggerOptions.predicate;
+	  var logErrors = loggerOptions.logErrors;
+	  var diffPredicate = loggerOptions.diffPredicate;
+
+	  // Return if 'console' object is not defined
+
+	  if (typeof logger === 'undefined') {
+	    return function () {
+	      return function (next) {
+	        return function (action) {
+	          return next(action);
+	        };
+	      };
+	    };
+	  }
+
+	  if (transformer) {
+	    console.error('Option \'transformer\' is deprecated, use \'stateTransformer\' instead!'); // eslint-disable-line no-console
+	  }
+
+	  var logBuffer = [];
+
+	  return function (_ref) {
+	    var getState = _ref.getState;
+	    return function (next) {
+	      return function (action) {
+	        // Exit early if predicate function returns 'false'
+	        if (typeof predicate === 'function' && !predicate(getState, action)) {
+	          return next(action);
+	        }
+
+	        var logEntry = {};
+	        logBuffer.push(logEntry);
+
+	        logEntry.started = _helpers.timer.now();
+	        logEntry.startedTime = new Date();
+	        logEntry.prevState = stateTransformer(getState());
+	        logEntry.action = action;
+
+	        var returnedValue = undefined;
+	        if (logErrors) {
+	          try {
+	            returnedValue = next(action);
+	          } catch (e) {
+	            logEntry.error = errorTransformer(e);
+	          }
+	        } else {
+	          returnedValue = next(action);
+	        }
+
+	        logEntry.took = _helpers.timer.now() - logEntry.started;
+	        logEntry.nextState = stateTransformer(getState());
+
+	        var diff = loggerOptions.diff && typeof diffPredicate === 'function' ? diffPredicate(getState, action) : loggerOptions.diff;
+
+	        (0, _core.printBuffer)(logBuffer, _extends({}, loggerOptions, { diff: diff }));
+	        logBuffer.length = 0;
+
+	        if (logEntry.error) throw logEntry.error;
+	        return returnedValue;
+	      };
+	    };
+	  };
+	}
+
+	exports.default = createLogger;
+	module.exports = exports['default'];
+
+/***/ },
+/* 72 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.printBuffer = printBuffer;
+
+	var _helpers = __webpack_require__(73);
+
+	var _diff = __webpack_require__(74);
+
+	var _diff2 = _interopRequireDefault(_diff);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	function _toConsumableArray(arr) {
+	  if (Array.isArray(arr)) {
+	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
+	      arr2[i] = arr[i];
+	    }return arr2;
+	  } else {
+	    return Array.from(arr);
+	  }
+	}
+
+	function _typeof(obj) {
+	  return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
+	}
+
+	/**
+	 * Get log level string based on supplied params
+	 *
+	 * @param {string | function | object} level - console[level]
+	 * @param {object} action - selected action
+	 * @param {array} payload - selected payload
+	 * @param {string} type - log entry type
+	 *
+	 * @returns {string} level
+	 */
+	function getLogLevel(level, action, payload, type) {
+	  switch (typeof level === 'undefined' ? 'undefined' : _typeof(level)) {
+	    case 'object':
+	      return typeof level[type] === 'function' ? level[type].apply(level, _toConsumableArray(payload)) : level[type];
+	    case 'function':
+	      return level(action);
+	    default:
+	      return level;
+	  }
+	}
+
+	function defaultTitleFormatter(options) {
+	  var timestamp = options.timestamp;
+	  var duration = options.duration;
+
+	  return function (action, time, took) {
+	    var parts = ['action'];
+	    if (timestamp) {
+	      parts.push('@ ' + time);
+	    }
+	    parts.push(action.type);
+	    if (duration) {
+	      parts.push('(in ' + took.toFixed(2) + ' ms)');
+	    }
+	    return parts.join(' ');
+	  };
+	}
+
+	function printBuffer(buffer, options) {
+	  var logger = options.logger;
+	  var actionTransformer = options.actionTransformer;
+	  var _options$titleFormatt = options.titleFormatter;
+	  var titleFormatter = _options$titleFormatt === undefined ? defaultTitleFormatter(options) : _options$titleFormatt;
+	  var collapsed = options.collapsed;
+	  var colors = options.colors;
+	  var level = options.level;
+	  var diff = options.diff;
+
+	  buffer.forEach(function (logEntry, key) {
+	    var started = logEntry.started;
+	    var startedTime = logEntry.startedTime;
+	    var action = logEntry.action;
+	    var prevState = logEntry.prevState;
+	    var error = logEntry.error;
+	    var took = logEntry.took;
+	    var nextState = logEntry.nextState;
+
+	    var nextEntry = buffer[key + 1];
+
+	    if (nextEntry) {
+	      nextState = nextEntry.prevState;
+	      took = nextEntry.started - started;
+	    }
+
+	    // Message
+	    var formattedAction = actionTransformer(action);
+	    var isCollapsed = typeof collapsed === 'function' ? collapsed(function () {
+	      return nextState;
+	    }, action) : collapsed;
+
+	    var formattedTime = (0, _helpers.formatTime)(startedTime);
+	    var titleCSS = colors.title ? 'color: ' + colors.title(formattedAction) + ';' : null;
+	    var title = titleFormatter(formattedAction, formattedTime, took);
+
+	    // Render
+	    try {
+	      if (isCollapsed) {
+	        if (colors.title) logger.groupCollapsed('%c ' + title, titleCSS);else logger.groupCollapsed(title);
+	      } else {
+	        if (colors.title) logger.group('%c ' + title, titleCSS);else logger.group(title);
+	      }
+	    } catch (e) {
+	      logger.log(title);
+	    }
+
+	    var prevStateLevel = getLogLevel(level, formattedAction, [prevState], 'prevState');
+	    var actionLevel = getLogLevel(level, formattedAction, [formattedAction], 'action');
+	    var errorLevel = getLogLevel(level, formattedAction, [error, prevState], 'error');
+	    var nextStateLevel = getLogLevel(level, formattedAction, [nextState], 'nextState');
+
+	    if (prevStateLevel) {
+	      if (colors.prevState) logger[prevStateLevel]('%c prev state', 'color: ' + colors.prevState(prevState) + '; font-weight: bold', prevState);else logger[prevStateLevel]('prev state', prevState);
+	    }
+
+	    if (actionLevel) {
+	      if (colors.action) logger[actionLevel]('%c action', 'color: ' + colors.action(formattedAction) + '; font-weight: bold', formattedAction);else logger[actionLevel]('action', formattedAction);
+	    }
+
+	    if (error && errorLevel) {
+	      if (colors.error) logger[errorLevel]('%c error', 'color: ' + colors.error(error, prevState) + '; font-weight: bold', error);else logger[errorLevel]('error', error);
+	    }
+
+	    if (nextStateLevel) {
+	      if (colors.nextState) logger[nextStateLevel]('%c next state', 'color: ' + colors.nextState(nextState) + '; font-weight: bold', nextState);else logger[nextStateLevel]('next state', nextState);
+	    }
+
+	    if (diff) {
+	      (0, _diff2.default)(prevState, nextState, logger, isCollapsed);
+	    }
+
+	    try {
+	      logger.groupEnd();
+	    } catch (e) {
+	      logger.log('—— log end ——');
+	    }
+	  });
+	}
+
+/***/ },
+/* 73 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var repeat = exports.repeat = function repeat(str, times) {
+	  return new Array(times + 1).join(str);
+	};
+
+	var pad = exports.pad = function pad(num, maxLength) {
+	  return repeat("0", maxLength - num.toString().length) + num;
+	};
+
+	var formatTime = exports.formatTime = function formatTime(time) {
+	  return pad(time.getHours(), 2) + ":" + pad(time.getMinutes(), 2) + ":" + pad(time.getSeconds(), 2) + "." + pad(time.getMilliseconds(), 3);
+	};
+
+	// Use performance API if it's available in order to get better precision
+	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
+
+/***/ },
+/* 74 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = diffLogger;
+
+	var _deepDiff = __webpack_require__(75);
+
+	var _deepDiff2 = _interopRequireDefault(_deepDiff);
+
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+
+	// https://github.com/flitbit/diff#differences
+	var dictionary = {
+	  'E': {
+	    color: '#2196F3',
+	    text: 'CHANGED:'
+	  },
+	  'N': {
+	    color: '#4CAF50',
+	    text: 'ADDED:'
+	  },
+	  'D': {
+	    color: '#F44336',
+	    text: 'DELETED:'
+	  },
+	  'A': {
+	    color: '#2196F3',
+	    text: 'ARRAY:'
+	  }
+	};
+
+	function style(kind) {
+	  return 'color: ' + dictionary[kind].color + '; font-weight: bold';
+	}
+
+	function render(diff) {
+	  var kind = diff.kind;
+	  var path = diff.path;
+	  var lhs = diff.lhs;
+	  var rhs = diff.rhs;
+	  var index = diff.index;
+	  var item = diff.item;
+
+	  switch (kind) {
+	    case 'E':
+	      return path.join('.') + ' ' + lhs + ' → ' + rhs;
+	    case 'N':
+	      return path.join('.') + ' ' + rhs;
+	    case 'D':
+	      return '' + path.join('.');
+	    case 'A':
+	      return [path.join('.') + '[' + index + ']', item];
+	    default:
+	      return null;
+	  }
+	}
+
+	function diffLogger(prevState, newState, logger, isCollapsed) {
+	  var diff = (0, _deepDiff2.default)(prevState, newState);
+
+	  try {
+	    if (isCollapsed) {
+	      logger.groupCollapsed('diff');
+	    } else {
+	      logger.group('diff');
+	    }
+	  } catch (e) {
+	    logger.log('diff');
+	  }
+
+	  if (diff) {
+	    diff.forEach(function (elem) {
+	      var kind = elem.kind;
+
+	      var output = render(elem);
+
+	      logger.log('%c ' + dictionary[kind].text, style(kind), output);
+	    });
+	  } else {
+	    logger.log('—— no diff ——');
+	  }
+
+	  try {
+	    logger.groupEnd();
+	  } catch (e) {
+	    logger.log('—— diff end —— ');
+	  }
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 75 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
+	/*!
+	 * deep-diff.
+	 * Licensed under the MIT License.
+	 */
+	;(function (root, factory) {
+	  'use strict';
+
+	  if (true) {
+	    // AMD. Register as an anonymous module.
+	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
+	      return factory();
+	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	  } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
+	    // Node. Does not work with strict CommonJS, but
+	    // only CommonJS-like environments that support module.exports,
+	    // like Node.
+	    module.exports = factory();
+	  } else {
+	    // Browser globals (root is window)
+	    root.DeepDiff = factory();
+	  }
+	})(undefined, function (undefined) {
+	  'use strict';
+
+	  var $scope,
+	      conflict,
+	      conflictResolution = [];
+	  if ((typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object' && global) {
+	    $scope = global;
+	  } else if (typeof window !== 'undefined') {
+	    $scope = window;
+	  } else {
+	    $scope = {};
+	  }
+	  conflict = $scope.DeepDiff;
+	  if (conflict) {
+	    conflictResolution.push(function () {
+	      if ('undefined' !== typeof conflict && $scope.DeepDiff === accumulateDiff) {
+	        $scope.DeepDiff = conflict;
+	        conflict = undefined;
+	      }
+	    });
+	  }
+
+	  // nodejs compatible on server side and in the browser.
+	  function inherits(ctor, superCtor) {
+	    ctor.super_ = superCtor;
+	    ctor.prototype = Object.create(superCtor.prototype, {
+	      constructor: {
+	        value: ctor,
+	        enumerable: false,
+	        writable: true,
+	        configurable: true
+	      }
+	    });
+	  }
+
+	  function Diff(kind, path) {
+	    Object.defineProperty(this, 'kind', {
+	      value: kind,
+	      enumerable: true
+	    });
+	    if (path && path.length) {
+	      Object.defineProperty(this, 'path', {
+	        value: path,
+	        enumerable: true
+	      });
+	    }
+	  }
+
+	  function DiffEdit(path, origin, value) {
+	    DiffEdit.super_.call(this, 'E', path);
+	    Object.defineProperty(this, 'lhs', {
+	      value: origin,
+	      enumerable: true
+	    });
+	    Object.defineProperty(this, 'rhs', {
+	      value: value,
+	      enumerable: true
+	    });
+	  }
+	  inherits(DiffEdit, Diff);
+
+	  function DiffNew(path, value) {
+	    DiffNew.super_.call(this, 'N', path);
+	    Object.defineProperty(this, 'rhs', {
+	      value: value,
+	      enumerable: true
+	    });
+	  }
+	  inherits(DiffNew, Diff);
+
+	  function DiffDeleted(path, value) {
+	    DiffDeleted.super_.call(this, 'D', path);
+	    Object.defineProperty(this, 'lhs', {
+	      value: value,
+	      enumerable: true
+	    });
+	  }
+	  inherits(DiffDeleted, Diff);
+
+	  function DiffArray(path, index, item) {
+	    DiffArray.super_.call(this, 'A', path);
+	    Object.defineProperty(this, 'index', {
+	      value: index,
+	      enumerable: true
+	    });
+	    Object.defineProperty(this, 'item', {
+	      value: item,
+	      enumerable: true
+	    });
+	  }
+	  inherits(DiffArray, Diff);
+
+	  function arrayRemove(arr, from, to) {
+	    var rest = arr.slice((to || from) + 1 || arr.length);
+	    arr.length = from < 0 ? arr.length + from : from;
+	    arr.push.apply(arr, rest);
+	    return arr;
+	  }
+
+	  function realTypeOf(subject) {
+	    var type = typeof subject === 'undefined' ? 'undefined' : _typeof(subject);
+	    if (type !== 'object') {
+	      return type;
+	    }
+
+	    if (subject === Math) {
+	      return 'math';
+	    } else if (subject === null) {
+	      return 'null';
+	    } else if (Array.isArray(subject)) {
+	      return 'array';
+	    } else if (Object.prototype.toString.call(subject) === '[object Date]') {
+	      return 'date';
+	    } else if (typeof subject.toString !== 'undefined' && /^\/.*\//.test(subject.toString())) {
+	      return 'regexp';
+	    }
+	    return 'object';
+	  }
+
+	  function deepDiff(lhs, rhs, changes, prefilter, path, key, stack) {
+	    path = path || [];
+	    var currentPath = path.slice(0);
+	    if (typeof key !== 'undefined') {
+	      if (prefilter) {
+	        if (typeof prefilter === 'function' && prefilter(currentPath, key)) {
+	          return;
+	        } else if ((typeof prefilter === 'undefined' ? 'undefined' : _typeof(prefilter)) === 'object') {
+	          if (prefilter.prefilter && prefilter.prefilter(currentPath, key)) {
+	            return;
+	          }
+	          if (prefilter.normalize) {
+	            var alt = prefilter.normalize(currentPath, key, lhs, rhs);
+	            if (alt) {
+	              lhs = alt[0];
+	              rhs = alt[1];
+	            }
+	          }
+	        }
+	      }
+	      currentPath.push(key);
+	    }
+
+	    // Use string comparison for regexes
+	    if (realTypeOf(lhs) === 'regexp' && realTypeOf(rhs) === 'regexp') {
+	      lhs = lhs.toString();
+	      rhs = rhs.toString();
+	    }
+
+	    var ltype = typeof lhs === 'undefined' ? 'undefined' : _typeof(lhs);
+	    var rtype = typeof rhs === 'undefined' ? 'undefined' : _typeof(rhs);
+	    if (ltype === 'undefined') {
+	      if (rtype !== 'undefined') {
+	        changes(new DiffNew(currentPath, rhs));
+	      }
+	    } else if (rtype === 'undefined') {
+	      changes(new DiffDeleted(currentPath, lhs));
+	    } else if (realTypeOf(lhs) !== realTypeOf(rhs)) {
+	      changes(new DiffEdit(currentPath, lhs, rhs));
+	    } else if (Object.prototype.toString.call(lhs) === '[object Date]' && Object.prototype.toString.call(rhs) === '[object Date]' && lhs - rhs !== 0) {
+	      changes(new DiffEdit(currentPath, lhs, rhs));
+	    } else if (ltype === 'object' && lhs !== null && rhs !== null) {
+	      stack = stack || [];
+	      if (stack.indexOf(lhs) < 0) {
+	        stack.push(lhs);
+	        if (Array.isArray(lhs)) {
+	          var i,
+	              len = lhs.length;
+	          for (i = 0; i < lhs.length; i++) {
+	            if (i >= rhs.length) {
+	              changes(new DiffArray(currentPath, i, new DiffDeleted(undefined, lhs[i])));
+	            } else {
+	              deepDiff(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack);
+	            }
+	          }
+	          while (i < rhs.length) {
+	            changes(new DiffArray(currentPath, i, new DiffNew(undefined, rhs[i++])));
+	          }
+	        } else {
+	          var akeys = Object.keys(lhs);
+	          var pkeys = Object.keys(rhs);
+	          akeys.forEach(function (k, i) {
+	            var other = pkeys.indexOf(k);
+	            if (other >= 0) {
+	              deepDiff(lhs[k], rhs[k], changes, prefilter, currentPath, k, stack);
+	              pkeys = arrayRemove(pkeys, other);
+	            } else {
+	              deepDiff(lhs[k], undefined, changes, prefilter, currentPath, k, stack);
+	            }
+	          });
+	          pkeys.forEach(function (k) {
+	            deepDiff(undefined, rhs[k], changes, prefilter, currentPath, k, stack);
+	          });
+	        }
+	        stack.length = stack.length - 1;
+	      }
+	    } else if (lhs !== rhs) {
+	      if (!(ltype === 'number' && isNaN(lhs) && isNaN(rhs))) {
+	        changes(new DiffEdit(currentPath, lhs, rhs));
+	      }
+	    }
+	  }
+
+	  function accumulateDiff(lhs, rhs, prefilter, accum) {
+	    accum = accum || [];
+	    deepDiff(lhs, rhs, function (diff) {
+	      if (diff) {
+	        accum.push(diff);
+	      }
+	    }, prefilter);
+	    return accum.length ? accum : undefined;
+	  }
+
+	  function applyArrayChange(arr, index, change) {
+	    if (change.path && change.path.length) {
+	      var it = arr[index],
+	          i,
+	          u = change.path.length - 1;
+	      for (i = 0; i < u; i++) {
+	        it = it[change.path[i]];
+	      }
+	      switch (change.kind) {
+	        case 'A':
+	          applyArrayChange(it[change.path[i]], change.index, change.item);
+	          break;
+	        case 'D':
+	          delete it[change.path[i]];
+	          break;
+	        case 'E':
+	        case 'N':
+	          it[change.path[i]] = change.rhs;
+	          break;
+	      }
+	    } else {
+	      switch (change.kind) {
+	        case 'A':
+	          applyArrayChange(arr[index], change.index, change.item);
+	          break;
+	        case 'D':
+	          arr = arrayRemove(arr, index);
+	          break;
+	        case 'E':
+	        case 'N':
+	          arr[index] = change.rhs;
+	          break;
+	      }
+	    }
+	    return arr;
+	  }
+
+	  function applyChange(target, source, change) {
+	    if (target && source && change && change.kind) {
+	      var it = target,
+	          i = -1,
+	          last = change.path ? change.path.length - 1 : 0;
+	      while (++i < last) {
+	        if (typeof it[change.path[i]] === 'undefined') {
+	          it[change.path[i]] = typeof change.path[i] === 'number' ? [] : {};
+	        }
+	        it = it[change.path[i]];
+	      }
+	      switch (change.kind) {
+	        case 'A':
+	          applyArrayChange(change.path ? it[change.path[i]] : it, change.index, change.item);
+	          break;
+	        case 'D':
+	          delete it[change.path[i]];
+	          break;
+	        case 'E':
+	        case 'N':
+	          it[change.path[i]] = change.rhs;
+	          break;
+	      }
+	    }
+	  }
+
+	  function revertArrayChange(arr, index, change) {
+	    if (change.path && change.path.length) {
+	      // the structure of the object at the index has changed...
+	      var it = arr[index],
+	          i,
+	          u = change.path.length - 1;
+	      for (i = 0; i < u; i++) {
+	        it = it[change.path[i]];
+	      }
+	      switch (change.kind) {
+	        case 'A':
+	          revertArrayChange(it[change.path[i]], change.index, change.item);
+	          break;
+	        case 'D':
+	          it[change.path[i]] = change.lhs;
+	          break;
+	        case 'E':
+	          it[change.path[i]] = change.lhs;
+	          break;
+	        case 'N':
+	          delete it[change.path[i]];
+	          break;
+	      }
+	    } else {
+	      // the array item is different...
+	      switch (change.kind) {
+	        case 'A':
+	          revertArrayChange(arr[index], change.index, change.item);
+	          break;
+	        case 'D':
+	          arr[index] = change.lhs;
+	          break;
+	        case 'E':
+	          arr[index] = change.lhs;
+	          break;
+	        case 'N':
+	          arr = arrayRemove(arr, index);
+	          break;
+	      }
+	    }
+	    return arr;
+	  }
+
+	  function revertChange(target, source, change) {
+	    if (target && source && change && change.kind) {
+	      var it = target,
+	          i,
+	          u;
+	      u = change.path.length - 1;
+	      for (i = 0; i < u; i++) {
+	        if (typeof it[change.path[i]] === 'undefined') {
+	          it[change.path[i]] = {};
+	        }
+	        it = it[change.path[i]];
+	      }
+	      switch (change.kind) {
+	        case 'A':
+	          // Array was modified...
+	          // it will be an array...
+	          revertArrayChange(it[change.path[i]], change.index, change.item);
+	          break;
+	        case 'D':
+	          // Item was deleted...
+	          it[change.path[i]] = change.lhs;
+	          break;
+	        case 'E':
+	          // Item was edited...
+	          it[change.path[i]] = change.lhs;
+	          break;
+	        case 'N':
+	          // Item is new...
+	          delete it[change.path[i]];
+	          break;
+	      }
+	    }
+	  }
+
+	  function applyDiff(target, source, filter) {
+	    if (target && source) {
+	      var onChange = function onChange(change) {
+	        if (!filter || filter(target, source, change)) {
+	          applyChange(target, source, change);
+	        }
+	      };
+	      deepDiff(target, source, onChange);
+	    }
+	  }
+
+	  Object.defineProperties(accumulateDiff, {
+
+	    diff: {
+	      value: accumulateDiff,
+	      enumerable: true
+	    },
+	    observableDiff: {
+	      value: deepDiff,
+	      enumerable: true
+	    },
+	    applyDiff: {
+	      value: applyDiff,
+	      enumerable: true
+	    },
+	    applyChange: {
+	      value: applyChange,
+	      enumerable: true
+	    },
+	    revertChange: {
+	      value: revertChange,
+	      enumerable: true
+	    },
+	    isConflict: {
+	      value: function value() {
+	        return 'undefined' !== typeof conflict;
+	      },
+	      enumerable: true
+	    },
+	    noConflict: {
+	      value: function value() {
+	        if (conflictResolution) {
+	          conflictResolution.forEach(function (it) {
+	            it();
+	          });
+	          conflictResolution = null;
+	        }
+	        return accumulateDiff;
+	      },
+	      enumerable: true
+	    }
+	  });
+
+	  return accumulateDiff;
+	});
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 76 */
+/***/ function(module, exports) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = {
+	  level: "log",
+	  logger: console,
+	  logErrors: true,
+	  collapsed: undefined,
+	  predicate: undefined,
+	  duration: false,
+	  timestamp: true,
+	  stateTransformer: function stateTransformer(state) {
+	    return state;
+	  },
+	  actionTransformer: function actionTransformer(action) {
+	    return action;
+	  },
+	  errorTransformer: function errorTransformer(error) {
+	    return error;
+	  },
+	  colors: {
+	    title: function title() {
+	      return "inherit";
+	    },
+	    prevState: function prevState() {
+	      return "#9E9E9E";
+	    },
+	    action: function action() {
+	      return "#03A9F4";
+	    },
+	    nextState: function nextState() {
+	      return "#4CAF50";
+	    },
+	    error: function error() {
+	      return "#F20404";
+	    }
+	  },
+	  diff: false,
+	  diffPredicate: undefined,
+
+	  // Deprecated options
+	  transformer: undefined
+	};
+	module.exports = exports['default'];
+
+/***/ },
+/* 77 */,
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+	exports.default = App;
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Nav = __webpack_require__(79);
+
+	var _Nav2 = _interopRequireDefault(_Nav);
+
+	var _Main = __webpack_require__(81);
+
+	var _Main2 = _interopRequireDefault(_Main);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function App(props) {
+	    return _react2.default.createElement(
+	        'div',
+	        { className: 'mail-client' },
+	        _react2.default.createElement(
+	            'aside',
+	            null,
+	            _react2.default.createElement(_Nav2.default, null)
+	        ),
+	        _react2.default.createElement(
+	            'main',
+	            null,
+	            _react2.default.createElement(_Main2.default, null)
+	        )
+	    );
+	}
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Link = __webpack_require__(80);
+
+	var _Link2 = _interopRequireDefault(_Link);
+
+	var _reactRedux = __webpack_require__(2);
+
+	var _redux = __webpack_require__(10);
+
+	var _reduxRouter = __webpack_require__(64);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Nav = function (_Component) {
+	    _inherits(Nav, _Component);
+
+	    function Nav(props, context) {
+	        _classCallCheck(this, Nav);
+
+	        var _this = _possibleConstructorReturn(this, (Nav.__proto__ || Object.getPrototypeOf(Nav)).call(this, props));
+
+	        _this.router = context.router;
+	        return _this;
+	    }
+
+	    _createClass(Nav, [{
+	        key: 'render',
+	        value: function render() {
+	            var _props = this.props,
+	                navigateTo = _props.navigateTo,
+	                route = _props.route;
+
+
+	            return _react2.default.createElement(
+	                'nav',
+	                null,
+	                _react2.default.createElement(
+	                    _Link2.default,
+	                    { router: this.router, navigateTo: navigateTo, name: 'inbox', options: { reload: true } },
+	                    'Inbox'
+	                ),
+	                _react2.default.createElement(
+	                    _Link2.default,
+	                    { router: this.router, navigateTo: navigateTo, name: 'compose' },
+	                    'Compose'
+	                ),
+	                _react2.default.createElement(
+	                    _Link2.default,
+	                    { router: this.router, navigateTo: navigateTo, name: 'contacts' },
+	                    'Contacts'
+	                )
+	            );
+	        }
+	    }]);
+
+	    return Nav;
+	}(_react.Component);
+
+	Nav.contextTypes = {
+	    router: _react.PropTypes.object.isRequired
+	};
+
+	exports.default = (0, _reactRedux.connect)(function (state) {
+	    return state.router.route;
+	}, function (dispatch) {
+	    return (0, _redux.bindActionCreators)({ navigateTo: _reduxRouter.actions.navigateTo }, dispatch);
+	})(Nav);
+
+/***/ },
+/* 80 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function Link(props) {
+	    var name = props.name,
+	        params = props.params,
+	        options = props.options,
+	        router = props.router,
+	        navigateTo = props.navigateTo;
+
+
+	    var href = router.buildUrl(name, params);
+	    var onClick = function onClick(evt) {
+	        evt.preventDefault();
+	        navigateTo(name, params, options);
+	    };
+	    var className = router.isActive(name, params) ? 'active' : '';
+
+	    return _react2.default.createElement(
+	        'a',
+	        { href: href, onClick: onClick, className: className },
+	        props.children
+	    );
+	}
+
+	Link.propTypes = {
+	    name: _react.PropTypes.string.isRequired,
+	    params: _react.PropTypes.object,
+	    options: _react.PropTypes.object,
+	    navigateTo: _react.PropTypes.func.isRequired
+	};
+
+	Link.defaultProps = {
+	    params: {},
+	    options: {}
+	};
+
+	exports.default = Link;
+
+/***/ },
+/* 81 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3396,17 +7256,17 @@
 
 	var _reactRedux = __webpack_require__(2);
 
-	var _reduxRouter = __webpack_require__(43);
+	var _reduxRouter = __webpack_require__(64);
 
-	var _Inbox = __webpack_require__(52);
+	var _Inbox = __webpack_require__(82);
 
 	var _Inbox2 = _interopRequireDefault(_Inbox);
 
-	var _Compose = __webpack_require__(57);
+	var _Compose = __webpack_require__(87);
 
 	var _Compose2 = _interopRequireDefault(_Compose);
 
-	var _NotFound = __webpack_require__(60);
+	var _NotFound = __webpack_require__(90);
 
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 
@@ -3430,7 +7290,7 @@
 	})(Main);
 
 /***/ },
-/* 52 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3443,17 +7303,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _InboxList = __webpack_require__(53);
+	var _InboxList = __webpack_require__(83);
 
 	var _InboxList2 = _interopRequireDefault(_InboxList);
 
-	var _Message = __webpack_require__(55);
+	var _Message = __webpack_require__(85);
 
 	var _Message2 = _interopRequireDefault(_Message);
 
 	var _reactRedux = __webpack_require__(2);
 
-	var _reduxRouter = __webpack_require__(43);
+	var _reduxRouter = __webpack_require__(64);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3474,7 +7334,7 @@
 	})(Inbox);
 
 /***/ },
-/* 53 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3489,7 +7349,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _InboxItem = __webpack_require__(54);
+	var _InboxItem = __webpack_require__(84);
 
 	var _InboxItem2 = _interopRequireDefault(_InboxItem);
 
@@ -3497,7 +7357,7 @@
 
 	var _redux = __webpack_require__(10);
 
-	var _reduxRouter = __webpack_require__(43);
+	var _reduxRouter = __webpack_require__(64);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -3523,7 +7383,7 @@
 	})(InboxList);
 
 /***/ },
-/* 54 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3563,7 +7423,7 @@
 	exports.default = InboxItem;
 
 /***/ },
-/* 55 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3579,7 +7439,7 @@
 
 	var _reactRedux = __webpack_require__(2);
 
-	var _lodash = __webpack_require__(56);
+	var _lodash = __webpack_require__(86);
 
 	var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -3616,7 +7476,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(Message);
 
 /***/ },
-/* 56 */
+/* 86 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, module) {'use strict';
@@ -6021,7 +9881,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(24)(module)))
 
 /***/ },
-/* 57 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6038,11 +9898,11 @@
 
 	var _reactRedux = __webpack_require__(2);
 
-	var _reselect = __webpack_require__(58);
+	var _reselect = __webpack_require__(88);
 
 	var _redux = __webpack_require__(10);
 
-	var _draft = __webpack_require__(59);
+	var _draft = __webpack_require__(89);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -6129,7 +9989,7 @@
 	exports.default = (0, _reactRedux.connect)(draftSelector, mapDispatchToProps)(Compose);
 
 /***/ },
-/* 58 */
+/* 88 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6255,7 +10115,7 @@
 	}
 
 /***/ },
-/* 59 */
+/* 89 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6280,7 +10140,7 @@
 	}
 
 /***/ },
-/* 60 */
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6305,2976 +10165,7 @@
 	}
 
 /***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = configureRouter;
-
-	var _router = __webpack_require__(62);
-
-	var _router2 = _interopRequireDefault(_router);
-
-	var _logger = __webpack_require__(77);
-
-	var _logger2 = _interopRequireDefault(_logger);
-
-	var _listeners = __webpack_require__(78);
-
-	var _listeners2 = _interopRequireDefault(_listeners);
-
-	var _browser = __webpack_require__(79);
-
-	var _browser2 = _interopRequireDefault(_browser);
-
-	var _routes = __webpack_require__(82);
-
-	var _routes2 = _interopRequireDefault(_routes);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function configureRouter() {
-	  var useListenersPlugin = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : false;
-
-	  var router = (0, _router2.default)(_routes2.default, {
-	    defaultRoute: 'inbox'
-	  })
-	  // Plugins
-	  .usePlugin(_logger2.default).usePlugin((0, _browser2.default)({
-	    useHash: true
-	  }));
-
-	  if (useListenersPlugin) {
-	    router.usePlugin((0, _listeners2.default)());
-	  }
-
-	  return router;
-	}
-
-	//export default configureRouter;
-
-/***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.constants = exports.transitionPath = exports.errorCodes = exports.loggerPlugin = exports.RouteNode = exports.createRouter = undefined;
-
-	var _createRouter = __webpack_require__(63);
-
-	var _createRouter2 = _interopRequireDefault(_createRouter);
-
-	var _routeNode = __webpack_require__(64);
-
-	var _routeNode2 = _interopRequireDefault(_routeNode);
-
-	var _logger = __webpack_require__(77);
-
-	var _logger2 = _interopRequireDefault(_logger);
-
-	var _router = __webpack_require__(50);
-
-	var _router2 = _interopRequireDefault(_router);
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	exports.default = _createRouter2.default;
-	exports.createRouter = _createRouter2.default;
-	exports.RouteNode = _routeNode2.default;
-	exports.loggerPlugin = _logger2.default;
-	exports.errorCodes = _constants.errorCodes;
-	exports.transitionPath = _router2.default;
-	exports.constants = _constants2.default;
-
-/***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _routeNode = __webpack_require__(64);
-
-	var _routeNode2 = _interopRequireDefault(_routeNode);
-
-	var _utils = __webpack_require__(67);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	var _routerLifecycle = __webpack_require__(69);
-
-	var _routerLifecycle2 = _interopRequireDefault(_routerLifecycle);
-
-	var _navigation = __webpack_require__(70);
-
-	var _navigation2 = _interopRequireDefault(_navigation);
-
-	var _middleware = __webpack_require__(73);
-
-	var _middleware2 = _interopRequireDefault(_middleware);
-
-	var _plugins = __webpack_require__(74);
-
-	var _plugins2 = _interopRequireDefault(_plugins);
-
-	var _routeLifecycle = __webpack_require__(75);
-
-	var _routeLifecycle2 = _interopRequireDefault(_routeLifecycle);
-
-	var _clone = __webpack_require__(76);
-
-	var _clone2 = _interopRequireDefault(_clone);
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _toConsumableArray(arr) {
-	    if (Array.isArray(arr)) {
-	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	            arr2[i] = arr[i];
-	        }return arr2;
-	    } else {
-	        return Array.from(arr);
-	    }
-	}
-
-	var defaultOptions = {
-	    trailingSlash: 0,
-	    useTrailingSlash: undefined,
-	    autoCleanUp: true,
-	    strictQueryParams: true,
-	    allowNotFound: false,
-	    strongMatching: true
-	};
-
-	/**
-	 * Create a router
-	 * @param  {Array}  [routes]          The routes
-	 * @param  {Object} [options={}]      The router options
-	 * @param  {Object} [dependencies={}] The router dependencies
-	 * @return {Object}                   The router instance
-	 */
-	function createRouter(routes) {
-	    var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	    var deps = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-
-	    var routerState = null;
-	    var callbacks = {};
-	    var dependencies = deps;
-	    var options = _extends({}, defaultOptions);
-
-	    Object.keys(opts).forEach(function (opt) {
-	        return setOption(opt, opts[opt]);
-	    });
-
-	    var router = {
-	        rootNode: rootNode,
-	        getOptions: getOptions,
-	        setOption: setOption,
-	        getState: getState,
-	        setState: setState,
-	        makeState: makeState,
-	        makeNotFoundState: makeNotFoundState,
-	        setDependency: setDependency,
-	        setDependencies: setDependencies,
-	        getDependencies: getDependencies,
-	        add: add,
-	        addNode: addNode,
-	        executeFactory: executeFactory,
-	        addEventListener: addEventListener,
-	        removeEventListener: removeEventListener,
-	        invokeEventListeners: invokeEventListeners
-	    };
-
-	    /**
-	     * Invoke all event listeners by event name. Possible event names are listed under constants
-	     * (`import { constants } from 'router5'`): `ROUTER_START`, `ROUTER_STOP`, `TRANSITION_START`,
-	     * `TRANSITION_CANCEL`, `TRANSITION_SUCCESS`, `TRANSITION_ERROR`.
-	     * This method is used internally and should not be invoked directly, but it can be useful for
-	     * testing purposes.
-	     * @private
-	     * @name invokeEventListeners
-	     * @param  {String}    eventName The event name
-	     */
-	    function invokeEventListeners(eventName) {
-	        for (var _len = arguments.length, args = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-	            args[_key - 1] = arguments[_key];
-	        }
-
-	        (callbacks[eventName] || []).forEach(function (cb) {
-	            return cb.apply(undefined, args);
-	        });
-	    }
-
-	    /**
-	     * Removes an event listener
-	     * @private
-	     * @param  {String}   eventName The event name
-	     * @param  {Function} cb        The callback to remove
-	     */
-	    function removeEventListener(eventName, cb) {
-	        callbacks[eventName] = callbacks[eventName].filter(function (_cb) {
-	            return _cb !== cb;
-	        });
-	    }
-
-	    /**
-	     * Add an event listener
-	     * @private
-	     * @param {String}   eventName The event name
-	     * @param {Function} cb        The callback to add
-	     */
-	    function addEventListener(eventName, cb) {
-	        callbacks[eventName] = (callbacks[eventName] || []).concat(cb);
-
-	        return function () {
-	            return removeEventListener(eventName, cb);
-	        };
-	    }
-
-	    (0, _utils2.default)(router);
-	    (0, _plugins2.default)(router);
-	    (0, _middleware2.default)(router);
-	    (0, _routeLifecycle2.default)(router);
-	    (0, _routerLifecycle2.default)(router);
-	    (0, _navigation2.default)(router);
-	    (0, _clone2.default)(router, createRouter);
-
-	    var rootNode = routes instanceof _routeNode2.default ? routes : new _routeNode2.default('', '', routes, addCanActivate);
-
-	    router.rootNode = rootNode;
-
-	    return router;
-
-	    function addCanActivate(route) {
-	        if (route.canActivate) router.canActivate(route.name, route.canActivate);
-	    }
-
-	    /**
-	     * Build a state object
-	     * @param  {String} name         The state name
-	     * @param  {Object} params       The state params
-	     * @param  {String} path         The state path
-	     * @param  {Object} [metaParams] Description of the state params
-	     * @param  {String} [source]     The source of the routing state
-	     * @return {Object}              The state object
-	     */
-	    function makeState(name, params, path, metaParams, source) {
-	        var state = {};
-	        var setProp = function setProp(key, value) {
-	            return Object.defineProperty(state, key, { value: value, enumerable: true });
-	        };
-	        setProp('name', name);
-	        setProp('params', params);
-	        setProp('path', path);
-	        if (metaParams || source) {
-	            var meta = { params: metaParams };
-
-	            if (source) meta.source = source;
-
-	            setProp('meta', meta);
-	        }
-	        return state;
-	    }
-
-	    /**
-	     * Build a not found state for a given path
-	     * @param  {String} path The unmatched path
-	     * @return {Object}      The not found state object
-	     */
-	    function makeNotFoundState(path) {
-	        return makeState(_constants2.default.UNKNOWN_ROUTE, { path: path }, path, {});
-	    }
-
-	    /**
-	     * Get the current router state
-	     * @return {Object} The current state
-	     */
-	    function getState() {
-	        return routerState;
-	    }
-
-	    /**
-	     * Set the current router state
-	     * @param {Object} state The state object
-	     */
-	    function setState(state) {
-	        routerState = state;
-	    }
-
-	    /**
-	     * Get router options
-	     * @return {Object} The router options
-	     */
-	    function getOptions() {
-	        return options;
-	    }
-
-	    /**
-	     * Set an option
-	     * @param  {String} option The option name
-	     * @param  {*}      value  The option value
-	     * @return {Object}       The router instance
-	     */
-	    function setOption(option, value) {
-	        if (option === 'useTrailingSlash' && value !== undefined) {
-	            options.trailingSlash = true;
-	        }
-	        options[option] = value;
-	        return router;
-	    }
-
-	    /**
-	     * Set a router dependency
-	     * @param  {String} dependencyName The dependency name
-	     * @param  {*}      dependency     The dependency
-	     * @return {Object}                The router instance
-	     */
-	    function setDependency(dependencyName, dependency) {
-	        dependencies[dependencyName] = dependency;
-	        return router;
-	    }
-
-	    /**
-	     * Add dependencies
-	     * @param { Object} deps A object of dependencies (key-value pairs)
-	     * @return {Object}      The router instance
-	     */
-	    function setDependencies(deps) {
-	        Object.keys(deps).forEach(function (depName) {
-	            dependencies[depName] = deps[depName];
-	        });
-
-	        return router;
-	    }
-
-	    /**
-	     * Get dependencies
-	     * @return {Object} The dependencies
-	     */
-	    function getDependencies() {
-	        return dependencies;
-	    }
-
-	    function getInjectables() {
-	        return [router, getDependencies()];
-	    }
-
-	    function executeFactory(factoryFunction) {
-	        return factoryFunction.apply(undefined, _toConsumableArray(getInjectables()));
-	    }
-
-	    /**
-	     * Add routes
-	     * @param  {Array} routes A list of routes to add
-	     * @return {Object}       The router instance
-	     */
-	    function add(routes) {
-	        rootNode.add(routes, addCanActivate);
-	        return router;
-	    }
-
-	    /**
-	     * Add a single route (node)
-	     * @param {String} name                   The route name (full name)
-	     * @param {String} path                   The route path (from parent)
-	     * @param {Function} [canActivateHandler] The canActivate handler for this node
-	     */
-	    function addNode(name, path, canActivateHandler) {
-	        router.rootNode.addNode(name, path);
-	        if (canActivateHandler) router.canActivate(name, canActivateHandler);
-	        return router;
-	    }
-	}
-
-	exports.default = createRouter;
-
-/***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	var _createClass = function () {
-	    function defineProperties(target, props) {
-	        for (var i = 0; i < props.length; i++) {
-	            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	        }
-	    }return function (Constructor, protoProps, staticProps) {
-	        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	    };
-	}();
-
-	var _pathParser = __webpack_require__(65);
-
-	var _pathParser2 = _interopRequireDefault(_pathParser);
-
-	var _searchParams = __webpack_require__(66);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _toConsumableArray(arr) {
-	    if (Array.isArray(arr)) {
-	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	            arr2[i] = arr[i];
-	        }return arr2;
-	    } else {
-	        return Array.from(arr);
-	    }
-	}
-
-	function _classCallCheck(instance, Constructor) {
-	    if (!(instance instanceof Constructor)) {
-	        throw new TypeError("Cannot call a class as a function");
-	    }
-	}
-
-	var noop = function noop() {};
-
-	var RouteNode = function () {
-	    function RouteNode() {
-	        var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-	        var path = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-	        var childRoutes = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [];
-	        var cb = arguments[3];
-	        var parent = arguments[4];
-
-	        _classCallCheck(this, RouteNode);
-
-	        this.name = name;
-	        this.absolute = /^~/.test(path);
-	        this.path = this.absolute ? path.slice(1) : path;
-	        this.parser = this.path ? new _pathParser2.default(this.path) : null;
-	        this.children = [];
-	        this.parent = parent;
-
-	        this.checkParents();
-
-	        this.add(childRoutes, cb);
-
-	        return this;
-	    }
-
-	    _createClass(RouteNode, [{
-	        key: 'checkParents',
-	        value: function checkParents() {
-	            if (this.absolute && this.haveParentsParams()) {
-	                throw new Error('[RouteNode] A RouteNode with an abolute path cannot have parents with route parameters');
-	            }
-	        }
-	    }, {
-	        key: 'haveParentsParams',
-	        value: function haveParentsParams() {
-	            if (this.parent && this.parent.parser) {
-	                var parser = this.parent.parser;
-	                var hasParams = parser.hasUrlParams || parser.hasSpatParam || parser.hasMatrixParams || parser.hasQueryParams;
-
-	                return hasParams || this.parent.haveParentsParams();
-	            }
-
-	            return false;
-	        }
-	    }, {
-	        key: 'getNonAbsoluteChildren',
-	        value: function getNonAbsoluteChildren() {
-	            return this.children.filter(function (child) {
-	                return !child.absolute;
-	            });
-	        }
-	    }, {
-	        key: 'findAbsoluteChildren',
-	        value: function findAbsoluteChildren() {
-	            return this.children.reduce(function (absoluteChildren, child) {
-	                return absoluteChildren.concat(child.absolute ? child : []).concat(child.findAbsoluteChildren());
-	            }, []);
-	        }
-	    }, {
-	        key: 'findSlashChild',
-	        value: function findSlashChild() {
-	            var slashChildren = this.getNonAbsoluteChildren().filter(function (child) {
-	                return child.parser && /^\/(\?|$)/.test(child.parser.path);
-	            });
-
-	            return slashChildren[0];
-	        }
-	    }, {
-	        key: 'getParentSegments',
-	        value: function getParentSegments() {
-	            var segments = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
-
-	            return this.parent && this.parent.parser ? this.parent.getParentSegments(segments.concat(this.parent)) : segments.reverse();
-	        }
-	    }, {
-	        key: 'setParent',
-	        value: function setParent(parent) {
-	            this.parent = parent;
-	            this.checkParents();
-	        }
-	    }, {
-	        key: 'setPath',
-	        value: function setPath() {
-	            var path = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
-
-	            this.path = path;
-	            this.parser = path ? new _pathParser2.default(path) : null;
-	        }
-	    }, {
-	        key: 'add',
-	        value: function add(route) {
-	            var _this = this;
-
-	            var cb = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : noop;
-
-	            var originalRoute = void 0;
-	            if (route === undefined || route === null) return;
-
-	            if (route instanceof Array) {
-	                route.forEach(function (r) {
-	                    return _this.add(r, cb);
-	                });
-	                return;
-	            }
-
-	            if (!(route instanceof RouteNode) && !(route instanceof Object)) {
-	                throw new Error('RouteNode.add() expects routes to be an Object or an instance of RouteNode.');
-	            } else if (route instanceof RouteNode) {
-	                route.setParent(this);
-	            } else {
-	                if (!route.name || !route.path) {
-	                    throw new Error('RouteNode.add() expects routes to have a name and a path defined.');
-	                }
-	                originalRoute = route;
-	                route = new RouteNode(route.name, route.path, route.children, cb, this);
-	            }
-
-	            var names = route.name.split('.');
-
-	            if (names.length === 1) {
-	                // Check duplicated routes
-	                if (this.children.map(function (child) {
-	                    return child.name;
-	                }).indexOf(route.name) !== -1) {
-	                    throw new Error('Alias "' + route.name + '" is already defined in route node');
-	                }
-
-	                // Check duplicated paths
-	                if (this.children.map(function (child) {
-	                    return child.path;
-	                }).indexOf(route.path) !== -1) {
-	                    throw new Error('Path "' + route.path + '" is already defined in route node');
-	                }
-
-	                this.children.push(route);
-	                // Push greedy spats to the bottom of the pile
-	                this.children.sort(function (left, right) {
-	                    var leftPath = left.path.split('?')[0].replace(/(.+)\/$/, '$1');
-	                    var rightPath = right.path.split('?')[0].replace(/(.+)\/$/, '$1');
-	                    // '/' last
-	                    if (leftPath === '/') return 1;
-	                    if (rightPath === '/') return -1;
-	                    // Spat params last
-	                    if (left.parser.hasSpatParam) return 1;
-	                    if (right.parser.hasSpatParam) return -1;
-	                    // No spat, number of segments (less segments last)
-	                    var leftSegments = (leftPath.match(/\//g) || []).length;
-	                    var rightSegments = (rightPath.match(/\//g) || []).length;
-	                    if (leftSegments < rightSegments) return 1;
-	                    if (leftSegments > rightSegments) return -1;
-	                    // Same number of segments, number of URL params ascending
-	                    var leftParamsCount = left.parser.urlParams.length;
-	                    var rightParamsCount = right.parser.urlParams.length;
-	                    if (leftParamsCount < rightParamsCount) return -1;
-	                    if (leftParamsCount > rightParamsCount) return 1;
-	                    // Same number of segments and params, last segment length descending
-	                    var leftParamLength = (leftPath.split('/').slice(-1)[0] || '').length;
-	                    var rightParamLength = (rightPath.split('/').slice(-1)[0] || '').length;
-	                    if (leftParamLength < rightParamLength) return 1;
-	                    if (leftParamLength > rightParamLength) return -1;
-	                    // Same last segment length, preserve definition order
-	                    return 0;
-	                });
-	            } else {
-	                // Locate parent node
-	                var segments = this.getSegmentsByName(names.slice(0, -1).join('.'));
-	                if (segments) {
-	                    segments[segments.length - 1].add(new RouteNode(names[names.length - 1], route.path, route.children));
-	                } else {
-	                    throw new Error('Could not add route named \'' + route.name + '\', parent is missing.');
-	                }
-	            }
-
-	            if (originalRoute) cb(originalRoute);
-
-	            return this;
-	        }
-	    }, {
-	        key: 'addNode',
-	        value: function addNode(name, params) {
-	            this.add(new RouteNode(name, params));
-	            return this;
-	        }
-	    }, {
-	        key: 'getSegmentsByName',
-	        value: function getSegmentsByName(routeName) {
-	            var findSegmentByName = function findSegmentByName(name, routes) {
-	                var filteredRoutes = routes.filter(function (r) {
-	                    return r.name === name;
-	                });
-	                return filteredRoutes.length ? filteredRoutes[0] : undefined;
-	            };
-	            var segments = [];
-	            var routes = this.parser ? [this] : this.children;
-	            var names = (this.parser ? [''] : []).concat(routeName.split('.'));
-
-	            var matched = names.every(function (name) {
-	                var segment = findSegmentByName(name, routes);
-	                if (segment) {
-	                    routes = segment.children;
-	                    segments.push(segment);
-	                    return true;
-	                }
-	                return false;
-	            });
-
-	            return matched ? segments : null;
-	        }
-	    }, {
-	        key: 'getSegmentsMatchingPath',
-	        value: function getSegmentsMatchingPath(path, options) {
-	            var trailingSlash = options.trailingSlash;
-	            var strictQueryParams = options.strictQueryParams;
-	            var strongMatching = options.strongMatching;
-
-	            var matchChildren = function matchChildren(nodes, pathSegment, segments) {
-	                var isRoot = nodes.length === 1 && nodes[0].name === '';
-	                // for (child of node.children) {
-
-	                var _loop = function _loop(i) {
-	                    var child = nodes[i];
-
-	                    // Partially match path
-	                    var match = void 0;
-	                    var remainingPath = void 0;
-
-	                    if (!child.children.length) {
-	                        match = child.parser.test(pathSegment, { trailingSlash: trailingSlash });
-	                    }
-
-	                    if (!match) {
-	                        match = child.parser.partialTest(pathSegment, { delimiter: strongMatching });
-	                    }
-
-	                    if (match) {
-	                        // Remove consumed segment from path
-	                        var consumedPath = child.parser.build(match, { ignoreSearch: true });
-	                        if (trailingSlash && !child.children.length) {
-	                            consumedPath = consumedPath.replace(/\/$/, '');
-	                        }
-	                        remainingPath = pathSegment.replace(consumedPath, '');
-	                        var search = (0, _searchParams.omit)((0, _searchParams.getSearch)(pathSegment.replace(consumedPath, '')), child.parser.queryParams.concat(child.parser.queryParamsBr));
-	                        remainingPath = (0, _searchParams.getPath)(remainingPath) + (search ? '?' + search : '');
-	                        if (trailingSlash && !isRoot && remainingPath === '/' && !/\/$/.test(consumedPath)) {
-	                            remainingPath = '';
-	                        }
-
-	                        segments.push(child);
-	                        Object.keys(match).forEach(function (param) {
-	                            return segments.params[param] = match[param];
-	                        });
-
-	                        if (!isRoot && !remainingPath.length) {
-	                            // fully matched
-	                            return {
-	                                v: segments
-	                            };
-	                        }
-	                        if (!isRoot && !strictQueryParams && remainingPath.indexOf('?') === 0) {
-	                            // unmatched queryParams in non strict mode
-	                            var remainingQueryParams = (0, _searchParams.parse)(remainingPath.slice(1));
-
-	                            remainingQueryParams.forEach(function (_ref) {
-	                                var name = _ref.name;
-	                                var value = _ref.value;
-	                                return segments.params[name] = value;
-	                            });
-	                            return {
-	                                v: segments
-	                            };
-	                        }
-	                        // Continue matching on non absolute children
-	                        var children = child.getNonAbsoluteChildren();
-	                        // If no children to match against but unmatched path left
-	                        if (!children.length) {
-	                            return {
-	                                v: null
-	                            };
-	                        }
-	                        // Else: remaining path and children
-	                        return {
-	                            v: matchChildren(children, remainingPath, segments)
-	                        };
-	                    }
-	                };
-
-	                for (var i = 0; i < nodes.length; i += 1) {
-	                    var _ret = _loop(i);
-
-	                    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
-	                }
-
-	                return null;
-	            };
-
-	            var topLevelNodes = this.parser ? [this] : this.children;
-	            var startingNodes = topLevelNodes.reduce(function (nodes, node) {
-	                return nodes.concat(node, node.findAbsoluteChildren());
-	            }, []);
-
-	            var segments = [];
-	            segments.params = {};
-
-	            var matched = matchChildren(startingNodes, path, segments);
-	            if (matched && matched.length === 1 && matched[0].name === '') return null;
-	            return matched;
-	        }
-	    }, {
-	        key: 'getPathFromSegments',
-	        value: function getPathFromSegments(segments) {
-	            return segments ? segments.map(function (segment) {
-	                return segment.path;
-	            }).join('') : null;
-	        }
-	    }, {
-	        key: 'getPath',
-	        value: function getPath(routeName) {
-	            return this.getPathFromSegments(this.getSegmentsByName(routeName));
-	        }
-	    }, {
-	        key: 'buildPathFromSegments',
-	        value: function buildPathFromSegments(segments) {
-	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	            if (!segments) return null;
-
-	            var searchParams = segments.filter(function (s) {
-	                return s.parser.hasQueryParams;
-	            }).reduce(function (params, s) {
-	                return params.concat(s.parser.queryParams).concat(s.parser.queryParamsBr.map(function (p) {
-	                    return p + '[]';
-	                }));
-	            }, []);
-
-	            var searchPart = !searchParams.length ? null : searchParams.filter(function (p) {
-	                if (Object.keys(params).indexOf((0, _searchParams.withoutBrackets)(p)) === -1) {
-	                    return false;
-	                }
-
-	                var val = params[(0, _searchParams.withoutBrackets)(p)];
-
-	                return val !== undefined && val !== null;
-	            }).map(function (p) {
-	                var val = params[(0, _searchParams.withoutBrackets)(p)];
-	                var encodedVal = Array.isArray(val) ? val.map(encodeURIComponent) : encodeURIComponent(val);
-
-	                return _pathParser2.default.serialise(p, encodedVal);
-	            }).join('&');
-
-	            var path = segments.reduce(function (path, segment) {
-	                var segmentPath = segment.parser.build(params, { ignoreSearch: true });
-
-	                return segment.absolute ? segmentPath : path + segmentPath;
-	            }, '');
-
-	            return path + (searchPart ? '?' + searchPart : '');
-	        }
-	    }, {
-	        key: 'getMetaFromSegments',
-	        value: function getMetaFromSegments(segments) {
-	            var accName = '';
-
-	            return segments.reduce(function (meta, segment) {
-	                var urlParams = segment.parser.urlParams.reduce(function (params, p) {
-	                    params[p] = 'url';
-	                    return params;
-	                }, {});
-
-	                var allParams = segment.parser.queryParams.reduce(function (params, p) {
-	                    params[p] = 'query';
-	                    return params;
-	                }, urlParams);
-
-	                if (segment.name !== undefined) {
-	                    accName = accName ? accName + '.' + segment.name : segment.name;
-	                    meta[accName] = allParams;
-	                }
-	                return meta;
-	            }, {});
-	        }
-	    }, {
-	        key: 'buildPath',
-	        value: function buildPath(routeName) {
-	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-	            var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
-
-	            var path = this.buildPathFromSegments(this.getSegmentsByName(routeName), params);
-
-	            if (options.trailingSlash === true) {
-	                return (/\/$/.test(path) ? path : path + '/'
-	                );
-	            } else if (options.trailingSlash === false) {
-	                return (/\/$/.test(path) ? path.slice(0, -1) : path
-	                );
-	            }
-
-	            return path;
-	        }
-	    }, {
-	        key: 'buildStateFromSegments',
-	        value: function buildStateFromSegments(segments) {
-	            if (!segments || !segments.length) return null;
-
-	            var name = segments.map(function (segment) {
-	                return segment.name;
-	            }).filter(function (name) {
-	                return name;
-	            }).join('.');
-	            var params = segments.params;
-
-	            return {
-	                name: name,
-	                params: params,
-	                _meta: this.getMetaFromSegments(segments)
-	            };
-	        }
-	    }, {
-	        key: 'buildState',
-	        value: function buildState(name) {
-	            var params = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	            var segments = this.getSegmentsByName(name);
-	            if (!segments || !segments.length) return null;
-
-	            return {
-	                name: name,
-	                params: params,
-	                _meta: this.getMetaFromSegments(segments)
-	            };
-	        }
-	    }, {
-	        key: 'matchPath',
-	        value: function matchPath(path, options) {
-	            var defaultOptions = { trailingSlash: false, strictQueryParams: true, strongMatching: true };
-	            var opts = _extends({}, defaultOptions, options);
-	            var matchedSegments = this.getSegmentsMatchingPath(path, opts);
-
-	            if (matchedSegments) {
-	                if (matchedSegments[0].absolute) {
-	                    var firstSegmentParams = matchedSegments[0].getParentSegments();
-
-	                    matchedSegments.reverse();
-	                    matchedSegments.push.apply(matchedSegments, _toConsumableArray(firstSegmentParams));
-	                    matchedSegments.reverse();
-	                }
-
-	                var lastSegment = matchedSegments[matchedSegments.length - 1];
-	                var lastSegmentSlashChild = lastSegment.findSlashChild();
-
-	                if (lastSegmentSlashChild) {
-	                    matchedSegments.push(lastSegmentSlashChild);
-	                }
-	            }
-
-	            return this.buildStateFromSegments(matchedSegments);
-	        }
-	    }]);
-
-	    return RouteNode;
-	}();
-
-	exports.default = RouteNode;
-	module.exports = exports['default'];
-
-/***/ },
-/* 65 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _createClass = function () {
-	    function defineProperties(target, props) {
-	        for (var i = 0; i < props.length; i++) {
-	            var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	        }
-	    }return function (Constructor, protoProps, staticProps) {
-	        if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	    };
-	}();
-
-	var _searchParams = __webpack_require__(66);
-
-	function _classCallCheck(instance, Constructor) {
-	    if (!(instance instanceof Constructor)) {
-	        throw new TypeError("Cannot call a class as a function");
-	    }
-	}
-
-	var defaultOrConstrained = function defaultOrConstrained(match) {
-	    return '(' + (match ? match.replace(/(^<|>$)/g, '') : '[a-zA-Z0-9-_.~%\':]+') + ')';
-	};
-
-	var rules = [{
-	    // An URL can contain a parameter :paramName
-	    // - and _ are allowed but not in last position
-	    name: 'url-parameter',
-	    pattern: /^:([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(<(.+?)>)?/,
-	    regex: function regex(match) {
-	        return new RegExp(defaultOrConstrained(match[2]));
-	    }
-	}, {
-	    // Url parameter (splat)
-	    name: 'url-parameter-splat',
-	    pattern: /^\*([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})/,
-	    regex: /([^\?]*)/
-	}, {
-	    name: 'url-parameter-matrix',
-	    pattern: /^\;([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(<(.+?)>)?/,
-	    regex: function regex(match) {
-	        return new RegExp(';' + match[1] + '=' + defaultOrConstrained(match[2]));
-	    }
-	}, {
-	    // Query parameter: ?param1&param2
-	    //                   ?:param1&:param2
-	    name: 'query-parameter-bracket',
-	    pattern: /^(?:\?|&)(?:\:)?([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})(?:\[\])/
-	}, {
-	    // Query parameter: ?param1&param2
-	    //                   ?:param1&:param2
-	    name: 'query-parameter',
-	    pattern: /^(?:\?|&)(?:\:)?([a-zA-Z0-9-_]*[a-zA-Z0-9]{1})/
-	}, {
-	    // Delimiter /
-	    name: 'delimiter',
-	    pattern: /^(\/|\?)/,
-	    regex: function regex(match) {
-	        return new RegExp('\\' + match[0]);
-	    }
-	}, {
-	    // Sub delimiters
-	    name: 'sub-delimiter',
-	    pattern: /^(\!|\&|\-|_|\.|;)/,
-	    regex: function regex(match) {
-	        return new RegExp(match[0]);
-	    }
-	}, {
-	    // Unmatched fragment (until delimiter is found)
-	    name: 'fragment',
-	    pattern: /^([0-9a-zA-Z]+)/,
-	    regex: function regex(match) {
-	        return new RegExp(match[0]);
-	    }
-	}];
-
-	var exists = function exists(val) {
-	    return val !== undefined && val !== null;
-	};
-
-	var tokenise = function tokenise(str) {
-	    var tokens = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
-
-	    // Look for a matching rule
-	    var matched = rules.some(function (rule) {
-	        var match = str.match(rule.pattern);
-	        if (!match) return false;
-
-	        tokens.push({
-	            type: rule.name,
-	            match: match[0],
-	            val: match.slice(1, 2),
-	            otherVal: match.slice(2),
-	            regex: rule.regex instanceof Function ? rule.regex(match) : rule.regex
-	        });
-
-	        if (match[0].length < str.length) tokens = tokenise(str.substr(match[0].length), tokens);
-	        return true;
-	    });
-
-	    // If no rules matched, throw an error (possible malformed path)
-	    if (!matched) {
-	        throw new Error('Could not parse path.');
-	    }
-	    // Return tokens
-	    return tokens;
-	};
-
-	var optTrailingSlash = function optTrailingSlash(source, trailingSlash) {
-	    if (!trailingSlash) return source;
-	    return source.replace(/\\\/$/, '') + '(?:\\/)?';
-	};
-
-	var upToDelimiter = function upToDelimiter(source, delimiter) {
-	    if (!delimiter) return source;
-
-	    return (/(\/)$/.test(source) ? source : source + '(\\/|\\?|\\.|;|$)'
-	    );
-	};
-
-	var appendQueryParam = function appendQueryParam(params, param) {
-	    var val = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-
-	    if (/\[\]$/.test(param)) {
-	        param = (0, _searchParams.withoutBrackets)(param);
-	        val = [val];
-	    }
-	    var existingVal = params[param];
-
-	    if (existingVal === undefined) params[param] = val;else params[param] = Array.isArray(existingVal) ? existingVal.concat(val) : [existingVal, val];
-
-	    return params;
-	};
-
-	var parseQueryParams = function parseQueryParams(path) {
-	    var searchPart = (0, _searchParams.getSearch)(path);
-	    if (!searchPart) return {};
-
-	    return (0, _searchParams.toObject)((0, _searchParams.parse)(searchPart));
-	};
-
-	function _serialise(key, val) {
-	    if (Array.isArray(val)) {
-	        return val.map(function (v) {
-	            return _serialise(key, v);
-	        }).join('&');
-	    }
-
-	    if (val === true) {
-	        return key;
-	    }
-
-	    return key + '=' + val;
-	}
-
-	var Path = function () {
-	    _createClass(Path, null, [{
-	        key: 'createPath',
-	        value: function createPath(path) {
-	            return new Path(path);
-	        }
-	    }, {
-	        key: 'serialise',
-	        value: function serialise(key, val) {
-	            return _serialise(key, val);
-	        }
-	    }]);
-
-	    function Path(path) {
-	        _classCallCheck(this, Path);
-
-	        if (!path) throw new Error('Please supply a path');
-	        this.path = path;
-	        this.tokens = tokenise(path);
-
-	        this.hasUrlParams = this.tokens.filter(function (t) {
-	            return (/^url-parameter/.test(t.type)
-	            );
-	        }).length > 0;
-	        this.hasSpatParam = this.tokens.filter(function (t) {
-	            return (/splat$/.test(t.type)
-	            );
-	        }).length > 0;
-	        this.hasMatrixParams = this.tokens.filter(function (t) {
-	            return (/matrix$/.test(t.type)
-	            );
-	        }).length > 0;
-	        this.hasQueryParams = this.tokens.filter(function (t) {
-	            return (/^query-parameter/.test(t.type)
-	            );
-	        }).length > 0;
-	        // Extract named parameters from tokens
-	        this.spatParams = this._getParams('url-parameter-splat');
-	        this.urlParams = this._getParams(/^url-parameter/);
-	        // Query params
-	        this.queryParams = this._getParams('query-parameter');
-	        this.queryParamsBr = this._getParams('query-parameter-bracket');
-	        // All params
-	        this.params = this.urlParams.concat(this.queryParams).concat(this.queryParamsBr);
-	        // Check if hasQueryParams
-	        // Regular expressions for url part only (full and partial match)
-	        this.source = this.tokens.filter(function (t) {
-	            return t.regex !== undefined;
-	        }).map(function (r) {
-	            return r.regex.source;
-	        }).join('');
-	    }
-
-	    _createClass(Path, [{
-	        key: '_getParams',
-	        value: function _getParams(type) {
-	            var predicate = type instanceof RegExp ? function (t) {
-	                return type.test(t.type);
-	            } : function (t) {
-	                return t.type === type;
-	            };
-
-	            return this.tokens.filter(predicate).map(function (t) {
-	                return t.val[0];
-	            });
-	        }
-	    }, {
-	        key: '_isQueryParam',
-	        value: function _isQueryParam(name) {
-	            return this.queryParams.indexOf(name) !== -1 || this.queryParamsBr.indexOf(name) !== -1;
-	        }
-	    }, {
-	        key: '_urlTest',
-	        value: function _urlTest(path, regex) {
-	            var _this = this;
-
-	            var match = path.match(regex);
-	            if (!match) return null;else if (!this.urlParams.length) return {};
-	            // Reduce named params to key-value pairs
-	            return match.slice(1, this.urlParams.length + 1).reduce(function (params, m, i) {
-	                params[_this.urlParams[i]] = decodeURIComponent(m);
-	                return params;
-	            }, {});
-	        }
-	    }, {
-	        key: 'test',
-	        value: function test(path, opts) {
-	            var _this2 = this;
-
-	            var options = _extends({ trailingSlash: false }, opts);
-	            // trailingSlash: falsy => non optional, truthy => optional
-	            var source = optTrailingSlash(this.source, options.trailingSlash);
-	            // Check if exact match
-	            var matched = this._urlTest(path, new RegExp('^' + source + (this.hasQueryParams ? '(\\?.*$|$)' : '$')));
-	            // If no match, or no query params, no need to go further
-	            if (!matched || !this.hasQueryParams) return matched;
-	            // Extract query params
-	            var queryParams = parseQueryParams(path);
-	            var unexpectedQueryParams = Object.keys(queryParams).filter(function (p) {
-	                return _this2.queryParams.concat(_this2.queryParamsBr).indexOf(p) === -1;
-	            });
-
-	            if (unexpectedQueryParams.length === 0) {
-	                // Extend url match
-	                Object.keys(queryParams).forEach(function (p) {
-	                    return matched[p] = queryParams[p];
-	                });
-
-	                return matched;
-	            }
-
-	            return null;
-	        }
-	    }, {
-	        key: 'partialTest',
-	        value: function partialTest(path, opts) {
-	            var _this3 = this;
-
-	            var options = _extends({ delimited: true }, opts);
-	            // Check if partial match (start of given path matches regex)
-	            // trailingSlash: falsy => non optional, truthy => optional
-	            var source = upToDelimiter(this.source, options.delimited);
-	            var match = this._urlTest(path, new RegExp('^' + source));
-
-	            if (!match) return match;
-
-	            if (!this.hasQueryParams) return match;
-
-	            var queryParams = parseQueryParams(path);
-
-	            Object.keys(queryParams).filter(function (p) {
-	                return _this3.queryParams.concat(_this3.queryParamsBr).indexOf(p) >= 0;
-	            }).forEach(function (p) {
-	                return appendQueryParam(match, p, queryParams[p]);
-	            });
-
-	            return match;
-	        }
-	    }, {
-	        key: 'build',
-	        value: function build() {
-	            var _this4 = this;
-
-	            var params = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-	            var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-	            var options = _extends({ ignoreConstraints: false, ignoreSearch: false }, opts);
-	            var encodedParams = Object.keys(params).reduce(function (acc, key) {
-	                if (!exists(params[key])) {
-	                    return acc;
-	                }
-
-	                var val = params[key];
-	                var encode = _this4._isQueryParam(key) ? encodeURIComponent : encodeURI;
-
-	                if (typeof val === 'boolean') {
-	                    acc[key] = val;
-	                } else if (Array.isArray(val)) {
-	                    acc[key] = val.map(encode);
-	                } else {
-	                    acc[key] = encode(val);
-	                }
-
-	                return acc;
-	            }, {});
-
-	            // Check all params are provided (not search parameters which are optional)
-	            if (this.urlParams.some(function (p) {
-	                return !exists(encodedParams[p]);
-	            })) throw new Error('Missing parameters');
-
-	            // Check constraints
-	            if (!options.ignoreConstraints) {
-	                var constraintsPassed = this.tokens.filter(function (t) {
-	                    return (/^url-parameter/.test(t.type) && !/-splat$/.test(t.type)
-	                    );
-	                }).every(function (t) {
-	                    return new RegExp('^' + defaultOrConstrained(t.otherVal[0]) + '$').test(encodedParams[t.val]);
-	                });
-
-	                if (!constraintsPassed) throw new Error('Some parameters are of invalid format');
-	            }
-
-	            var base = this.tokens.filter(function (t) {
-	                return (/^query-parameter/.test(t.type) === false
-	                );
-	            }).map(function (t) {
-	                if (t.type === 'url-parameter-matrix') return ';' + t.val + '=' + encodedParams[t.val[0]];
-	                return (/^url-parameter/.test(t.type) ? encodedParams[t.val[0]] : t.match
-	                );
-	            }).join('');
-
-	            if (options.ignoreSearch) return base;
-
-	            var queryParams = this.queryParams.concat(this.queryParamsBr.map(function (p) {
-	                return p + '[]';
-	            }));
-
-	            var searchPart = queryParams.filter(function (p) {
-	                return Object.keys(encodedParams).indexOf((0, _searchParams.withoutBrackets)(p)) !== -1;
-	            }).map(function (p) {
-	                return _serialise(p, encodedParams[(0, _searchParams.withoutBrackets)(p)]);
-	            }).join('&');
-
-	            return base + (searchPart ? '?' + searchPart : '');
-	        }
-	    }]);
-
-	    return Path;
-	}();
-
-	exports.default = Path;
-	module.exports = exports['default'];
-
-/***/ },
-/* 66 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	// Split path
-	var getPath = exports.getPath = function getPath(path) {
-	    return path.split('?')[0];
-	};
-	var getSearch = exports.getSearch = function getSearch(path) {
-	    return path.split('?')[1];
-	};
-
-	// Search param value
-	var isSerialisable = function isSerialisable(val) {
-	    return val !== undefined && val !== null && val !== '';
-	};
-
-	// Search param name
-	var bracketTest = /\[\]$/;
-	var hasBrackets = exports.hasBrackets = function hasBrackets(paramName) {
-	    return bracketTest.test(paramName);
-	};
-	var withoutBrackets = exports.withoutBrackets = function withoutBrackets(paramName) {
-	    return paramName.replace(bracketTest, '');
-	};
-
-	/**
-	 * Parse a querystring and return a list of params (Objects with name and value properties)
-	 * @param  {String} querystring The querystring to parse
-	 * @return {Array[Object]}      The list of params
-	 */
-	var parse = exports.parse = function parse(querystring) {
-	    return querystring.split('&').reduce(function (params, param) {
-	        var split = param.split('=');
-	        var name = split[0];
-	        var value = split[1];
-
-	        return params.concat(split.length === 1 ? { name: name, value: true } : { name: name, value: decodeURIComponent(value) });
-	    }, []);
-	};
-
-	/**
-	 * Reduce a list of parameters (returned by `.parse()``) to an object (key-value pairs)
-	 * @param  {Array} paramList The list of parameters returned by `.parse()`
-	 * @return {Object}          The object of parameters (key-value pairs)
-	 */
-	var toObject = exports.toObject = function toObject(paramList) {
-	    return paramList.reduce(function (params, _ref) {
-	        var name = _ref.name;
-	        var value = _ref.value;
-
-	        var isArray = hasBrackets(name);
-	        var currentValue = params[withoutBrackets(name)];
-
-	        if (currentValue === undefined) {
-	            params[withoutBrackets(name)] = isArray ? [value] : value;
-	        } else {
-	            params[withoutBrackets(name)] = [].concat(currentValue, value);
-	        }
-
-	        return params;
-	    }, {});
-	};
-
-	/**
-	 * Build a querystring from a list of parameters
-	 * @param  {Array} paramList The list of parameters (see `.parse()`)
-	 * @return {String}          The querystring
-	 */
-	var build = exports.build = function build(paramList) {
-	    return paramList.filter(function (_ref2) {
-	        var value = _ref2.value;
-	        return value !== undefined && value !== null;
-	    }).map(function (_ref3) {
-	        var name = _ref3.name;
-	        var value = _ref3.value;
-	        return value === true ? name : name + '=' + encodeURIComponent(value);
-	    }).join('&');
-	};
-
-	/**
-	 * Remove a list of parameters from a querystring
-	 * @param  {String} querystring  The original querystring
-	 * @param  {Array}  paramsToOmit The parameters to omit
-	 * @return {String}              The querystring
-	 */
-	var omit = exports.omit = function omit(querystring, paramsToOmit) {
-	    if (!querystring) return '';
-
-	    var remainingQueryParams = parse(querystring).filter(function (_ref4) {
-	        var name = _ref4.name;
-	        return paramsToOmit.indexOf(withoutBrackets(name)) === -1;
-	    });
-	    var remainingQueryString = build(remainingQueryParams);
-
-	    return remainingQueryString || '';
-	};
-
-/***/ },
-/* 67 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = withUtils;
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function withUtils(router) {
-	    var options = router.getOptions();
-
-	    router.isActive = isActive;
-	    router.areStatesEqual = areStatesEqual;
-	    router.areStatesDescendants = areStatesDescendants;
-	    router.buildPath = buildPath;
-	    router.buildState = buildState;
-	    router.matchPath = matchPath;
-	    router.setRootPath = setRootPath;
-
-	    /**
-	     * Check if a route is currently active
-	     * @param  {String}  name                     The route name
-	     * @param  {Object}  params                   The route params
-	     * @param  {Boolean} [strictEquality=false]   Whether to check if the given route is the active route, or part of the active route
-	     * @param  {Boolean} [ignoreQueryParams=true] Whether to ignore query parameters
-	     * @return {Boolean}                          Whether the given route is active
-	     */
-	    function isActive(name) {
-	        var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-	        var strictEquality = arguments.length <= 2 || arguments[2] === undefined ? false : arguments[2];
-	        var ignoreQueryParams = arguments.length <= 3 || arguments[3] === undefined ? true : arguments[3];
-
-	        var activeState = router.getState();
-
-	        if (!activeState) return false;
-
-	        if (strictEquality || activeState.name === name) {
-	            return areStatesEqual(router.makeState(name, params), activeState, ignoreQueryParams);
-	        }
-
-	        return areStatesDescendants(router.makeState(name, params), activeState);
-	    }
-
-	    /**
-	     * Compare two route state objects
-	     * @param  {Object}  state1            The route state
-	     * @param  {Object}  state2            The other route state
-	     * @param  {Boolean} ignoreQueryParams Whether to ignore query parameters or not
-	     * @return {Boolean}                   Whether the two route state are equal or not
-	     */
-	    function areStatesEqual(state1, state2) {
-	        var ignoreQueryParams = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
-
-	        if (state1.name !== state2.name) return false;
-
-	        var getUrlParams = function getUrlParams(name) {
-	            return router.rootNode.getSegmentsByName(name).map(function (segment) {
-	                return segment.parser[ignoreQueryParams ? 'urlParams' : 'params'];
-	            }).reduce(function (params, p) {
-	                return params.concat(p);
-	            }, []);
-	        };
-
-	        var state1Params = getUrlParams(state1.name);
-	        var state2Params = getUrlParams(state2.name);
-
-	        return state1Params.length === state2Params.length && state1Params.every(function (p) {
-	            return state1.params[p] === state2.params[p];
-	        });
-	    }
-
-	    /**
-	     * Check if two states are related
-	     * @param  {State} parentState  The parent state
-	     * @param  {State} childState   The child state
-	     * @return {Boolean}            Whether the two states are descendants or not
-	     */
-	    function areStatesDescendants(parentState, childState) {
-	        var regex = new RegExp('^' + parentState.name + '\\.(.*)$');
-	        if (!regex.test(childState.name)) return false;
-	        // If child state name extends parent state name, and all parent state params
-	        // are in child state params.
-	        return Object.keys(parentState.params).every(function (p) {
-	            return parentState.params[p] === childState.params[p];
-	        });
-	    }
-
-	    /**
-	     * Build a path
-	     * @param  {String} route  The route name
-	     * @param  {Object} params The route params
-	     * @return {String}        The path
-	     */
-	    function buildPath(route, params) {
-	        if (route === _constants2.default.UNKNOWN_ROUTE) {
-	            return params.path;
-	        }
-
-	        var useTrailingSlash = options.useTrailingSlash;
-
-	        return router.rootNode.buildPath(route, params, { trailingSlash: useTrailingSlash });
-	    }
-
-	    function buildState(route, params) {
-	        return router.rootNode.buildState(route, params);
-	    }
-
-	    /**
-	     * Match a path
-	     * @param  {String} path     The path to match
-	     * @param  {String} [source] The source (optional, used internally)
-	     * @return {Object}          The matched state (null if unmatched)
-	     */
-	    function matchPath(path, source) {
-	        var trailingSlash = options.trailingSlash;
-	        var strictQueryParams = options.strictQueryParams;
-	        var strongMatching = options.strongMatching;
-
-	        var match = router.rootNode.matchPath(path, { trailingSlash: trailingSlash, strictQueryParams: strictQueryParams, strongMatching: strongMatching });
-
-	        if (match) {
-	            var name = match.name;
-	            var params = match.params;
-	            var _meta = match._meta;
-
-	            var builtPath = options.useTrailingSlash === undefined ? path : router.buildPath(name, params);
-
-	            return router.makeState(name, params, builtPath, _meta, source);
-	        }
-
-	        return null;
-	    }
-
-	    /**
-	     * Set the root node patch, use carefully. It can be used to set app-wide allowed query parameters.
-	     * @param {String} rootPath The root node path
-	     */
-	    function setRootPath(rootPath) {
-	        router.rootNode.setPath(rootPath);
-	    }
-	}
-
-/***/ },
-/* 68 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	var errorCodes = exports.errorCodes = {
-	    ROUTER_NOT_STARTED: 'NOT_STARTED',
-	    NO_START_PATH_OR_STATE: 'NO_START_PATH_OR_STATE',
-	    ROUTER_ALREADY_STARTED: 'ALREADY_STARTED',
-	    ROUTE_NOT_FOUND: 'ROUTE_NOT_FOUND',
-	    SAME_STATES: 'SAME_STATES',
-	    CANNOT_DEACTIVATE: 'CANNOT_DEACTIVATE',
-	    CANNOT_ACTIVATE: 'CANNOT_ACTIVATE',
-	    TRANSITION_ERR: 'TRANSITION_ERR',
-	    TRANSITION_CANCELLED: 'CANCELLED'
-	};
-
-	var constants = {
-	    UNKNOWN_ROUTE: '@@router5/UNKNOWN_ROUTE',
-	    ROUTER_START: '$start',
-	    ROUTER_STOP: '$stop',
-	    TRANSITION_START: '$$start',
-	    TRANSITION_CANCEL: '$$cancel',
-	    TRANSITION_SUCCESS: '$$success',
-	    TRANSITION_ERROR: '$$error'
-	};
-
-	exports.default = constants;
-
-/***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	exports.default = withRouterLifecycle;
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var noop = function noop() {};
-
-	function withRouterLifecycle(router) {
-	    var started = false;
-	    var options = router.getOptions();
-
-	    router.isStarted = isStarted;
-	    router.start = start;
-	    router.stop = stop;
-
-	    /**
-	     * Check if the router is started
-	     * @return {Boolean} Whether the router is started or not
-	     */
-	    function isStarted() {
-	        return started;
-	    }
-
-	    /**
-	     * Start the router
-	     * @param  {String|Object} startPathOrState The start path or state. This is optional when using the browser plugin.
-	     * @param  {Function}      done             A done node style callback (err, state)
-	     * @return {Object}                         The router instance
-	     */
-	    function start() {
-	        var lastArg = arguments.length <= arguments.length - 1 + 0 ? undefined : arguments[arguments.length - 1 + 0];
-	        var done = typeof lastArg === 'function' ? lastArg : noop;
-	        var startPathOrState = typeof (arguments.length <= 0 ? undefined : arguments[0]) !== 'function' ? arguments.length <= 0 ? undefined : arguments[0] : undefined;
-
-	        if (started) {
-	            done({ code: _constants.errorCodes.ROUTER_ALREADY_STARTED });
-	            return router;
-	        }
-
-	        var startPath = void 0,
-	            startState = void 0;
-
-	        started = true;
-	        router.invokeEventListeners(_constants2.default.ROUTER_START);
-
-	        // callback
-	        var cb = function cb(err, state) {
-	            var invokeErrCb = arguments.length <= 2 || arguments[2] === undefined ? true : arguments[2];
-
-	            if (!err) router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, state, null, { replace: true });
-	            if (err && invokeErrCb) router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, state, null, err);
-	            done(err, state);
-	        };
-
-	        if (startPathOrState === undefined && !options.defaultRoute) {
-	            return cb({ code: _constants.errorCodes.NO_START_PATH_OR_STATE });
-	        }if (typeof startPathOrState === 'string') {
-	            startPath = startPathOrState;
-	        } else if ((typeof startPathOrState === 'undefined' ? 'undefined' : _typeof(startPathOrState)) === 'object') {
-	            startState = startPathOrState;
-	        }
-
-	        if (!startState) {
-	            (function () {
-	                // If no supplied start state, get start state
-	                startState = startPath === undefined ? null : router.matchPath(startPath);
-	                // Navigate to default function
-	                var navigateToDefault = function navigateToDefault() {
-	                    return router.navigateToDefault({ replace: true }, done);
-	                };
-	                var redirect = function redirect(route) {
-	                    return router.navigate(route.name, route.params, { replace: true, reload: true }, done);
-	                };
-	                // If matched start path
-	                if (startState) {
-	                    router.transitionToState(startState, router.getState(), {}, function (err, state) {
-	                        if (!err) cb(null, state);else if (err.redirect) redirect(err.redirect);else if (options.defaultRoute) navigateToDefault();else cb(err, null, false);
-	                    });
-	                } else if (options.defaultRoute) {
-	                    // If default, navigate to default
-	                    navigateToDefault();
-	                } else if (options.allowNotFound) {
-	                    cb(null, router.makeNotFoundState(startPath));
-	                } else {
-	                    // No start match, no default => do nothing
-	                    cb({ code: _constants.errorCodes.ROUTE_NOT_FOUND, path: startPath }, null);
-	                }
-	            })();
-	        } else {
-	            // Initialise router with provided start state
-	            router.setState(startState);
-	            cb(null, startState);
-	        }
-
-	        return router;
-	    }
-
-	    /**
-	     * Stop the router
-	     * @return {Object} The router instance
-	     */
-	    function stop() {
-	        if (started) {
-	            router.setState(null);
-	            started = false;
-	            router.invokeEventListeners(_constants2.default.ROUTER_STOP);
-	        }
-
-	        return router;
-	    }
-	}
-
-/***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	exports.default = withNavigation;
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	var _transition = __webpack_require__(71);
-
-	var _transition2 = _interopRequireDefault(_transition);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var noop = function noop() {};
-
-	function withNavigation(router) {
-	    var cancelCurrentTransition = void 0;
-
-	    router.navigate = navigate;
-	    router.navigateToDefault = navigateToDefault;
-	    router.transitionToState = transitionToState;
-	    router.cancel = cancel;
-
-	    /**
-	     * Cancel the current transition if there is one
-	     * @return {Object} The router instance
-	     */
-	    function cancel() {
-	        if (cancelCurrentTransition) {
-	            cancelCurrentTransition('navigate');
-	            cancelCurrentTransition = null;
-	        }
-
-	        return router;
-	    }
-
-	    /**
-	     * Navigate to a route
-	     * @param  {String}   routeName      The route name
-	     * @param  {Object}   [routeParams]  The route params
-	     * @param  {Object}   [options]      The navigation options (`replace`, `reload`)
-	     * @param  {Function} [done]         A done node style callback (err, state)
-	     * @return {Function}                A cancel function
-	     */
-	    function navigate() {
-	        var name = arguments.length <= 0 ? undefined : arguments[0];
-	        var lastArg = arguments.length <= arguments.length - 1 + 0 ? undefined : arguments[arguments.length - 1 + 0];
-	        var done = typeof lastArg === 'function' ? lastArg : noop;
-	        var params = _typeof(arguments.length <= 1 ? undefined : arguments[1]) === 'object' ? arguments.length <= 1 ? undefined : arguments[1] : {};
-	        var opts = _typeof(arguments.length <= 2 ? undefined : arguments[2]) === 'object' ? arguments.length <= 2 ? undefined : arguments[2] : {};
-
-	        if (!router.isStarted()) {
-	            done({ code: _constants.errorCodes.ROUTER_NOT_STARTED });
-	            return;
-	        }
-
-	        var route = router.buildState(name, params);
-
-	        if (!route) {
-	            var err = { code: _constants.errorCodes.ROUTE_NOT_FOUND };
-	            done(err);
-	            router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, null, router.getState(), err);
-	            return;
-	        }
-
-	        var toState = router.makeState(route.name, route.params, router.buildPath(name, params), route._meta);
-	        var sameStates = router.getState() ? router.areStatesEqual(router.getState(), toState, false) : false;
-
-	        // Do not proceed further if states are the same and no reload
-	        // (no desactivation and no callbacks)
-	        if (sameStates && !opts.reload) {
-	            var _err = { code: _constants.errorCodes.SAME_STATES };
-	            done(_err);
-	            router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, toState, router.getState(), _err);
-	            return;
-	        }
-
-	        var fromState = sameStates ? null : router.getState();
-
-	        // Transitio
-	        return transitionToState(toState, fromState, opts, function (err, state) {
-	            if (err) {
-	                if (err.redirect) {
-	                    var _err$redirect = err.redirect;
-	                    var _name = _err$redirect.name;
-	                    var _params = _err$redirect.params;
-
-	                    navigate(_name, _params, _extends({}, opts, { reload: true }), done);
-	                } else {
-	                    done(err);
-	                }
-	            } else {
-	                router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, state, fromState, opts);
-	                done(null, state);
-	            }
-	        });
-	    }
-
-	    /**
-	     * Navigate to the default route (if defined)
-	     * @param  {Object}   [opts] The navigation options
-	     * @param  {Function} [done] A done node style callback (err, state)
-	     * @return {Function}        A cancel function
-	     */
-	    function navigateToDefault() {
-	        var opts = _typeof(arguments.length <= 0 ? undefined : arguments[0]) === 'object' ? arguments.length <= 0 ? undefined : arguments[0] : {};
-	        var done = arguments.length === 2 ? arguments.length <= 1 ? undefined : arguments[1] : typeof (arguments.length <= 0 ? undefined : arguments[0]) === 'function' ? arguments.length <= 0 ? undefined : arguments[0] : noop;
-	        var options = router.getOptions();
-
-	        if (options.defaultRoute) {
-	            return navigate(options.defaultRoute, options.defaultParams, opts, done);
-	        }
-
-	        return function () {};
-	    }
-
-	    function transitionToState(toState, fromState) {
-	        var options = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
-	        var done = arguments.length <= 3 || arguments[3] === undefined ? noop : arguments[3];
-
-	        cancel();
-	        router.invokeEventListeners(_constants2.default.TRANSITION_START, toState, fromState);
-
-	        cancelCurrentTransition = (0, _transition2.default)(router, toState, fromState, options, function (err, state) {
-	            cancelCurrentTransition = null;
-	            state = state || toState;
-
-	            if (err) {
-	                if (err.code === _constants.errorCodes.TRANSITION_CANCELLED) {
-	                    router.invokeEventListeners(_constants2.default.TRANSITION_CANCEL, toState, fromState);
-	                } else {
-	                    router.invokeEventListeners(_constants2.default.TRANSITION_ERROR, toState, fromState, err);
-	                }
-	                done(err);
-	            } else {
-	                router.setState(state);
-	                done(null, state);
-	            }
-	        });
-
-	        return cancelCurrentTransition;
-	    }
-	}
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _slicedToArray = function () {
-	    function sliceIterator(arr, i) {
-	        var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
-	            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-	                _arr.push(_s.value);if (i && _arr.length === i) break;
-	            }
-	        } catch (err) {
-	            _d = true;_e = err;
-	        } finally {
-	            try {
-	                if (!_n && _i["return"]) _i["return"]();
-	            } finally {
-	                if (_d) throw _e;
-	            }
-	        }return _arr;
-	    }return function (arr, i) {
-	        if (Array.isArray(arr)) {
-	            return arr;
-	        } else if (Symbol.iterator in Object(arr)) {
-	            return sliceIterator(arr, i);
-	        } else {
-	            throw new TypeError("Invalid attempt to destructure non-iterable instance");
-	        }
-	    };
-	}();
-
-	var _router = __webpack_require__(50);
-
-	var _router2 = _interopRequireDefault(_router);
-
-	var _resolve = __webpack_require__(72);
-
-	var _resolve2 = _interopRequireDefault(_resolve);
-
-	var _constants = __webpack_require__(68);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _defineProperty(obj, key, value) {
-	    if (key in obj) {
-	        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	    } else {
-	        obj[key] = value;
-	    }return obj;
-	}
-
-	exports.default = transition;
-
-	function transition(router, toState, fromState, opts, callback) {
-	    var cancelled = false;
-	    var completed = false;
-	    var options = router.getOptions();
-
-	    var _router$getLifecycleF = router.getLifecycleFunctions();
-
-	    var _router$getLifecycleF2 = _slicedToArray(_router$getLifecycleF, 2);
-
-	    var canDeactivateFunctions = _router$getLifecycleF2[0];
-	    var canActivateFunctions = _router$getLifecycleF2[1];
-
-	    var middlewareFunctions = router.getMiddlewareFunctions();
-	    var isCancelled = function isCancelled() {
-	        return cancelled;
-	    };
-	    var cancel = function cancel() {
-	        if (!cancelled && !completed) {
-	            cancelled = true;
-	            callback({ code: _constants.errorCodes.TRANSITION_CANCELLED }, null);
-	        }
-	    };
-	    var done = function done(err, state) {
-	        completed = true;
-
-	        if (isCancelled()) {
-	            return;
-	        }
-
-	        if (!err && options.autoCleanUp) {
-	            (function () {
-	                var activeSegments = (0, _router.nameToIDs)(toState.name);
-	                Object.keys(canDeactivateFunctions).forEach(function (name) {
-	                    if (activeSegments.indexOf(name) === -1) router.clearCanDeactivate(name);
-	                });
-	            })();
-	        }
-
-	        callback(err, state || toState);
-	    };
-	    var makeError = function makeError(base, err) {
-	        return _extends({}, base, err instanceof Object ? err : { error: err });
-	    };
-
-	    var _transitionPath = (0, _router2.default)(toState, fromState);
-
-	    var toDeactivate = _transitionPath.toDeactivate;
-	    var toActivate = _transitionPath.toActivate;
-
-	    var asyncBase = { isCancelled: isCancelled, toState: toState, fromState: fromState };
-
-	    var canDeactivate = function canDeactivate(toState, fromState, cb) {
-	        var canDeactivateFunctionMap = toDeactivate.filter(function (name) {
-	            return canDeactivateFunctions[name];
-	        }).reduce(function (fnMap, name) {
-	            return _extends({}, fnMap, _defineProperty({}, name, canDeactivateFunctions[name]));
-	        }, {});
-
-	        (0, _resolve2.default)(canDeactivateFunctionMap, _extends({}, asyncBase, { errorKey: 'segment' }), function (err) {
-	            return cb(err ? makeError({ code: _constants.errorCodes.CANNOT_DEACTIVATE }, err) : null);
-	        });
-	    };
-
-	    var canActivate = function canActivate(toState, fromState, cb) {
-	        var canActivateFunctionMap = toActivate.filter(function (name) {
-	            return canActivateFunctions[name];
-	        }).reduce(function (fnMap, name) {
-	            return _extends({}, fnMap, _defineProperty({}, name, canActivateFunctions[name]));
-	        }, {});
-
-	        (0, _resolve2.default)(canActivateFunctionMap, _extends({}, asyncBase, { errorKey: 'segment' }), function (err) {
-	            return cb(err ? makeError({ code: _constants.errorCodes.CANNOT_ACTIVATE }, err) : null);
-	        });
-	    };
-
-	    var middleware = !middlewareFunctions.length ? [] : function (toState, fromState, cb) {
-	        return (0, _resolve2.default)(middlewareFunctions, _extends({}, asyncBase), function (err, state) {
-	            return cb(err ? makeError({ code: _constants.errorCodes.TRANSITION_ERR }, err) : null, state || toState);
-	        });
-	    };
-
-	    var pipeline = (fromState && !opts.forceDeactivate ? [canDeactivate] : []).concat(canActivate).concat(middleware);
-
-	    (0, _resolve2.default)(pipeline, asyncBase, done);
-
-	    return cancel;
-	}
-
-/***/ },
-/* 72 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _typeof = typeof Symbol === "function" && _typeof2(Symbol.iterator) === "symbol" ? function (obj) {
-	    return typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	} : function (obj) {
-	    return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof2(obj);
-	};
-
-	exports.default = resolve;
-
-	function _defineProperty(obj, key, value) {
-	    if (key in obj) {
-	        Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true });
-	    } else {
-	        obj[key] = value;
-	    }return obj;
-	}
-
-	function resolve(functions, _ref, callback) {
-	    var isCancelled = _ref.isCancelled;
-	    var toState = _ref.toState;
-	    var fromState = _ref.fromState;
-	    var errorKey = _ref.errorKey;
-
-	    var remainingFunctions = Array.isArray(functions) ? functions : Object.keys(functions);
-
-	    var isState = function isState(obj) {
-	        return (typeof obj === 'undefined' ? 'undefined' : _typeof(obj)) === 'object' && obj.name !== undefined && obj.params !== undefined && obj.path !== undefined;
-	    };
-	    var hasStateChanged = function hasStateChanged(state) {
-	        return state.name !== toState.name || state.params !== toState.params || state.path !== toState.path;
-	    };
-
-	    var processFn = function processFn(done) {
-	        if (!remainingFunctions.length) return true;
-
-	        var isMapped = typeof remainingFunctions[0] === 'string';
-	        var errBase = errorKey && isMapped ? _defineProperty({}, errorKey, remainingFunctions[0]) : {};
-	        var stepFn = isMapped ? functions[remainingFunctions[0]] : remainingFunctions[0];
-
-	        // const len = stepFn.length;
-	        var res = stepFn.call(null, toState, fromState, done);
-	        if (isCancelled()) {
-	            done(null);
-	        } else if (typeof res === 'boolean') {
-	            done(res ? null : errBase);
-	        } else if (res && typeof res.then === 'function') {
-	            res.then(function (resVal) {
-	                if (resVal instanceof Error) done({ error: resVal }, null);else done(null, resVal);
-	            }, function (err) {
-	                if (err instanceof Error) {
-	                    console.error(err.stack || err);
-	                    done(_extends({}, errBase, { promiseError: err }), null);
-	                } else {
-	                    done((typeof err === 'undefined' ? 'undefined' : _typeof(err)) === 'object' ? _extends({}, errBase, err) : errBase, null);
-	                }
-	            });
-	        }
-	        // else: wait for done to be called
-
-	        return false;
-	    };
-
-	    var iterate = function iterate(err, val) {
-	        if (isCancelled()) {
-	            callback();
-	        } else if (err) {
-	            callback(err);
-	        } else {
-	            if (val && isState(val)) {
-	                if (hasStateChanged(val)) console.error('[router5][transition] Warning: state values changed during transition process.');
-	                toState = val;
-	            }
-	            remainingFunctions = remainingFunctions.slice(1);
-	            next();
-	        }
-	    };
-
-	    var next = function next() {
-	        if (isCancelled()) {
-	            callback();
-	        } else {
-	            var finished = processFn(iterate);
-	            if (finished) callback(null, toState);
-	        }
-	    };
-
-	    next();
-	}
-
-/***/ },
-/* 73 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = withMiddleware;
-	function withMiddleware(router) {
-	    var middlewareFactories = [];
-	    var middlewareFunctions = [];
-
-	    router.useMiddleware = useMiddleware;
-	    router.getMiddlewareFactories = getMiddlewareFactories;
-	    router.getMiddlewareFunctions = getMiddlewareFunctions;
-	    router.clearMiddleware = clearMiddleware;
-
-	    /**
-	     * Register middleware functions.
-	     * @param  {...Function} middlewares The middleware functions
-	     * @return {Object}                  The router instance
-	     */
-	    function useMiddleware() {
-	        for (var _len = arguments.length, middlewares = Array(_len), _key = 0; _key < _len; _key++) {
-	            middlewares[_key] = arguments[_key];
-	        }
-
-	        middlewares.forEach(addMiddleware);
-
-	        return router;
-	    }
-
-	    /**
-	     * Remove all middleware functions
-	     * @return {Object} The router instance
-	     */
-	    function clearMiddleware() {
-	        middlewareFactories = [];
-	        middlewareFunctions = [];
-
-	        return router;
-	    }
-
-	    function getMiddlewareFactories() {
-	        return middlewareFactories;
-	    }
-
-	    function getMiddlewareFunctions() {
-	        return middlewareFunctions;
-	    }
-
-	    function addMiddleware(middleware) {
-	        middlewareFactories.push(middleware);
-	        middlewareFunctions.push(router.executeFactory(middleware));
-	    }
-	}
-
-/***/ },
-/* 74 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = withPlugins;
-
-	function _toConsumableArray(arr) {
-	    if (Array.isArray(arr)) {
-	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	            arr2[i] = arr[i];
-	        }return arr2;
-	    } else {
-	        return Array.from(arr);
-	    }
-	}
-
-	var pluginMethods = ['onStart', 'onStop', 'onTransitionSuccess', 'onTransitionStart', 'onTransitionError', 'onTransitionCancel'];
-
-	function withPlugins(router) {
-	    var plugins = [];
-	    var removePluginListeners = [];
-
-	    router.usePlugin = usePlugin;
-	    router.hasPlugin = hasPlugin;
-	    router.getPlugins = getPlugins;
-
-	    function getPlugins() {
-	        return plugins;
-	    }
-
-	    /**
-	     * Use plugins
-	     * @param  {...Function} plugins An argument list of plugins
-	     * @return {Object}              The router instance
-	     */
-	    function usePlugin() {
-	        for (var _len = arguments.length, plugins = Array(_len), _key = 0; _key < _len; _key++) {
-	            plugins[_key] = arguments[_key];
-	        }
-
-	        plugins.forEach(addPlugin);
-	        return router;
-	    }
-
-	    function addPlugin(plugin) {
-	        if (!hasPlugin(plugin)) {
-	            plugins.push(plugin);
-	            startPlugin(plugin);
-	        }
-	    }
-
-	    /**
-	     * Check if a plugin has already been registered.
-	     * @param  {String}  pluginName The plugin name
-	     * @return {Boolean}            Whether the plugin has been registered
-	     */
-	    function hasPlugin(pluginName) {
-	        return plugins.filter(function (p) {
-	            return p.pluginName === pluginName || p.name === pluginName;
-	        }).length > 0;
-	    }
-
-	    function startPlugin(plugin) {
-	        var appliedPlugin = router.executeFactory(plugin);
-
-	        var removeEventListeners = pluginMethods.map(function (methodName) {
-	            if (appliedPlugin[methodName]) {
-	                return router.addEventListener(methodName.toLowerCase().replace(/^on/, '$$').replace(/transition/, '$$'), appliedPlugin[methodName]);
-	            }
-	        }).filter(Boolean);
-
-	        removePluginListeners.push.apply(removePluginListeners, _toConsumableArray(removeEventListeners));
-	    }
-	}
-
-/***/ },
-/* 75 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = withRouteLifecycle;
-	var toFunction = function toFunction(val) {
-	    return typeof val === 'function' ? val : function () {
-	        return function () {
-	            return val;
-	        };
-	    };
-	};
-
-	function withRouteLifecycle(router) {
-	    var canDeactivateFactories = {};
-	    var canActivateFactories = {};
-	    var canDeactivateFunctions = {};
-	    var canActivateFunctions = {};
-
-	    router.canDeactivate = canDeactivate;
-	    router.canActivate = canActivate;
-	    router.getLifecycleFactories = getLifecycleFactories;
-	    router.getLifecycleFunctions = getLifecycleFunctions;
-	    router.clearCanDeactivate = clearCanDeactivate;
-
-	    function getLifecycleFactories() {
-	        return [canDeactivateFactories, canActivateFactories];
-	    }
-
-	    function getLifecycleFunctions() {
-	        return [canDeactivateFunctions, canActivateFunctions];
-	    }
-
-	    /**
-	     * Register a canDeactivate handler or specify a if a route can be deactivated
-	     * @param  {String} name                           The route name
-	     * @param  {Function|Boolean} canDeactivateHandler The canDeactivate handler or boolean
-	     * @return {Object}                                The router instance
-	     */
-	    function canDeactivate(name, canDeactivateHandler) {
-	        var factory = toFunction(canDeactivateHandler);
-
-	        canDeactivateFactories[name] = factory;
-	        canDeactivateFunctions[name] = router.executeFactory(factory);
-
-	        return router;
-	    }
-
-	    /**
-	     * Remove a canDeactivate handler for a route
-	     * @param  {String} name The route name
-	     * @return {Object}      The router instance
-	     */
-	    function clearCanDeactivate(name) {
-	        canDeactivateFactories[name] = undefined;
-	        canDeactivateFunctions[name] = undefined;
-
-	        return router;
-	    }
-
-	    /**
-	     * Register a canActivate handler or specify a if a route can be deactivated
-	     * @param  {String} name                         The route name
-	     * @param  {Function|Boolean} canActivateHandler The canActivate handler or boolean
-	     * @return {Object}                              The router instance
-	     */
-	    function canActivate(name, canActivateHandler) {
-	        var factory = toFunction(canActivateHandler);
-
-	        canActivateFactories[name] = factory;
-	        canActivateFunctions[name] = router.executeFactory(factory);
-
-	        return router;
-	    }
-	}
-
-/***/ },
-/* 76 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _slicedToArray = function () {
-	    function sliceIterator(arr, i) {
-	        var _arr = [];var _n = true;var _d = false;var _e = undefined;try {
-	            for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-	                _arr.push(_s.value);if (i && _arr.length === i) break;
-	            }
-	        } catch (err) {
-	            _d = true;_e = err;
-	        } finally {
-	            try {
-	                if (!_n && _i["return"]) _i["return"]();
-	            } finally {
-	                if (_d) throw _e;
-	            }
-	        }return _arr;
-	    }return function (arr, i) {
-	        if (Array.isArray(arr)) {
-	            return arr;
-	        } else if (Symbol.iterator in Object(arr)) {
-	            return sliceIterator(arr, i);
-	        } else {
-	            throw new TypeError("Invalid attempt to destructure non-iterable instance");
-	        }
-	    };
-	}();
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	exports.default = withCloning;
-
-	function _toConsumableArray(arr) {
-	    if (Array.isArray(arr)) {
-	        for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	            arr2[i] = arr[i];
-	        }return arr2;
-	    } else {
-	        return Array.from(arr);
-	    }
-	}
-
-	function withCloning(router, createRouter) {
-	    router.clone = clone;
-
-	    /**
-	     * Clone the current router configuration. The new returned router will be non-started,
-	     * with a null state
-	     * @param  {[type]} deps [description]
-	     * @return {[type]}      [description]
-	     */
-	    function clone() {
-	        var deps = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	        var clonedDependencies = _extends({}, router.getDependencies(), deps);
-	        var clonedRouter = createRouter(router.rootNode, router.getOptions(), clonedDependencies);
-
-	        clonedRouter.useMiddleware.apply(clonedRouter, _toConsumableArray(router.getMiddlewareFactories()));
-	        clonedRouter.usePlugin.apply(clonedRouter, _toConsumableArray(router.getPlugins()));
-
-	        var _router$getLifecycleF = router.getLifecycleFactories();
-
-	        var _router$getLifecycleF2 = _slicedToArray(_router$getLifecycleF, 2);
-
-	        var canDeactivateFactories = _router$getLifecycleF2[0];
-	        var canActivateFactories = _router$getLifecycleF2[1];
-
-	        Object.keys(canDeactivateFactories).forEach(function (name) {
-	            return clonedRouter.canDeactivate(name, canDeactivateFactories[name]);
-	        });
-	        Object.keys(canActivateFactories).forEach(function (name) {
-	            return clonedRouter.canActivate(name, canActivateFactories[name]);
-	        });
-
-	        return clonedRouter;
-	    }
-	};
-
-/***/ },
-/* 77 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	/* istanbul ignore next */
-	function loggerPlugin() {
-	    var startGroup = function startGroup() {
-	        return console.group('Router transition');
-	    };
-	    var endGroup = function endGroup() {
-	        return console.groupEnd('Router transition');
-	    };
-
-	    console.info('Router started');
-
-	    return {
-	        onStop: function onStop() {
-	            console.info('Router stopped');
-	        },
-	        onTransitionStart: function onTransitionStart(toState, fromState) {
-	            endGroup();
-	            startGroup();
-	            console.log('Transition started from state');
-	            console.log(fromState);
-	            console.log('To state');
-	            console.log(toState);
-	        },
-	        onTransitionCancel: function onTransitionCancel() {
-	            console.warn('Transition cancelled');
-	        },
-	        onTransitionError: function onTransitionError(toState, fromState, err) {
-	            console.warn('Transition error with code ' + err.code);
-	            endGroup();
-	        },
-	        onTransitionSuccess: function onTransitionSuccess() {
-	            console.log('Transition success');
-	            endGroup();
-	        }
-	    };
-	};
-
-	loggerPlugin.pluginName = 'LOGGER_PLUGIN';
-
-	exports.default = loggerPlugin;
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _router = __webpack_require__(50);
-
-	var _router2 = _interopRequireDefault(_router);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var defaultOptions = {
-	    autoCleanUp: true
-	};
-
-	function listenersPluginFactory() {
-	    var options = arguments.length <= 0 || arguments[0] === undefined ? defaultOptions : arguments[0];
-
-	    function listenersPlugin(router) {
-	        var listeners = {};
-
-	        function removeListener(name, cb) {
-	            if (cb) {
-	                if (listeners[name]) listeners[name] = listeners[name].filter(function (callback) {
-	                    return callback !== cb;
-	                });
-	            } else {
-	                listeners[name] = [];
-	            }
-	            return router;
-	        };
-
-	        function addListener(name, cb, replace) {
-	            var normalizedName = name.replace(/^(\*|\^|=)/, '');
-
-	            if (normalizedName && !/^\$/.test(name)) {
-	                var segments = router.rootNode.getSegmentsByName(normalizedName);
-	                if (!segments) console.warn('No route found for ' + normalizedName + ', listener might never be called!');
-	            }
-
-	            if (!listeners[name]) listeners[name] = [];
-	            listeners[name] = (replace ? [] : listeners[name]).concat(cb);
-
-	            return router;
-	        };
-
-	        router.getListeners = function () {
-	            return listeners;
-	        };
-
-	        router.addListener = function (cb) {
-	            return addListener('*', cb);
-	        };
-	        router.removeListener = function (cb) {
-	            return removeListener('*', cb);
-	        };
-
-	        router.addNodeListener = function (name, cb) {
-	            return addListener('^' + name, cb, true);
-	        };
-	        router.removeNodeListener = function (name, cb) {
-	            return removeListener('^' + name, cb);
-	        };
-
-	        router.addRouteListener = function (name, cb) {
-	            return addListener('=' + name, cb);
-	        };
-	        router.removeRouteListener = function (name, cb) {
-	            return removeListener('=' + name, cb);
-	        };
-
-	        function invokeListeners(name, toState, fromState) {
-	            (listeners[name] || []).forEach(function (cb) {
-	                if (listeners[name].indexOf(cb) !== -1) {
-	                    cb(toState, fromState);
-	                }
-	            });
-	        }
-
-	        function onTransitionSuccess(toState, fromState, opts) {
-	            var _transitionPath = (0, _router2.default)(toState, fromState);
-
-	            var intersection = _transitionPath.intersection;
-	            var toDeactivate = _transitionPath.toDeactivate;
-
-	            var intersectionNode = opts.reload ? '' : intersection;
-	            var name = toState.name;
-
-	            if (options.autoCleanUp) {
-	                toDeactivate.forEach(function (name) {
-	                    return removeListener('^' + name);
-	                });
-	            }
-
-	            invokeListeners('^' + intersectionNode, toState, fromState);
-	            invokeListeners('=' + name, toState, fromState);
-	            invokeListeners('*', toState, fromState);
-	        }
-
-	        return { onTransitionSuccess: onTransitionSuccess };
-	    };
-
-	    listenersPlugin.pluginName = 'LISTENERS_PLUGIN';
-
-	    return listenersPlugin;
-	}
-
-	exports.default = listenersPluginFactory;
-
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _extends = Object.assign || function (target) {
-	    for (var i = 1; i < arguments.length; i++) {
-	        var source = arguments[i];for (var key in source) {
-	            if (Object.prototype.hasOwnProperty.call(source, key)) {
-	                target[key] = source[key];
-	            }
-	        }
-	    }return target;
-	};
-
-	var _constants = __webpack_require__(68);
-
-	var _constants2 = _interopRequireDefault(_constants);
-
-	var _browser = __webpack_require__(80);
-
-	var _browser2 = _interopRequireDefault(_browser);
-
-	var _utils = __webpack_require__(81);
-
-	var _utils2 = _interopRequireDefault(_utils);
-
-	function _interopRequireDefault(obj) {
-	    return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	var defaultOptions = {
-	    forceDeactivate: true,
-	    useHash: false,
-	    hashPrefix: '',
-	    base: false
-	};
-
-	var source = 'popstate';
-
-	function browserPluginFactory() {
-	    var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-	    var browser = arguments.length <= 1 || arguments[1] === undefined ? _browser2.default : arguments[1];
-
-	    var options = _extends({}, defaultOptions, opts);
-	    var transitionOptions = { forceDeactivate: options.forceDeactivate, source: source };
-
-	    function browserPlugin(router) {
-	        var routerOptions = router.getOptions();
-	        var routerStart = router.start;
-
-	        (0, _utils2.default)(router, options);
-
-	        router.start = function () {
-	            for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	                args[_key] = arguments[_key];
-	            }
-
-	            if (args.length === 0 || typeof args[0] === 'function') {
-	                routerStart.apply(undefined, [browser.getLocation(options)].concat(args));
-	            } else {
-	                routerStart.apply(undefined, args);
-	            }
-
-	            return router;
-	        };
-
-	        router.replaceHistoryState = function (name) {
-	            var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
-
-	            var state = router.buildState(name, params);
-	            var url = router.buildUrl(name, params);
-	            router.lastKnownState = state;
-	            browser.replaceState(state, '', url);
-	        };
-
-	        function updateBrowserState(state, url, replace) {
-	            if (replace) browser.replaceState(state, '', url);else browser.pushState(state, '', url);
-	        }
-
-	        function onPopState(evt) {
-	            var routerState = router.getState();
-	            // Do nothing if no state or if last know state is poped state (it should never happen)
-	            var newState = !evt.state || !evt.state.name;
-	            var state = newState ? router.matchPath(browser.getLocation(options), source) : evt.state;
-	            var defaultRoute = routerOptions.defaultRoute;
-	            var defaultParams = routerOptions.defaultParams;
-
-	            if (!state) {
-	                // If current state is already the default route, we will have a double entry
-	                // Navigating back and forth will emit SAME_STATES error
-	                defaultRoute && router.navigateToDefault(_extends({}, transitionOptions, { reload: true, replace: true }));
-	                return;
-	            }
-	            if (routerState && router.areStatesEqual(state, routerState, false)) {
-	                return;
-	            }
-
-	            router.transitionToState(state, routerState, transitionOptions, function (err, toState) {
-	                if (err) {
-	                    if (err.redirect) {
-	                        var _err$redirect = err.redirect;
-	                        var name = _err$redirect.name;
-	                        var params = _err$redirect.params;
-
-	                        router.navigate(name, params, _extends({}, transitionOptions, { replace: true }));
-	                    } else if (err === _constants.errorCodes.CANNOT_DEACTIVATE) {
-	                        var url = router.buildUrl(routerState.name, routerState.params);
-	                        if (!newState) {
-	                            // Keep history state unchanged but use current URL
-	                            updateBrowserState(state, url, true);
-	                        }
-	                        // else do nothing or history will be messed up
-	                        // TODO: history.back()?
-	                    } else {
-	                        // Force navigation to default state
-	                        defaultRoute && router.navigate(defaultRoute, defaultParams, _extends({}, transitionOptions, { reload: true, replace: true }));
-	                    }
-	                } else {
-	                    router.invokeEventListeners(_constants2.default.TRANSITION_SUCCESS, toState, routerState, { replace: true });
-	                }
-	            });
-	        }
-
-	        function onStart() {
-	            if (options.useHash && !options.base) {
-	                // Guess base
-	                options.base = browser.getBase();
-	            }
-
-	            browser.addPopstateListener(onPopState);
-	        }
-
-	        function onStop() {
-	            browser.removePopstateListener(onPopState);
-	        }
-
-	        function onTransitionSuccess(toState, fromState, opts) {
-	            var historyState = browser.getState();
-	            var replace = opts.replace || fromState && router.areStatesEqual(toState, fromState, false) || opts.reload && historyState && router.areStatesEqual(toState, historyState, false);
-	            updateBrowserState(toState, router.buildUrl(toState.name, toState.params), replace);
-	        }
-
-	        return { onStart: onStart, onStop: onStop, onTransitionSuccess: onTransitionSuccess, onPopState: onPopState };
-	    };
-
-	    browserPlugin.pluginName = 'BROWSER_PLUGIN';
-
-	    return browserPlugin;
-	}
-
-	exports.default = browserPluginFactory;
-
-/***/ },
-/* 80 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	/**
-	 * Dumb functions
-	 */
-	// istanbul ignore next
-	var identity = function identity(arg) {
-	    return function () {
-	        return arg;
-	    };
-	};
-	// istanbul ignore next
-	var noop = function noop() {};
-
-	/**
-	 * Browser detection
-	 */
-	var isBrowser = typeof window !== 'undefined' && window.history;
-
-	/**
-	 * Browser functions needed by router5
-	 */
-	var getBase = function getBase() {
-	    return window.location.pathname.replace(/\/$/, '');
-	};
-
-	var pushState = function pushState(state, title, path) {
-	    return window.history.pushState(state, title, path);
-	};
-
-	var replaceState = function replaceState(state, title, path) {
-	    return window.history.replaceState(state, title, path);
-	};
-
-	var addPopstateListener = function addPopstateListener(fn) {
-	    return window.addEventListener('popstate', fn);
-	};
-
-	var removePopstateListener = function removePopstateListener(fn) {
-	    return window.removeEventListener('popstate', fn);
-	};
-
-	var getLocation = function getLocation(opts) {
-	    var path = opts.useHash ? window.location.hash.replace(new RegExp('^#' + opts.hashPrefix), '') : window.location.pathname.replace(new RegExp('^' + opts.base), '');
-	    return (path || '/') + window.location.search;
-	};
-
-	var getState = function getState() {
-	    return window.history.state;
-	};
-
-	/**
-	 * Export browser object
-	 */
-	var browser = {};
-	if (isBrowser) {
-	    browser = { getBase: getBase, pushState: pushState, replaceState: replaceState, addPopstateListener: addPopstateListener, removePopstateListener: removePopstateListener, getLocation: getLocation, getState: getState };
-	} else {
-	    // istanbul ignore next
-	    browser = {
-	        getBase: identity(''),
-	        pushState: noop,
-	        replaceState: noop,
-	        addPopstateListener: noop,
-	        removePopstateListener: noop,
-	        getLocation: identity(''),
-	        getState: identity(null)
-	    };
-	}
-
-	exports.default = browser;
-
-/***/ },
-/* 81 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-	exports.default = withUtils;
-	function withUtils(router, options) {
-	    router.urlToPath = urlToPath;
-	    router.buildUrl = buildUrl;
-	    router.matchUrl = matchUrl;
-
-	    function buildUrl(route, params) {
-	        var base = options.base || '';
-	        var prefix = options.useHash ? '#' + options.hashPrefix : '';
-	        var path = router.buildPath(route, params);
-
-	        return base + prefix + path;
-	    }
-
-	    function urlToPath(url) {
-	        var match = url.match(/^(?:http|https)\:\/\/(?:[0-9a-z_\-\.\:]+?)(?=\/)(.*)$/);
-	        var path = match ? match[1] : url;
-
-	        var pathParts = path.match(/^(.+?)(#.+?)?(\?.+)?$/);
-
-	        if (!pathParts) throw new Error('[router5] Could not parse url ' + url);
-
-	        var pathname = pathParts[1];
-	        var hash = pathParts[2] || '';
-	        var search = pathParts[3] || '';
-
-	        return (options.useHash ? hash.replace(new RegExp('^#' + options.hashPrefix), '') : options.base ? pathname.replace(new RegExp('^' + options.base), '') : pathname) + search;
-	    }
-
-	    function matchUrl(url) {
-	        return router.matchPath(urlToPath(url));
-	    }
-	}
-
-/***/ },
-/* 82 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = [{ name: 'inbox', path: '/inbox' }, { name: 'inbox.message', path: '/message/:id' }, { name: 'compose', path: '/compose' }, { name: 'contacts', path: '/contacts' }];
-
-/***/ },
-/* 83 */
+/* 91 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9286,21 +10177,21 @@
 
 	var _redux = __webpack_require__(10);
 
-	var _reduxThunk = __webpack_require__(84);
+	var _reduxThunk = __webpack_require__(92);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _reduxRouter = __webpack_require__(43);
+	var _reduxRouter = __webpack_require__(64);
 
-	var _emails = __webpack_require__(85);
+	var _emails = __webpack_require__(93);
 
 	var _emails2 = _interopRequireDefault(_emails);
 
-	var _draft = __webpack_require__(86);
+	var _draft = __webpack_require__(94);
 
 	var _draft2 = _interopRequireDefault(_draft);
 
-	var _reduxLogger = __webpack_require__(87);
+	var _reduxLogger = __webpack_require__(71);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
@@ -9321,7 +10212,7 @@
 	}
 
 /***/ },
-/* 84 */
+/* 92 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -9349,7 +10240,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 85 */
+/* 93 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9383,7 +10274,7 @@
 	}
 
 /***/ },
-/* 86 */
+/* 94 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -9421,899 +10312,20 @@
 	}
 
 /***/ },
-/* 87 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _core = __webpack_require__(88);
-
-	var _helpers = __webpack_require__(89);
-
-	var _defaults = __webpack_require__(92);
-
-	var _defaults2 = _interopRequireDefault(_defaults);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	/**
-	 * Creates logger with following options
-	 *
-	 * @namespace
-	 * @param {object} options - options for logger
-	 * @param {string | function | object} options.level - console[level]
-	 * @param {boolean} options.duration - print duration of each action?
-	 * @param {boolean} options.timestamp - print timestamp with each action?
-	 * @param {object} options.colors - custom colors
-	 * @param {object} options.logger - implementation of the `console` API
-	 * @param {boolean} options.logErrors - should errors in action execution be caught, logged, and re-thrown?
-	 * @param {boolean} options.collapsed - is group collapsed?
-	 * @param {boolean} options.predicate - condition which resolves logger behavior
-	 * @param {function} options.stateTransformer - transform state before print
-	 * @param {function} options.actionTransformer - transform action before print
-	 * @param {function} options.errorTransformer - transform error before print
-	 *
-	 * @returns {function} logger middleware
-	 */
-	function createLogger() {
-	  var options = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
-
-	  var loggerOptions = _extends({}, _defaults2.default, options);
-
-	  var logger = loggerOptions.logger;
-	  var transformer = loggerOptions.transformer;
-	  var stateTransformer = loggerOptions.stateTransformer;
-	  var errorTransformer = loggerOptions.errorTransformer;
-	  var predicate = loggerOptions.predicate;
-	  var logErrors = loggerOptions.logErrors;
-	  var diffPredicate = loggerOptions.diffPredicate;
-
-	  // Return if 'console' object is not defined
-
-	  if (typeof logger === 'undefined') {
-	    return function () {
-	      return function (next) {
-	        return function (action) {
-	          return next(action);
-	        };
-	      };
-	    };
-	  }
-
-	  if (transformer) {
-	    console.error('Option \'transformer\' is deprecated, use \'stateTransformer\' instead!'); // eslint-disable-line no-console
-	  }
-
-	  var logBuffer = [];
-
-	  return function (_ref) {
-	    var getState = _ref.getState;
-	    return function (next) {
-	      return function (action) {
-	        // Exit early if predicate function returns 'false'
-	        if (typeof predicate === 'function' && !predicate(getState, action)) {
-	          return next(action);
-	        }
-
-	        var logEntry = {};
-	        logBuffer.push(logEntry);
-
-	        logEntry.started = _helpers.timer.now();
-	        logEntry.startedTime = new Date();
-	        logEntry.prevState = stateTransformer(getState());
-	        logEntry.action = action;
-
-	        var returnedValue = undefined;
-	        if (logErrors) {
-	          try {
-	            returnedValue = next(action);
-	          } catch (e) {
-	            logEntry.error = errorTransformer(e);
-	          }
-	        } else {
-	          returnedValue = next(action);
-	        }
-
-	        logEntry.took = _helpers.timer.now() - logEntry.started;
-	        logEntry.nextState = stateTransformer(getState());
-
-	        var diff = loggerOptions.diff && typeof diffPredicate === 'function' ? diffPredicate(getState, action) : loggerOptions.diff;
-
-	        (0, _core.printBuffer)(logBuffer, _extends({}, loggerOptions, { diff: diff }));
-	        logBuffer.length = 0;
-
-	        if (logEntry.error) throw logEntry.error;
-	        return returnedValue;
-	      };
-	    };
-	  };
-	}
-
-	exports.default = createLogger;
-	module.exports = exports['default'];
-
-/***/ },
-/* 88 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _typeof2 = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.printBuffer = printBuffer;
-
-	var _helpers = __webpack_require__(89);
-
-	var _diff = __webpack_require__(90);
-
-	var _diff2 = _interopRequireDefault(_diff);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	function _toConsumableArray(arr) {
-	  if (Array.isArray(arr)) {
-	    for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) {
-	      arr2[i] = arr[i];
-	    }return arr2;
-	  } else {
-	    return Array.from(arr);
-	  }
-	}
-
-	function _typeof(obj) {
-	  return obj && typeof Symbol !== "undefined" && obj.constructor === Symbol ? "symbol" : typeof obj === 'undefined' ? 'undefined' : _typeof2(obj);
-	}
-
-	/**
-	 * Get log level string based on supplied params
-	 *
-	 * @param {string | function | object} level - console[level]
-	 * @param {object} action - selected action
-	 * @param {array} payload - selected payload
-	 * @param {string} type - log entry type
-	 *
-	 * @returns {string} level
-	 */
-	function getLogLevel(level, action, payload, type) {
-	  switch (typeof level === 'undefined' ? 'undefined' : _typeof(level)) {
-	    case 'object':
-	      return typeof level[type] === 'function' ? level[type].apply(level, _toConsumableArray(payload)) : level[type];
-	    case 'function':
-	      return level(action);
-	    default:
-	      return level;
-	  }
-	}
-
-	function defaultTitleFormatter(options) {
-	  var timestamp = options.timestamp;
-	  var duration = options.duration;
-
-	  return function (action, time, took) {
-	    var parts = ['action'];
-	    if (timestamp) {
-	      parts.push('@ ' + time);
-	    }
-	    parts.push(action.type);
-	    if (duration) {
-	      parts.push('(in ' + took.toFixed(2) + ' ms)');
-	    }
-	    return parts.join(' ');
-	  };
-	}
-
-	function printBuffer(buffer, options) {
-	  var logger = options.logger;
-	  var actionTransformer = options.actionTransformer;
-	  var _options$titleFormatt = options.titleFormatter;
-	  var titleFormatter = _options$titleFormatt === undefined ? defaultTitleFormatter(options) : _options$titleFormatt;
-	  var collapsed = options.collapsed;
-	  var colors = options.colors;
-	  var level = options.level;
-	  var diff = options.diff;
-
-	  buffer.forEach(function (logEntry, key) {
-	    var started = logEntry.started;
-	    var startedTime = logEntry.startedTime;
-	    var action = logEntry.action;
-	    var prevState = logEntry.prevState;
-	    var error = logEntry.error;
-	    var took = logEntry.took;
-	    var nextState = logEntry.nextState;
-
-	    var nextEntry = buffer[key + 1];
-
-	    if (nextEntry) {
-	      nextState = nextEntry.prevState;
-	      took = nextEntry.started - started;
-	    }
-
-	    // Message
-	    var formattedAction = actionTransformer(action);
-	    var isCollapsed = typeof collapsed === 'function' ? collapsed(function () {
-	      return nextState;
-	    }, action) : collapsed;
-
-	    var formattedTime = (0, _helpers.formatTime)(startedTime);
-	    var titleCSS = colors.title ? 'color: ' + colors.title(formattedAction) + ';' : null;
-	    var title = titleFormatter(formattedAction, formattedTime, took);
-
-	    // Render
-	    try {
-	      if (isCollapsed) {
-	        if (colors.title) logger.groupCollapsed('%c ' + title, titleCSS);else logger.groupCollapsed(title);
-	      } else {
-	        if (colors.title) logger.group('%c ' + title, titleCSS);else logger.group(title);
-	      }
-	    } catch (e) {
-	      logger.log(title);
-	    }
-
-	    var prevStateLevel = getLogLevel(level, formattedAction, [prevState], 'prevState');
-	    var actionLevel = getLogLevel(level, formattedAction, [formattedAction], 'action');
-	    var errorLevel = getLogLevel(level, formattedAction, [error, prevState], 'error');
-	    var nextStateLevel = getLogLevel(level, formattedAction, [nextState], 'nextState');
-
-	    if (prevStateLevel) {
-	      if (colors.prevState) logger[prevStateLevel]('%c prev state', 'color: ' + colors.prevState(prevState) + '; font-weight: bold', prevState);else logger[prevStateLevel]('prev state', prevState);
-	    }
-
-	    if (actionLevel) {
-	      if (colors.action) logger[actionLevel]('%c action', 'color: ' + colors.action(formattedAction) + '; font-weight: bold', formattedAction);else logger[actionLevel]('action', formattedAction);
-	    }
-
-	    if (error && errorLevel) {
-	      if (colors.error) logger[errorLevel]('%c error', 'color: ' + colors.error(error, prevState) + '; font-weight: bold', error);else logger[errorLevel]('error', error);
-	    }
-
-	    if (nextStateLevel) {
-	      if (colors.nextState) logger[nextStateLevel]('%c next state', 'color: ' + colors.nextState(nextState) + '; font-weight: bold', nextState);else logger[nextStateLevel]('next state', nextState);
-	    }
-
-	    if (diff) {
-	      (0, _diff2.default)(prevState, nextState, logger, isCollapsed);
-	    }
-
-	    try {
-	      logger.groupEnd();
-	    } catch (e) {
-	      logger.log('—— log end ——');
-	    }
-	  });
-	}
-
-/***/ },
-/* 89 */
+/* 95 */
 /***/ function(module, exports) {
 
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var repeat = exports.repeat = function repeat(str, times) {
-	  return new Array(times + 1).join(str);
-	};
-
-	var pad = exports.pad = function pad(num, maxLength) {
-	  return repeat("0", maxLength - num.toString().length) + num;
-	};
-
-	var formatTime = exports.formatTime = function formatTime(time) {
-	  return pad(time.getHours(), 2) + ":" + pad(time.getMinutes(), 2) + ":" + pad(time.getSeconds(), 2) + "." + pad(time.getMilliseconds(), 3);
-	};
-
-	// Use performance API if it's available in order to get better precision
-	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
-
-/***/ },
-/* 90 */
-/***/ function(module, exports, __webpack_require__) {
-
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = diffLogger;
-
-	var _deepDiff = __webpack_require__(91);
-
-	var _deepDiff2 = _interopRequireDefault(_deepDiff);
-
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-
-	// https://github.com/flitbit/diff#differences
-	var dictionary = {
-	  'E': {
-	    color: '#2196F3',
-	    text: 'CHANGED:'
-	  },
-	  'N': {
-	    color: '#4CAF50',
-	    text: 'ADDED:'
-	  },
-	  'D': {
-	    color: '#F44336',
-	    text: 'DELETED:'
-	  },
-	  'A': {
-	    color: '#2196F3',
-	    text: 'ARRAY:'
-	  }
+	var routes = {
+	  routes: [{ name: 'inbox', path: '/inbox' }, { name: 'inbox.message', path: '/message/:id' }, { name: 'compose', path: '/compose' }, { name: 'contacts', path: '/contacts' }],
+	  defaultRoute: 'inbox'
 	};
 
-	function style(kind) {
-	  return 'color: ' + dictionary[kind].color + '; font-weight: bold';
-	}
-
-	function render(diff) {
-	  var kind = diff.kind;
-	  var path = diff.path;
-	  var lhs = diff.lhs;
-	  var rhs = diff.rhs;
-	  var index = diff.index;
-	  var item = diff.item;
-
-	  switch (kind) {
-	    case 'E':
-	      return path.join('.') + ' ' + lhs + ' → ' + rhs;
-	    case 'N':
-	      return path.join('.') + ' ' + rhs;
-	    case 'D':
-	      return '' + path.join('.');
-	    case 'A':
-	      return [path.join('.') + '[' + index + ']', item];
-	    default:
-	      return null;
-	  }
-	}
-
-	function diffLogger(prevState, newState, logger, isCollapsed) {
-	  var diff = (0, _deepDiff2.default)(prevState, newState);
-
-	  try {
-	    if (isCollapsed) {
-	      logger.groupCollapsed('diff');
-	    } else {
-	      logger.group('diff');
-	    }
-	  } catch (e) {
-	    logger.log('diff');
-	  }
-
-	  if (diff) {
-	    diff.forEach(function (elem) {
-	      var kind = elem.kind;
-
-	      var output = render(elem);
-
-	      logger.log('%c ' + dictionary[kind].text, style(kind), output);
-	    });
-	  } else {
-	    logger.log('—— no diff ——');
-	  }
-
-	  try {
-	    logger.groupEnd();
-	  } catch (e) {
-	    logger.log('—— diff end —— ');
-	  }
-	}
-	module.exports = exports['default'];
-
-/***/ },
-/* 91 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
-
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
-	/*!
-	 * deep-diff.
-	 * Licensed under the MIT License.
-	 */
-	;(function (root, factory) {
-	  'use strict';
-
-	  if (true) {
-	    // AMD. Register as an anonymous module.
-	    !(__WEBPACK_AMD_DEFINE_ARRAY__ = [], __WEBPACK_AMD_DEFINE_RESULT__ = function () {
-	      return factory();
-	    }.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
-	  } else if ((typeof exports === 'undefined' ? 'undefined' : _typeof(exports)) === 'object') {
-	    // Node. Does not work with strict CommonJS, but
-	    // only CommonJS-like environments that support module.exports,
-	    // like Node.
-	    module.exports = factory();
-	  } else {
-	    // Browser globals (root is window)
-	    root.DeepDiff = factory();
-	  }
-	})(undefined, function (undefined) {
-	  'use strict';
-
-	  var $scope,
-	      conflict,
-	      conflictResolution = [];
-	  if ((typeof global === 'undefined' ? 'undefined' : _typeof(global)) === 'object' && global) {
-	    $scope = global;
-	  } else if (typeof window !== 'undefined') {
-	    $scope = window;
-	  } else {
-	    $scope = {};
-	  }
-	  conflict = $scope.DeepDiff;
-	  if (conflict) {
-	    conflictResolution.push(function () {
-	      if ('undefined' !== typeof conflict && $scope.DeepDiff === accumulateDiff) {
-	        $scope.DeepDiff = conflict;
-	        conflict = undefined;
-	      }
-	    });
-	  }
-
-	  // nodejs compatible on server side and in the browser.
-	  function inherits(ctor, superCtor) {
-	    ctor.super_ = superCtor;
-	    ctor.prototype = Object.create(superCtor.prototype, {
-	      constructor: {
-	        value: ctor,
-	        enumerable: false,
-	        writable: true,
-	        configurable: true
-	      }
-	    });
-	  }
-
-	  function Diff(kind, path) {
-	    Object.defineProperty(this, 'kind', {
-	      value: kind,
-	      enumerable: true
-	    });
-	    if (path && path.length) {
-	      Object.defineProperty(this, 'path', {
-	        value: path,
-	        enumerable: true
-	      });
-	    }
-	  }
-
-	  function DiffEdit(path, origin, value) {
-	    DiffEdit.super_.call(this, 'E', path);
-	    Object.defineProperty(this, 'lhs', {
-	      value: origin,
-	      enumerable: true
-	    });
-	    Object.defineProperty(this, 'rhs', {
-	      value: value,
-	      enumerable: true
-	    });
-	  }
-	  inherits(DiffEdit, Diff);
-
-	  function DiffNew(path, value) {
-	    DiffNew.super_.call(this, 'N', path);
-	    Object.defineProperty(this, 'rhs', {
-	      value: value,
-	      enumerable: true
-	    });
-	  }
-	  inherits(DiffNew, Diff);
-
-	  function DiffDeleted(path, value) {
-	    DiffDeleted.super_.call(this, 'D', path);
-	    Object.defineProperty(this, 'lhs', {
-	      value: value,
-	      enumerable: true
-	    });
-	  }
-	  inherits(DiffDeleted, Diff);
-
-	  function DiffArray(path, index, item) {
-	    DiffArray.super_.call(this, 'A', path);
-	    Object.defineProperty(this, 'index', {
-	      value: index,
-	      enumerable: true
-	    });
-	    Object.defineProperty(this, 'item', {
-	      value: item,
-	      enumerable: true
-	    });
-	  }
-	  inherits(DiffArray, Diff);
-
-	  function arrayRemove(arr, from, to) {
-	    var rest = arr.slice((to || from) + 1 || arr.length);
-	    arr.length = from < 0 ? arr.length + from : from;
-	    arr.push.apply(arr, rest);
-	    return arr;
-	  }
-
-	  function realTypeOf(subject) {
-	    var type = typeof subject === 'undefined' ? 'undefined' : _typeof(subject);
-	    if (type !== 'object') {
-	      return type;
-	    }
-
-	    if (subject === Math) {
-	      return 'math';
-	    } else if (subject === null) {
-	      return 'null';
-	    } else if (Array.isArray(subject)) {
-	      return 'array';
-	    } else if (Object.prototype.toString.call(subject) === '[object Date]') {
-	      return 'date';
-	    } else if (typeof subject.toString !== 'undefined' && /^\/.*\//.test(subject.toString())) {
-	      return 'regexp';
-	    }
-	    return 'object';
-	  }
-
-	  function deepDiff(lhs, rhs, changes, prefilter, path, key, stack) {
-	    path = path || [];
-	    var currentPath = path.slice(0);
-	    if (typeof key !== 'undefined') {
-	      if (prefilter) {
-	        if (typeof prefilter === 'function' && prefilter(currentPath, key)) {
-	          return;
-	        } else if ((typeof prefilter === 'undefined' ? 'undefined' : _typeof(prefilter)) === 'object') {
-	          if (prefilter.prefilter && prefilter.prefilter(currentPath, key)) {
-	            return;
-	          }
-	          if (prefilter.normalize) {
-	            var alt = prefilter.normalize(currentPath, key, lhs, rhs);
-	            if (alt) {
-	              lhs = alt[0];
-	              rhs = alt[1];
-	            }
-	          }
-	        }
-	      }
-	      currentPath.push(key);
-	    }
-
-	    // Use string comparison for regexes
-	    if (realTypeOf(lhs) === 'regexp' && realTypeOf(rhs) === 'regexp') {
-	      lhs = lhs.toString();
-	      rhs = rhs.toString();
-	    }
-
-	    var ltype = typeof lhs === 'undefined' ? 'undefined' : _typeof(lhs);
-	    var rtype = typeof rhs === 'undefined' ? 'undefined' : _typeof(rhs);
-	    if (ltype === 'undefined') {
-	      if (rtype !== 'undefined') {
-	        changes(new DiffNew(currentPath, rhs));
-	      }
-	    } else if (rtype === 'undefined') {
-	      changes(new DiffDeleted(currentPath, lhs));
-	    } else if (realTypeOf(lhs) !== realTypeOf(rhs)) {
-	      changes(new DiffEdit(currentPath, lhs, rhs));
-	    } else if (Object.prototype.toString.call(lhs) === '[object Date]' && Object.prototype.toString.call(rhs) === '[object Date]' && lhs - rhs !== 0) {
-	      changes(new DiffEdit(currentPath, lhs, rhs));
-	    } else if (ltype === 'object' && lhs !== null && rhs !== null) {
-	      stack = stack || [];
-	      if (stack.indexOf(lhs) < 0) {
-	        stack.push(lhs);
-	        if (Array.isArray(lhs)) {
-	          var i,
-	              len = lhs.length;
-	          for (i = 0; i < lhs.length; i++) {
-	            if (i >= rhs.length) {
-	              changes(new DiffArray(currentPath, i, new DiffDeleted(undefined, lhs[i])));
-	            } else {
-	              deepDiff(lhs[i], rhs[i], changes, prefilter, currentPath, i, stack);
-	            }
-	          }
-	          while (i < rhs.length) {
-	            changes(new DiffArray(currentPath, i, new DiffNew(undefined, rhs[i++])));
-	          }
-	        } else {
-	          var akeys = Object.keys(lhs);
-	          var pkeys = Object.keys(rhs);
-	          akeys.forEach(function (k, i) {
-	            var other = pkeys.indexOf(k);
-	            if (other >= 0) {
-	              deepDiff(lhs[k], rhs[k], changes, prefilter, currentPath, k, stack);
-	              pkeys = arrayRemove(pkeys, other);
-	            } else {
-	              deepDiff(lhs[k], undefined, changes, prefilter, currentPath, k, stack);
-	            }
-	          });
-	          pkeys.forEach(function (k) {
-	            deepDiff(undefined, rhs[k], changes, prefilter, currentPath, k, stack);
-	          });
-	        }
-	        stack.length = stack.length - 1;
-	      }
-	    } else if (lhs !== rhs) {
-	      if (!(ltype === 'number' && isNaN(lhs) && isNaN(rhs))) {
-	        changes(new DiffEdit(currentPath, lhs, rhs));
-	      }
-	    }
-	  }
-
-	  function accumulateDiff(lhs, rhs, prefilter, accum) {
-	    accum = accum || [];
-	    deepDiff(lhs, rhs, function (diff) {
-	      if (diff) {
-	        accum.push(diff);
-	      }
-	    }, prefilter);
-	    return accum.length ? accum : undefined;
-	  }
-
-	  function applyArrayChange(arr, index, change) {
-	    if (change.path && change.path.length) {
-	      var it = arr[index],
-	          i,
-	          u = change.path.length - 1;
-	      for (i = 0; i < u; i++) {
-	        it = it[change.path[i]];
-	      }
-	      switch (change.kind) {
-	        case 'A':
-	          applyArrayChange(it[change.path[i]], change.index, change.item);
-	          break;
-	        case 'D':
-	          delete it[change.path[i]];
-	          break;
-	        case 'E':
-	        case 'N':
-	          it[change.path[i]] = change.rhs;
-	          break;
-	      }
-	    } else {
-	      switch (change.kind) {
-	        case 'A':
-	          applyArrayChange(arr[index], change.index, change.item);
-	          break;
-	        case 'D':
-	          arr = arrayRemove(arr, index);
-	          break;
-	        case 'E':
-	        case 'N':
-	          arr[index] = change.rhs;
-	          break;
-	      }
-	    }
-	    return arr;
-	  }
-
-	  function applyChange(target, source, change) {
-	    if (target && source && change && change.kind) {
-	      var it = target,
-	          i = -1,
-	          last = change.path ? change.path.length - 1 : 0;
-	      while (++i < last) {
-	        if (typeof it[change.path[i]] === 'undefined') {
-	          it[change.path[i]] = typeof change.path[i] === 'number' ? [] : {};
-	        }
-	        it = it[change.path[i]];
-	      }
-	      switch (change.kind) {
-	        case 'A':
-	          applyArrayChange(change.path ? it[change.path[i]] : it, change.index, change.item);
-	          break;
-	        case 'D':
-	          delete it[change.path[i]];
-	          break;
-	        case 'E':
-	        case 'N':
-	          it[change.path[i]] = change.rhs;
-	          break;
-	      }
-	    }
-	  }
-
-	  function revertArrayChange(arr, index, change) {
-	    if (change.path && change.path.length) {
-	      // the structure of the object at the index has changed...
-	      var it = arr[index],
-	          i,
-	          u = change.path.length - 1;
-	      for (i = 0; i < u; i++) {
-	        it = it[change.path[i]];
-	      }
-	      switch (change.kind) {
-	        case 'A':
-	          revertArrayChange(it[change.path[i]], change.index, change.item);
-	          break;
-	        case 'D':
-	          it[change.path[i]] = change.lhs;
-	          break;
-	        case 'E':
-	          it[change.path[i]] = change.lhs;
-	          break;
-	        case 'N':
-	          delete it[change.path[i]];
-	          break;
-	      }
-	    } else {
-	      // the array item is different...
-	      switch (change.kind) {
-	        case 'A':
-	          revertArrayChange(arr[index], change.index, change.item);
-	          break;
-	        case 'D':
-	          arr[index] = change.lhs;
-	          break;
-	        case 'E':
-	          arr[index] = change.lhs;
-	          break;
-	        case 'N':
-	          arr = arrayRemove(arr, index);
-	          break;
-	      }
-	    }
-	    return arr;
-	  }
-
-	  function revertChange(target, source, change) {
-	    if (target && source && change && change.kind) {
-	      var it = target,
-	          i,
-	          u;
-	      u = change.path.length - 1;
-	      for (i = 0; i < u; i++) {
-	        if (typeof it[change.path[i]] === 'undefined') {
-	          it[change.path[i]] = {};
-	        }
-	        it = it[change.path[i]];
-	      }
-	      switch (change.kind) {
-	        case 'A':
-	          // Array was modified...
-	          // it will be an array...
-	          revertArrayChange(it[change.path[i]], change.index, change.item);
-	          break;
-	        case 'D':
-	          // Item was deleted...
-	          it[change.path[i]] = change.lhs;
-	          break;
-	        case 'E':
-	          // Item was edited...
-	          it[change.path[i]] = change.lhs;
-	          break;
-	        case 'N':
-	          // Item is new...
-	          delete it[change.path[i]];
-	          break;
-	      }
-	    }
-	  }
-
-	  function applyDiff(target, source, filter) {
-	    if (target && source) {
-	      var onChange = function onChange(change) {
-	        if (!filter || filter(target, source, change)) {
-	          applyChange(target, source, change);
-	        }
-	      };
-	      deepDiff(target, source, onChange);
-	    }
-	  }
-
-	  Object.defineProperties(accumulateDiff, {
-
-	    diff: {
-	      value: accumulateDiff,
-	      enumerable: true
-	    },
-	    observableDiff: {
-	      value: deepDiff,
-	      enumerable: true
-	    },
-	    applyDiff: {
-	      value: applyDiff,
-	      enumerable: true
-	    },
-	    applyChange: {
-	      value: applyChange,
-	      enumerable: true
-	    },
-	    revertChange: {
-	      value: revertChange,
-	      enumerable: true
-	    },
-	    isConflict: {
-	      value: function value() {
-	        return 'undefined' !== typeof conflict;
-	      },
-	      enumerable: true
-	    },
-	    noConflict: {
-	      value: function value() {
-	        if (conflictResolution) {
-	          conflictResolution.forEach(function (it) {
-	            it();
-	          });
-	          conflictResolution = null;
-	        }
-	        return accumulateDiff;
-	      },
-	      enumerable: true
-	    }
-	  });
-
-	  return accumulateDiff;
-	});
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
-/* 92 */
-/***/ function(module, exports) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.default = {
-	  level: "log",
-	  logger: console,
-	  logErrors: true,
-	  collapsed: undefined,
-	  predicate: undefined,
-	  duration: false,
-	  timestamp: true,
-	  stateTransformer: function stateTransformer(state) {
-	    return state;
-	  },
-	  actionTransformer: function actionTransformer(action) {
-	    return action;
-	  },
-	  errorTransformer: function errorTransformer(error) {
-	    return error;
-	  },
-	  colors: {
-	    title: function title() {
-	      return "inherit";
-	    },
-	    prevState: function prevState() {
-	      return "#9E9E9E";
-	    },
-	    action: function action() {
-	      return "#03A9F4";
-	    },
-	    nextState: function nextState() {
-	      return "#4CAF50";
-	    },
-	    error: function error() {
-	      return "#F20404";
-	    }
-	  },
-	  diff: false,
-	  diffPredicate: undefined,
-
-	  // Deprecated options
-	  transformer: undefined
-	};
-	module.exports = exports['default'];
+	exports.default = routes;
 
 /***/ }
 /******/ ]);

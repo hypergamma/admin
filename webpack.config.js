@@ -4,9 +4,8 @@ var webpack = require('webpack');
 module.exports = {
   context: path.join(__dirname, ''),
   entry: {
-    //cancel: './Cancel/Cancel',
-    //Return: './Return/Return',
-    template: './client/template/template'
+    template: './client/template/template',
+    admin: './client/admin/admin'
   },
   output: {
     path: path.join(__dirname, 'dist'),
@@ -19,8 +18,7 @@ module.exports = {
         loader: 'babel',
         query:
         {
-          presets:['es2015','react'],
-          plugins:['transform-object-rest-spread']
+          presets:['es2015','react', 'stage-2']
         }
       }
     ]

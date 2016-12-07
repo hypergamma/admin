@@ -3,8 +3,8 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { actions } from 'redux-router5'
 import { createSelector } from 'reselect';
-import NavItem from './sidebar/NavItem'
 import { setTitle } from '../actions/breadcrumb';
+import NavItem from './sidebar/NavItem'
 
 const reducerSelector = createSelector(
   state => state.breadcrumb,
@@ -39,7 +39,7 @@ class Sidebar extends Component {
             <li className="nav-title">
               Pop Art
             </li>
-            <NavItem router={this.router} navigateTo={navigateTo} name="dashboard" setTitle={ setTitle } title="Pop Art > Dashboard">
+            <NavItem router={this.router} navigateTo={navigateTo} name="dashboard">
               <i className="icon-speedometer"></i> Dashboard
             </NavItem>
             <li className="nav-title">
@@ -48,7 +48,7 @@ class Sidebar extends Component {
             <li className="nav-item nav-dropdown">
               <a className="nav-link nav-dropdown-toggle" href="#"><i className="icon-puzzle"></i> Function</a>
               <ul className="nav-dropdown-items">
-                <NavItem router={this.router} navigateTo={navigateTo} name="addfunc" setTitle={ setTitle } title="Function > Add Function">
+                <NavItem router={this.router} navigateTo={navigateTo} name="addfunc">
                   <i className="icon-puzzle"></i> Add Function
                 </NavItem>
               </ul>

@@ -2790,11 +2790,11 @@
 
 	var _reselect = __webpack_require__(51);
 
-	var _NavItem = __webpack_require__(52);
+	var _breadcrumb = __webpack_require__(52);
+
+	var _NavItem = __webpack_require__(53);
 
 	var _NavItem2 = _interopRequireDefault(_NavItem);
-
-	var _breadcrumb = __webpack_require__(53);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -2859,7 +2859,7 @@
 	            ),
 	            _react2.default.createElement(
 	              _NavItem2.default,
-	              { router: this.router, navigateTo: navigateTo, name: 'dashboard', setTitle: setTitle, title: 'Pop Art > Dashboard' },
+	              { router: this.router, navigateTo: navigateTo, name: 'dashboard' },
 	              _react2.default.createElement('i', { className: 'icon-speedometer' }),
 	              ' Dashboard'
 	            ),
@@ -2882,7 +2882,7 @@
 	                { className: 'nav-dropdown-items' },
 	                _react2.default.createElement(
 	                  _NavItem2.default,
-	                  { router: this.router, navigateTo: navigateTo, name: 'addfunc', setTitle: setTitle, title: 'Function > Add Function' },
+	                  { router: this.router, navigateTo: navigateTo, name: 'addfunc' },
 	                  _react2.default.createElement('i', { className: 'icon-puzzle' }),
 	                  ' Add Function'
 	                )
@@ -3579,6 +3579,23 @@
 
 /***/ },
 /* 52 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setTitle = setTitle;
+	function setTitle(title) {
+	  return {
+	    type: 'SET_TITLE',
+	    title: title
+	  };
+	}
+
+/***/ },
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -3599,15 +3616,12 @@
 	      options = props.options,
 	      router = props.router,
 	      navigateTo = props.navigateTo,
-	      children = props.children,
-	      setTitle = props.setTitle,
-	      title = props.title;
+	      children = props.children;
 
 	  var href = "#"; //router.buildUrl(name, params);
 	  var onClick = function onClick(evt) {
 	    evt.preventDefault();
 	    navigateTo(name, params, options);
-	    setTitle(title);
 	  };
 	  var className = 'nav-link';
 
@@ -3635,23 +3649,6 @@
 	};
 
 	exports.default = NavItem;
-
-/***/ },
-/* 53 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	exports.setTitle = setTitle;
-	function setTitle(title) {
-	  return {
-	    type: 'SET_TITLE',
-	    title: title
-	  };
-	}
 
 /***/ },
 /* 54 */
@@ -3802,355 +3799,345 @@
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = AddFunc;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(2);
+
+	var _redux = __webpack_require__(10);
+
+	var _reselect = __webpack_require__(51);
+
+	var _breadcrumb = __webpack_require__(52);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function AddFunc(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    { className: "row" },
-	    _react2.default.createElement(
-	      "div",
-	      { className: "col-md-8" },
-	      _react2.default.createElement(
-	        "div",
-	        { className: "card" },
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var reducerSelector = (0, _reselect.createSelector)(function (state) {
+	  return state.breadcrumb;
+	}, function (state) {
+	  return state.router;
+	}, function (breadcrumb, router) {
+	  return {
+	    title: breadcrumb.title,
+	    error: hasCannotDeactivateError(router.transitionError)
+	  };
+	});
+
+	function hasCannotDeactivateError(error) {
+	  return error && error.code === 'CANNOT_DEACTIVATE' && error.segment === 'compose';
+	}
+
+	function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)({ setTitle: _breadcrumb.setTitle }, dispatch);
+	}
+
+	var AddFunc = function (_Component) {
+	  _inherits(AddFunc, _Component);
+
+	  function AddFunc(props, context) {
+	    _classCallCheck(this, AddFunc);
+
+	    var _this = _possibleConstructorReturn(this, (AddFunc.__proto__ || Object.getPrototypeOf(AddFunc)).call(this, props));
+
+	    _this.router = context.router;
+	    var setTitle = _this.props.setTitle;
+
+	    setTitle('Function > Add Function');
+	    return _this;
+	  }
+
+	  _createClass(AddFunc, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'row' },
 	        _react2.default.createElement(
-	          "div",
-	          { className: "card-header" },
+	          'div',
+	          { className: 'col-md-8' },
 	          _react2.default.createElement(
-	            "strong",
-	            null,
-	            "Add"
-	          ),
-	          " Function"
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "card-block" },
-	          _react2.default.createElement(
-	            "form",
-	            { action: "", method: "post", enctype: "multipart/form-data", className: "form-horizontal " },
+	            'div',
+	            { className: 'card' },
 	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group row" },
+	              'div',
+	              { className: 'card-header' },
 	              _react2.default.createElement(
-	                "label",
-	                { className: "col-md-3 form-control-label", "for": "text-input" },
-	                "User Name"
+	                'strong',
+	                null,
+	                'Add'
 	              ),
-	              _react2.default.createElement(
-	                "div",
-	                { className: "col-md-9" },
-	                _react2.default.createElement("input", { type: "text", id: "nuser", name: "nuser", className: "form-control", placeholder: "\uB85C\uADF8\uC778 \uC0DD\uAE30\uBA74 \uC5C6\uC5B4\uC9D1\uB2C8\uB2F9" })
-	              )
+	              ' Function'
 	            ),
 	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group row" },
+	              'div',
+	              { className: 'card-block' },
 	              _react2.default.createElement(
-	                "label",
-	                { className: "col-md-3 form-control-label", "for": "select" },
-	                "Platform"
-	              ),
-	              _react2.default.createElement(
-	                "div",
-	                { className: "col-md-9" },
+	                'form',
+	                { action: '', method: 'post', enctype: 'multipart/form-data', className: 'form-horizontal ' },
 	                _react2.default.createElement(
-	                  "select",
-	                  { id: "select", name: "select", className: "form-control", size: "1" },
+	                  'div',
+	                  { className: 'form-group row' },
 	                  _react2.default.createElement(
-	                    "option",
-	                    { value: "node" },
-	                    "nodejs"
+	                    'label',
+	                    { className: 'col-md-3 form-control-label', 'for': 'text-input' },
+	                    'User Name'
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-9' },
+	                    _react2.default.createElement('input', { type: 'text', id: 'nuser', name: 'nuser', className: 'form-control', placeholder: '\uB85C\uADF8\uC778 \uC0DD\uAE30\uBA74 \uC5C6\uC5B4\uC9D1\uB2C8\uB2F9' })
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group row' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    { className: 'col-md-3 form-control-label', 'for': 'select' },
+	                    'Platform'
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-9' },
+	                    _react2.default.createElement(
+	                      'select',
+	                      { id: 'select', name: 'select', className: 'form-control', size: '1' },
+	                      _react2.default.createElement(
+	                        'option',
+	                        { value: 'node' },
+	                        'nodejs'
+	                      )
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group row' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    { className: 'col-md-3 form-control-label', 'for': 'select' },
+	                    'Version'
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-9' },
+	                    _react2.default.createElement(
+	                      'select',
+	                      { id: 'select', name: 'select', className: 'form-control', size: '1' },
+	                      _react2.default.createElement(
+	                        'option',
+	                        { value: '0' },
+	                        'Please select'
+	                      ),
+	                      _react2.default.createElement(
+	                        'option',
+	                        { value: '6.9' },
+	                        '6.9 LTS'
+	                      ),
+	                      _react2.default.createElement(
+	                        'option',
+	                        { value: '7.2' },
+	                        '7.2'
+	                      )
+	                    )
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group row' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    { className: 'col-md-3 form-control-label', 'for': 'text-input' },
+	                    'Function Name'
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-9' },
+	                    _react2.default.createElement('input', { type: 'text', id: 'nfunc', name: 'nfunc', className: 'form-control', placeholder: '\uD568\uC218 \uC774\uB984' })
+	                  )
+	                ),
+	                _react2.default.createElement(
+	                  'div',
+	                  { className: 'form-group row' },
+	                  _react2.default.createElement(
+	                    'label',
+	                    { className: 'col-md-3 form-control-label', 'for': 'textarea-input' },
+	                    'Function'
+	                  ),
+	                  _react2.default.createElement(
+	                    'div',
+	                    { className: 'col-md-9' },
+	                    _react2.default.createElement('textarea', { id: 'textarea-input', name: 'textarea-input', rows: '9', className: 'form-control', placeholder: 'Function...' })
 	                  )
 	                )
 	              )
 	            ),
 	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group row" },
+	              'div',
+	              { className: 'card-footer' },
 	              _react2.default.createElement(
-	                "label",
-	                { className: "col-md-3 form-control-label", "for": "select" },
-	                "Version"
-	              ),
-	              _react2.default.createElement(
-	                "div",
-	                { className: "col-md-9" },
-	                _react2.default.createElement(
-	                  "select",
-	                  { id: "select", name: "select", className: "form-control", size: "1" },
-	                  _react2.default.createElement(
-	                    "option",
-	                    { value: "0" },
-	                    "Please select"
-	                  ),
-	                  _react2.default.createElement(
-	                    "option",
-	                    { value: "6.9" },
-	                    "6.9 LTS"
-	                  ),
-	                  _react2.default.createElement(
-	                    "option",
-	                    { value: "7.2" },
-	                    "7.2"
-	                  )
-	                )
-	              )
-	            ),
-	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group row" },
-	              _react2.default.createElement(
-	                "label",
-	                { className: "col-md-3 form-control-label", "for": "text-input" },
-	                "Function Name"
-	              ),
-	              _react2.default.createElement(
-	                "div",
-	                { className: "col-md-9" },
-	                _react2.default.createElement("input", { type: "text", id: "nfunc", name: "nfunc", className: "form-control", placeholder: "\uD568\uC218 \uC774\uB984" })
-	              )
-	            ),
-	            _react2.default.createElement(
-	              "div",
-	              { className: "form-group row" },
-	              _react2.default.createElement(
-	                "label",
-	                { className: "col-md-3 form-control-label", "for": "textarea-input" },
-	                "Function"
-	              ),
-	              _react2.default.createElement(
-	                "div",
-	                { className: "col-md-9" },
-	                _react2.default.createElement("textarea", { id: "textarea-input", name: "textarea-input", rows: "9", className: "form-control", placeholder: "Function..." })
+	                'button',
+	                { type: 'submit', className: 'btn btn-sm btn-primary' },
+	                _react2.default.createElement('i', { className: 'fa fa-dot-circle-o' }),
+	                ' Submit'
 	              )
 	            )
 	          )
-	        ),
-	        _react2.default.createElement(
-	          "div",
-	          { className: "card-footer" },
-	          _react2.default.createElement(
-	            "button",
-	            { type: "submit", className: "btn btn-sm btn-primary" },
-	            _react2.default.createElement("i", { className: "fa fa-dot-circle-o" }),
-	            " Submit"
-	          )
 	        )
-	      )
-	    )
-	  )
-	  /*
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="text-input">Text Input</label>
-	    <div className="col-md-9">
-	      <input type="text" id="text-input" name="text-input" className="form-control" placeholder="Text">
-	        <span className="help-block">This is a help text</span>
-	      </input>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="email-input">Email Input</label>
-	    <div className="col-md-9">
-	      <input type="email" id="email-input" name="email-input" className="form-control" placeholder="Enter Email">
-	        <span className="help-block">Please enter your email</span>
-	      </input>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="password-input">Password</label>
-	    <div className="col-md-9">
-	      <input type="password" id="password-input" name="password-input" className="form-control" placeholder="Password" >
-	        <span className="help-block">Please enter a complex password</span>
-	      </input>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="textarea-input">Textarea</label>
-	    <div className="col-md-9">
-	      <textarea id="textarea-input" name="textarea-input" rows="9" className="form-control" placeholder="Content.."></textarea>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="select">Select</label>
-	    <div className="col-md-9">
-	      <select id="select" name="select" className="form-control" size="1">
-	        <option value="0">Please select</option>
-	        <option value="1">Option #1</option>
-	        <option value="2">Option #2</option>
-	        <option value="3">Option #3</option>
-	      </select>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="select">Select Large</label>
-	    <div className="col-md-9">
-	      <select id="select" name="select" className="form-control input-lg" size="1">
-	        <option value="0">Please select</option>
-	        <option value="1">Option #1</option>
-	        <option value="2">Option #2</option>
-	        <option value="3">Option #3</option>
-	      </select>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="select">Select Small</label>
-	    <div className="col-md-9">
-	      <select id="select" name="select" className="form-control input-sm" size="1">
-	        <option value="0">Please select</option>
-	        <option value="1">Option #1</option>
-	        <option value="2">Option #2</option>
-	        <option value="3">Option #3</option>
-	      </select>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="select">Disabled Select</label>
-	    <div className="col-md-9">
-	      <select id="disabledSelect" className="form-control" disabled="">
-	        <option value="0">Please select</option>
-	        <option value="1">Option #1</option>
-	        <option value="2">Option #2</option>
-	        <option value="3">Option #3</option>
-	      </select>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label">Radios</label>
-	    <div className="col-md-9">
-	      <div className="radio">
-	        <label for="radio1">
-	          <input type="radio" id="radio1" name="radios" value="option1">Option 1</input>
-	        </label>
-	      </div>
-	      <div className="radio">
-	        <label for="radio2">
-	          <input type="radio" id="radio2" name="radios" value="option2">Option 2</input>
-	        </label>
-	      </div>
-	      <div className="radio">
-	        <label for="radio3">
-	          <input type="radio" id="radio3" name="radios" value="option3">Option 3</input>
-	        </label>
-	      </div>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label">Inline Radios</label>
-	    <div className="col-md-9">
-	      <label className="radio-inline" for="inline-radio1">
-	        <input type="radio" id="inline-radio1" name="inline-radios" value="option1">One</input>
-	      </label>
-	      <label className="radio-inline" for="inline-radio2">
-	        <input type="radio" id="inline-radio2" name="inline-radios" value="option2">Two</input>
-	      </label>
-	      <label className="radio-inline" for="inline-radio3">
-	        <input type="radio" id="inline-radio3" name="inline-radios" value="option3">Three</input>
-	      </label>
-	    </div>
-	  </div>
-	  <div className="form-group row">
-	    <label className="col-md-3 form-control-label" for="file-input">File input</label>
-	    <div className="col-md-9">
-	      <input type="file" id="file-input" name="file-input" />
-	    </div>
-	  </div>
-	  </div>
-	  <div className="card-footer">
-	  <button type="submit" className="btn btn-sm btn-primary"><i className="fa fa-dot-circle-o"></i> Submit</button>
-	  <button type="reset" className="btn btn-sm btn-danger"><i className="fa fa-ban"></i> Reset</button>
-	  </div>
-	  </div>
-	  </div>
-	  </div>*/
-	  ;
-	}
+	      );
+	    }
+	  }]);
+
+	  return AddFunc;
+	}(_react.Component);
+
+	exports.default = (0, _reactRedux.connect)(reducerSelector, mapDispatchToProps)(AddFunc);
 
 /***/ },
 /* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.default = Dashboard;
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _reactRedux = __webpack_require__(2);
+
+	var _redux = __webpack_require__(10);
+
+	var _reselect = __webpack_require__(51);
+
+	var _breadcrumb = __webpack_require__(52);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	function Dashboard(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    { "class": "container d-table" },
-	    _react2.default.createElement(
-	      "div",
-	      { "class": "d-100vh-va-middle" },
-	      _react2.default.createElement(
-	        "div",
-	        { "class": "row" },
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var reducerSelector = (0, _reselect.createSelector)(function (state) {
+	  return state.breadcrumb;
+	}, function (state) {
+	  return state.router;
+	}, function (breadcrumb, router) {
+	  return {
+	    title: breadcrumb.title,
+	    error: hasCannotDeactivateError(router.transitionError)
+	  };
+	});
+
+	function hasCannotDeactivateError(error) {
+	  return error && error.code === 'CANNOT_DEACTIVATE' && error.segment === 'compose';
+	}
+
+	function mapDispatchToProps(dispatch) {
+	  return (0, _redux.bindActionCreators)({ setTitle: _breadcrumb.setTitle }, dispatch);
+	}
+
+	var Dashboard = function (_Component) {
+	  _inherits(Dashboard, _Component);
+
+	  function Dashboard(props, context) {
+	    _classCallCheck(this, Dashboard);
+
+	    var _this = _possibleConstructorReturn(this, (Dashboard.__proto__ || Object.getPrototypeOf(Dashboard)).call(this, props));
+
+	    _this.router = context.router;
+	    var setTitle = _this.props.setTitle;
+
+	    setTitle('Dashboard');
+	    return _this;
+	  }
+
+	  _createClass(Dashboard, [{
+	    key: 'render',
+	    value: function render() {
+	      return _react2.default.createElement(
+	        'div',
+	        { 'class': 'container d-table' },
 	        _react2.default.createElement(
-	          "div",
-	          { "class": "col-md-6 offset-md-3" },
+	          'div',
+	          { 'class': 'd-100vh-va-middle' },
 	          _react2.default.createElement(
-	            "div",
-	            { "class": "clearfix" },
+	            'div',
+	            { 'class': 'row' },
 	            _react2.default.createElement(
-	              "h1",
-	              { "class": "float-xs-left display-3 mr-2" },
-	              "Dashboard"
-	            ),
-	            _react2.default.createElement(
-	              "h4",
-	              { "class": "pt-1" },
-	              "Oops! You're lost. Dashboard"
-	            ),
-	            _react2.default.createElement(
-	              "p",
-	              { "class": "text-muted" },
-	              "The page you are looking for was not found."
-	            )
-	          ),
-	          _react2.default.createElement(
-	            "div",
-	            { "class": "input-prepend input-group" },
-	            _react2.default.createElement(
-	              "span",
-	              { "class": "input-group-addon" },
-	              _react2.default.createElement("i", { "class": "fa fa-search" })
-	            ),
-	            _react2.default.createElement("input", { id: "prependedInput", "class": "form-control", size: "16", type: "text", placeholder: "What are you looking for?" }),
-	            _react2.default.createElement(
-	              "span",
-	              { "class": "input-group-btn" },
+	              'div',
+	              { 'class': 'col-md-6 offset-md-3' },
 	              _react2.default.createElement(
-	                "button",
-	                { "class": "btn btn-info", type: "button" },
-	                "Search"
+	                'div',
+	                { 'class': 'clearfix' },
+	                _react2.default.createElement(
+	                  'h1',
+	                  { 'class': 'float-xs-left display-3 mr-2' },
+	                  'Dashboard'
+	                ),
+	                _react2.default.createElement(
+	                  'h4',
+	                  { 'class': 'pt-1' },
+	                  'Oops! You\'re lost. Dashboard'
+	                ),
+	                _react2.default.createElement(
+	                  'p',
+	                  { 'class': 'text-muted' },
+	                  'The page you are looking for was not found.'
+	                )
+	              ),
+	              _react2.default.createElement(
+	                'div',
+	                { 'class': 'input-prepend input-group' },
+	                _react2.default.createElement(
+	                  'span',
+	                  { 'class': 'input-group-addon' },
+	                  _react2.default.createElement('i', { 'class': 'fa fa-search' })
+	                ),
+	                _react2.default.createElement('input', { id: 'prependedInput', 'class': 'form-control', size: '16', type: 'text', placeholder: 'What are you looking for?' }),
+	                _react2.default.createElement(
+	                  'span',
+	                  { 'class': 'input-group-btn' },
+	                  _react2.default.createElement(
+	                    'button',
+	                    { 'class': 'btn btn-info', type: 'button' },
+	                    'Search'
+	                  )
+	                )
 	              )
 	            )
 	          )
 	        )
-	      )
-	    )
-	  );
-	}
+	      );
+	    }
+	  }]);
+
+	  return Dashboard;
+	}(_react.Component);
+
+	exports.default = (0, _reactRedux.connect)(reducerSelector, mapDispatchToProps)(Dashboard);
 
 /***/ },
 /* 58 */

@@ -66,15 +66,15 @@
 
 	var _App2 = _interopRequireDefault(_App);
 
-	var _createRouter = __webpack_require__(61);
+	var _createRouter = __webpack_require__(62);
 
 	var _createRouter2 = _interopRequireDefault(_createRouter);
 
-	var _store = __webpack_require__(82);
+	var _store = __webpack_require__(83);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _routes = __webpack_require__(90);
+	var _routes = __webpack_require__(92);
 
 	var _routes2 = _interopRequireDefault(_routes);
 
@@ -2682,11 +2682,11 @@
 
 	var _Main2 = _interopRequireDefault(_Main);
 
-	var _AsideMenu = __webpack_require__(59);
+	var _AsideMenu = __webpack_require__(60);
 
 	var _AsideMenu2 = _interopRequireDefault(_AsideMenu);
 
-	var _Footer = __webpack_require__(60);
+	var _Footer = __webpack_require__(61);
 
 	var _Footer2 = _interopRequireDefault(_Footer);
 
@@ -3768,11 +3768,11 @@
 
 	var _AddFunc2 = _interopRequireDefault(_AddFunc);
 
-	var _Dashboard = __webpack_require__(57);
+	var _Dashboard = __webpack_require__(58);
 
 	var _Dashboard2 = _interopRequireDefault(_Dashboard);
 
-	var _NotFound = __webpack_require__(58);
+	var _NotFound = __webpack_require__(59);
 
 	var _NotFound2 = _interopRequireDefault(_NotFound);
 
@@ -3819,6 +3819,8 @@
 
 	var _breadcrumb = __webpack_require__(52);
 
+	var _func = __webpack_require__(57);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -3843,7 +3845,7 @@
 	}
 
 	function mapDispatchToProps(dispatch) {
-	  return (0, _redux.bindActionCreators)({ setTitle: _breadcrumb.setTitle }, dispatch);
+	  return (0, _redux.bindActionCreators)({ setTitle: _breadcrumb.setTitle, setNuser: _func.setNuser, setNfunc: _func.setNfunc, setFuncEnv: _func.setFuncEnv, setFuncEnvVer: _func.setFuncEnvVer, setFunc: _func.setFunc }, dispatch);
 	}
 
 	var AddFunc = function (_Component) {
@@ -3864,6 +3866,35 @@
 	  _createClass(AddFunc, [{
 	    key: 'render',
 	    value: function render() {
+	      var _props = this.props,
+	          setNuser = _props.setNuser,
+	          setNfunc = _props.setNfunc,
+	          setFuncEnv = _props.setFuncEnv,
+	          setFuncEnvVer = _props.setFuncEnvVer,
+	          setFunc = _props.setFunc;
+
+	      // 매우 마음이 안드는 부분이다...
+
+	      var handleNuser = function handleNuser(event) {
+	        setNuser(event.target.value);
+	      };
+
+	      var handleNfunc = function handleNfunc(event) {
+	        setNfunc(event.target.value);
+	      };
+
+	      var handleFuncEnv = function handleFuncEnv(event) {
+	        setFuncEnv(event.target.value);
+	      };
+
+	      var handleFuncEnvVer = function handleFuncEnvVer(event) {
+	        setFuncEnvVer(event.target.value);
+	      };
+
+	      var handleFunc = function handleFunc(event) {
+	        setFunc(event.target.value);
+	      };
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'row' },
@@ -3900,7 +3931,7 @@
 	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-md-9' },
-	                    _react2.default.createElement('input', { type: 'text', id: 'nuser', name: 'nuser', className: 'form-control', placeholder: '\uB85C\uADF8\uC778 \uC0DD\uAE30\uBA74 \uC5C6\uC5B4\uC9D1\uB2C8\uB2F9' })
+	                    _react2.default.createElement('input', { type: 'text', id: 'nuser', name: 'nuser', className: 'form-control', placeholder: '\uB85C\uADF8\uC778 \uC0DD\uAE30\uBA74 \uC5C6\uC5B4\uC9D1\uB2C8\uB2F9', onChange: handleNuser })
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -3916,7 +3947,7 @@
 	                    { className: 'col-md-9' },
 	                    _react2.default.createElement(
 	                      'select',
-	                      { id: 'select', name: 'select', className: 'form-control', size: '1' },
+	                      { id: 'select', name: 'select', className: 'form-control', size: '1', onChange: handleFuncEnv },
 	                      _react2.default.createElement(
 	                        'option',
 	                        { value: 'node' },
@@ -3938,7 +3969,7 @@
 	                    { className: 'col-md-9' },
 	                    _react2.default.createElement(
 	                      'select',
-	                      { id: 'select', name: 'select', className: 'form-control', size: '1' },
+	                      { id: 'select', name: 'select', className: 'form-control', size: '1', onChange: handleFuncEnvVer },
 	                      _react2.default.createElement(
 	                        'option',
 	                        { value: '0' },
@@ -3968,7 +3999,7 @@
 	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-md-9' },
-	                    _react2.default.createElement('input', { type: 'text', id: 'nfunc', name: 'nfunc', className: 'form-control', placeholder: '\uD568\uC218 \uC774\uB984' })
+	                    _react2.default.createElement('input', { type: 'text', id: 'nfunc', name: 'nfunc', className: 'form-control', placeholder: '\uD568\uC218 \uC774\uB984', onChange: handleNfunc })
 	                  )
 	                ),
 	                _react2.default.createElement(
@@ -3982,7 +4013,7 @@
 	                  _react2.default.createElement(
 	                    'div',
 	                    { className: 'col-md-9' },
-	                    _react2.default.createElement('textarea', { id: 'textarea-input', name: 'textarea-input', rows: '9', className: 'form-control', placeholder: 'Function...' })
+	                    _react2.default.createElement('textarea', { id: 'textarea-input', name: 'textarea-input', rows: '9', className: 'form-control', placeholder: 'Function...', onChange: handleFunc })
 	                  )
 	                )
 	              )
@@ -4010,6 +4041,55 @@
 
 /***/ },
 /* 57 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.setNuser = setNuser;
+	exports.setNfunc = setNfunc;
+	exports.setFuncEnv = setFuncEnv;
+	exports.setFuncEnvVer = setFuncEnvVer;
+	exports.setFunc = setFunc;
+	function setNuser(nuser) {
+	  return {
+	    type: 'SET_NUSER',
+	    nuser: nuser
+	  };
+	}
+
+	function setNfunc(nfunc) {
+	  return {
+	    type: 'SET_NFUNC',
+	    nfunc: nfunc
+	  };
+	}
+
+	function setFuncEnv(func_env) {
+	  return {
+	    type: 'SET_FUNC_ENV',
+	    func_env: func_env
+	  };
+	}
+
+	function setFuncEnvVer(func_env_ver) {
+	  return {
+	    type: 'SET_FUNC_ENV_VER',
+	    func_env_ver: func_env_ver
+	  };
+	}
+
+	function setFunc(func) {
+	  return {
+	    type: 'SET_FUNC',
+	    func: func
+	  };
+	}
+
+/***/ },
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4140,7 +4220,7 @@
 	exports.default = (0, _reactRedux.connect)(reducerSelector, mapDispatchToProps)(Dashboard);
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4214,7 +4294,7 @@
 	}
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4248,7 +4328,7 @@
 	}
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -4292,7 +4372,7 @@
 	}
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4302,19 +4382,19 @@
 	});
 	exports.default = configureRouter;
 
-	var _router = __webpack_require__(62);
+	var _router = __webpack_require__(63);
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _logger = __webpack_require__(77);
+	var _logger = __webpack_require__(78);
 
 	var _logger2 = _interopRequireDefault(_logger);
 
-	var _listeners = __webpack_require__(78);
+	var _listeners = __webpack_require__(79);
 
 	var _listeners2 = _interopRequireDefault(_listeners);
 
-	var _browser = __webpack_require__(79);
+	var _browser = __webpack_require__(80);
 
 	var _browser2 = _interopRequireDefault(_browser);
 
@@ -4339,7 +4419,7 @@
 	}
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4349,15 +4429,15 @@
 	});
 	exports.constants = exports.transitionPath = exports.errorCodes = exports.loggerPlugin = exports.RouteNode = exports.createRouter = undefined;
 
-	var _createRouter = __webpack_require__(63);
+	var _createRouter = __webpack_require__(64);
 
 	var _createRouter2 = _interopRequireDefault(_createRouter);
 
-	var _routeNode = __webpack_require__(64);
+	var _routeNode = __webpack_require__(65);
 
 	var _routeNode2 = _interopRequireDefault(_routeNode);
 
-	var _logger = __webpack_require__(77);
+	var _logger = __webpack_require__(78);
 
 	var _logger2 = _interopRequireDefault(_logger);
 
@@ -4365,7 +4445,7 @@
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -4382,7 +4462,7 @@
 	exports.constants = _constants2.default;
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4401,39 +4481,39 @@
 	    }return target;
 	};
 
-	var _routeNode = __webpack_require__(64);
+	var _routeNode = __webpack_require__(65);
 
 	var _routeNode2 = _interopRequireDefault(_routeNode);
 
-	var _utils = __webpack_require__(67);
+	var _utils = __webpack_require__(68);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
-	var _routerLifecycle = __webpack_require__(69);
+	var _routerLifecycle = __webpack_require__(70);
 
 	var _routerLifecycle2 = _interopRequireDefault(_routerLifecycle);
 
-	var _navigation = __webpack_require__(70);
+	var _navigation = __webpack_require__(71);
 
 	var _navigation2 = _interopRequireDefault(_navigation);
 
-	var _middleware = __webpack_require__(73);
+	var _middleware = __webpack_require__(74);
 
 	var _middleware2 = _interopRequireDefault(_middleware);
 
-	var _plugins = __webpack_require__(74);
+	var _plugins = __webpack_require__(75);
 
 	var _plugins2 = _interopRequireDefault(_plugins);
 
-	var _routeLifecycle = __webpack_require__(75);
+	var _routeLifecycle = __webpack_require__(76);
 
 	var _routeLifecycle2 = _interopRequireDefault(_routeLifecycle);
 
-	var _clone = __webpack_require__(76);
+	var _clone = __webpack_require__(77);
 
 	var _clone2 = _interopRequireDefault(_clone);
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -4703,7 +4783,7 @@
 	exports.default = createRouter;
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -4740,11 +4820,11 @@
 	    };
 	}();
 
-	var _pathParser = __webpack_require__(65);
+	var _pathParser = __webpack_require__(66);
 
 	var _pathParser2 = _interopRequireDefault(_pathParser);
 
-	var _searchParams = __webpack_require__(66);
+	var _searchParams = __webpack_require__(67);
 
 	function _interopRequireDefault(obj) {
 	    return obj && obj.__esModule ? obj : { default: obj };
@@ -5232,7 +5312,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5261,7 +5341,7 @@
 	    };
 	}();
 
-	var _searchParams = __webpack_require__(66);
+	var _searchParams = __webpack_require__(67);
 
 	function _classCallCheck(instance, Constructor) {
 	    if (!(instance instanceof Constructor)) {
@@ -5619,7 +5699,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5722,7 +5802,7 @@
 	};
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5732,7 +5812,7 @@
 	});
 	exports.default = withUtils;
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -5875,7 +5955,7 @@
 	}
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -5908,7 +5988,7 @@
 	exports.default = constants;
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -5927,7 +6007,7 @@
 
 	exports.default = withRouterLifecycle;
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
@@ -6043,7 +6123,7 @@
 	}
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6072,11 +6152,11 @@
 
 	exports.default = withNavigation;
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
-	var _transition = __webpack_require__(71);
+	var _transition = __webpack_require__(72);
 
 	var _transition2 = _interopRequireDefault(_transition);
 
@@ -6216,7 +6296,7 @@
 	}
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6265,11 +6345,11 @@
 
 	var _router2 = _interopRequireDefault(_router);
 
-	var _resolve = __webpack_require__(72);
+	var _resolve = __webpack_require__(73);
 
 	var _resolve2 = _interopRequireDefault(_resolve);
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	function _interopRequireDefault(obj) {
 	    return obj && obj.__esModule ? obj : { default: obj };
@@ -6374,7 +6454,7 @@
 	}
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6484,7 +6564,7 @@
 	}
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6543,7 +6623,7 @@
 	}
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6623,7 +6703,7 @@
 	}
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6704,7 +6784,7 @@
 	}
 
 /***/ },
-/* 76 */
+/* 77 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -6798,7 +6878,7 @@
 	};
 
 /***/ },
-/* 77 */
+/* 78 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -6848,7 +6928,7 @@
 	exports.default = loggerPlugin;
 
 /***/ },
-/* 78 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6964,7 +7044,7 @@
 	exports.default = listenersPluginFactory;
 
 /***/ },
-/* 79 */
+/* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -6983,15 +7063,15 @@
 	    }return target;
 	};
 
-	var _constants = __webpack_require__(68);
+	var _constants = __webpack_require__(69);
 
 	var _constants2 = _interopRequireDefault(_constants);
 
-	var _browser = __webpack_require__(80);
+	var _browser = __webpack_require__(81);
 
 	var _browser2 = _interopRequireDefault(_browser);
 
-	var _utils = __webpack_require__(81);
+	var _utils = __webpack_require__(82);
 
 	var _utils2 = _interopRequireDefault(_utils);
 
@@ -7122,7 +7202,7 @@
 	exports.default = browserPluginFactory;
 
 /***/ },
-/* 80 */
+/* 81 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7201,7 +7281,7 @@
 	exports.default = browser;
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -7244,7 +7324,7 @@
 	}
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7258,13 +7338,17 @@
 
 	var _reduxRouter = __webpack_require__(43);
 
-	var _reduxLogger = __webpack_require__(83);
+	var _reduxLogger = __webpack_require__(84);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _breadcrumb = __webpack_require__(89);
+	var _breadcrumb = __webpack_require__(90);
 
 	var _breadcrumb2 = _interopRequireDefault(_breadcrumb);
+
+	var _func = __webpack_require__(91);
+
+	var _func2 = _interopRequireDefault(_func);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -7274,7 +7358,8 @@
 	  var createStoreWithMiddleware = (0, _redux.applyMiddleware)((0, _reduxRouter.router5Middleware)(router), (0, _reduxLogger2.default)())(_redux.createStore);
 	  var store = createStoreWithMiddleware((0, _redux.combineReducers)({
 	    router: _reduxRouter.router5Reducer,
-	    breadcrumb: _breadcrumb2.default
+	    breadcrumb: _breadcrumb2.default,
+	    func: _func2.default
 	  }), initialState);
 
 	  window.store = store;
@@ -7282,7 +7367,7 @@
 	}
 
 /***/ },
-/* 83 */
+/* 84 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7301,11 +7386,11 @@
 	  value: true
 	});
 
-	var _core = __webpack_require__(84);
+	var _core = __webpack_require__(85);
 
-	var _helpers = __webpack_require__(85);
+	var _helpers = __webpack_require__(86);
 
-	var _defaults = __webpack_require__(88);
+	var _defaults = __webpack_require__(89);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -7410,7 +7495,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 84 */
+/* 85 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7422,9 +7507,9 @@
 	});
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(85);
+	var _helpers = __webpack_require__(86);
 
-	var _diff = __webpack_require__(86);
+	var _diff = __webpack_require__(87);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -7565,7 +7650,7 @@
 	}
 
 /***/ },
-/* 85 */
+/* 86 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -7589,7 +7674,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 86 */
+/* 87 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -7599,7 +7684,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(87);
+	var _deepDiff = __webpack_require__(88);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -7687,7 +7772,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 87 */
+/* 88 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {'use strict';
@@ -8126,7 +8211,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 88 */
+/* 89 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -8177,7 +8262,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 89 */
+/* 90 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -8209,7 +8294,58 @@
 	}
 
 /***/ },
-/* 90 */
+/* 91 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	exports.default = func;
+	var initialState = {
+	  nuser: '',
+	  nfunc: '',
+	  func_env: 'node',
+	  func_env_ver: '',
+	  func: ''
+	};
+
+	function func() {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case 'SET_NUSER':
+	      return _extends({}, state, {
+	        nuser: action.nuser
+	      });
+	    case 'SET_NFUNC':
+	      return _extends({}, state, {
+	        nfunc: action.nfunc
+	      });
+	    case 'SET_FUNC_ENV':
+	      return _extends({}, state, {
+	        func_env: action.func_env
+	      });
+	    case 'SET_FUNC_ENV_VER':
+	      return _extends({}, state, {
+	        func_env_ver: action.func_env_ver
+	      });
+	    case 'SET_FUNC':
+	      return _extends({}, state, {
+	        func: action.func
+	      });
+	    default:
+	      return state;
+	  }
+	}
+
+/***/ },
+/* 92 */
 /***/ function(module, exports) {
 
 	'use strict';

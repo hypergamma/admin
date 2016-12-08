@@ -5884,6 +5884,16 @@
 	            { className: 'card' },
 	            _react2.default.createElement(
 	              'div',
+	              { className: 'card-header' },
+	              _react2.default.createElement(
+	                'strong',
+	                null,
+	                'UserName'
+	              ),
+	              ' Function'
+	            ),
+	            _react2.default.createElement(
+	              'div',
 	              { className: 'card-block' },
 	              _react2.default.createElement(
 	                'div',
@@ -5918,12 +5928,16 @@
 
 	var _reactChartjs = __webpack_require__(65);
 
+	var _superagent = __webpack_require__(58);
+
+	var _superagent2 = _interopRequireDefault(_superagent);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var initialState = {
-	  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	  labels: ['1', '2', '3', '4', '5', '6', '7'],
 	  datasets: [{
-	    label: 'My First dataset',
+	    label: 'cpu usage percent',
 	    fill: false,
 	    lineTension: 0.1,
 	    backgroundColor: 'rgba(75,192,192,0.4)',
@@ -5941,7 +5955,7 @@
 	    pointHoverBorderWidth: 2,
 	    pointRadius: 1,
 	    pointHitRadius: 10,
-	    data: [65, 59, 80, 81, 56, 55, 40]
+	    data: [0, 0, 0, 0, 0, 0, 0]
 	  }]
 	};
 
@@ -5956,17 +5970,32 @@
 
 	    setInterval(function () {
 	      var oldDataSet = _this.state;
-	      var newData = [];
 
-	      for (var x = 0; x < _this.state.labels.length; x++) {
-	        newData.push(Math.floor(Math.random() * 100));
-	      }
+	      _superagent2.default.get('/api/handler/data').query({
+	        nuser: 'nuser',
+	        nfunc: 'nfunc'
+	      }).end(function (err, res) {
+	        if (!err) {
+	          var newData = [];
+	          var newLabel = [];
+	          res.body.forEach(function (row) {
+	            newData.push(row.cpu_usage_percent || 0);
+	            newLabel.push(row.time || '');
+	          });
+	          var newDataSet = Object.assign({}, oldDataSet);
+	          newDataSet.data = newData;
+	          //newDataSet.labels = newLabel;
+	          console.log(oldDataSet);
+	          console.log(newDataSet);
+	          _this.setState({ datasets: [newDataSet] });
+	          console.log(_this.state);
+	        }
+	      });
+	      // for(var x=0; x< _this.state.labels.length; x++){
+	      //   newData.push(Math.floor(Math.random() * 100));
+	      // }
 
-	      var newDataSet = Object.assign({}, oldDataSet);
-	      newDataSet.data = newData;
-
-	      _this.setState({ datasets: [newDataSet] });
-	    }, 5000);
+	    }, 3000);
 	  },
 	  render: function render() {
 	    return _react2.default.createElement(_reactChartjs.Line, { data: this.state });

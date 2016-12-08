@@ -1,11 +1,12 @@
 import React from 'react';
 import {Line} from 'react-chartjs-2';
+import request from 'superagent';
 
 const initialState = {
-  labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+  labels: ['1', '2', '3', '4', '5', '6', '7'],
   datasets: [
     {
-      label: 'My First dataset',
+      label: 'cpu usage percent',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
@@ -23,7 +24,7 @@ const initialState = {
       pointHoverBorderWidth: 2,
       pointRadius: 1,
       pointHitRadius: 10,
-      data: [65, 59, 80, 81, 56, 55, 40]
+      data: [0, 0, 0, 0, 0, 0, 0]
     }
   ]
 };
@@ -41,17 +42,37 @@ export default React.createClass({
 
     setInterval(function(){
       var oldDataSet = _this.state;
-      var newData = [];
 
-      for(var x=0; x< _this.state.labels.length; x++){
-        newData.push(Math.floor(Math.random() * 100));
-      }
+      request
+        .get('/api/handler/data')
+        .query(
+          {
+            nuser:'nuser',
+            nfunc:'nfunc'
+          })
+        .end(function (err, res) {
+          if(!err) {
+            var newData = [];
+            var newLabel = [];
+            res.body.forEach( (row) => {
+              newData.push(row.cpu_usage_percent || 0)
+              newLabel.push(row.time || '')
+            });
+            var newDataSet = Object.assign({}, oldDataSet);
+            newDataSet.data = newData;
+            //newDataSet.labels = newLabel;
+            console.log(oldDataSet);
+            console.log(newDataSet);
+            _this.setState({datasets: [newDataSet]});
+            console.log(_this.state);
+          }
+        });
+      // for(var x=0; x< _this.state.labels.length; x++){
+      //   newData.push(Math.floor(Math.random() * 100));
+      // }
 
-      var newDataSet = Object.assign({}, oldDataSet);
-      newDataSet.data = newData;
 
-      _this.setState({datasets: [newDataSet]});
-    }, 5000);
+    }, 3000);
   },
   render() {
     return (

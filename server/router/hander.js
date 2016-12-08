@@ -15,10 +15,26 @@ var influx = require('../influxdb/influx');
 //   });
 // });
 
+
+router.get('/data', function (req, res) {
+  var nuser = req.query.nuser || '1';
+  var nfunc = req.query.nfunc || '1';
+  var limit = req.query.limit || 30;
+  var query = `select * from handler 
+    where nuser = ${nuser} 
+    and nfunc = ${nfunc}
+    order by time desc 
+    limit ${limit}`;
+  influx.query(query).then(results => {
+    res.send(results);
+  });
+
+
+});
+
 router.get('/test', function (req, res) {
   var result = '';
   influx.query('select * from handler order by time desc limit 30').then(results => {
-    //results.forEach(row => result += `num_invokes ${row.num_invokes} num_errors ${row.num_errors} latency ${row.latency} \n`);
     results.forEach(row => result += JSON.stringify(row) + '<br>');
     res.send(result);
   });

@@ -47,8 +47,8 @@ export default React.createClass({
         .get('/api/handler/data')
         .query(
           {
-            nuser:'nuser',
-            nfunc:'nfunc'
+            nuser:'asdf1234',
+            nfunc:'sqrt'
           })
         .end(function (err, res) {
           if(!err) {

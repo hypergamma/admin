@@ -6,7 +6,7 @@ const initialState = {
   labels: ['1', '2', '3', '4', '5', '6', '7'],
   datasets: [
     {
-      label: 'cpu usage percent',
+      label: 'mem usage bytes',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
@@ -53,18 +53,12 @@ export default React.createClass({
         .end(function (err, res) {
           if(!err) {
             var newData = [];
-            var newLabel = [];
             res.body.forEach( (row) => {
-              newData.push(row.cpu_usage_percent || 0)
-              newLabel.push(row.time || '')
+              newData.push(row.mem_usage_bytes || 0)
             });
             var newDataSet = Object.assign({}, oldDataSet);
             newDataSet.data = newData;
-            //newDataSet.labels = newLabel;
-            console.log(oldDataSet);
-            console.log(newDataSet);
             _this.setState({datasets: [newDataSet]});
-            console.log(_this.state);
           }
         });
       // for(var x=0; x< _this.state.labels.length; x++){

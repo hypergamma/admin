@@ -6,7 +6,7 @@ const initialState = {
   labels: ['1', '2', '3', '4', '5', '6', '7'],
   datasets: [
     {
-      label: 'cpu usage percent',
+      label: 'function call count',
       fill: false,
       lineTension: 0.1,
       backgroundColor: 'rgba(75,192,192,0.4)',
@@ -44,7 +44,7 @@ export default React.createClass({
       var oldDataSet = _this.state;
 
       request
-        .get('/api/handler/data')
+        .get('/api/handler/callcount')
         .query(
           {
             nuser:'asdf1234',
@@ -55,7 +55,7 @@ export default React.createClass({
             var newData = [];
             var newLabel = [];
             res.body.forEach( (row) => {
-              newData.push(row.cpu_usage_percent || 0)
+              newData.push(row.sum || 0)
               newLabel.push(row.time || '')
             });
             var newDataSet = Object.assign({}, oldDataSet);

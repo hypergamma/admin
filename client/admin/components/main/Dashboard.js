@@ -4,7 +4,8 @@ import { bindActionCreators } from 'redux'
 import { createSelector } from 'reselect';
 import { setTitle } from '../../actions/breadcrumb';
 import Line from '../graph/Line';
-
+import MemLine from '../graph/MemLine';
+import CallLine from '../graph/CallLine';
 
 const reducerSelector = createSelector(
   state => state.breadcrumb,
@@ -45,6 +46,16 @@ class Dashboard extends Component {
             <div className="card-block">
               <div className="chart-wrapper">
                 <Line />
+              </div>
+            </div>
+            <div className="card-block">
+              <div className="chart-wrapper">
+                <MemLine />
+              </div>
+            </div>
+            <div className="card-block">
+              <div className="chart-wrapper">
+                <CallLine />
               </div>
             </div>
           </div>

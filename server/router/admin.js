@@ -7,13 +7,4 @@ router.get('/', function (req, res) {
 });
 
 
-router.get('/template', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../client/template/template.html'));
-});
-
-router.get('/test', function (req, res) {
-  res.sendFile(path.join(__dirname, '../../client/template/testui.html'));
-});
-
-
 module.exports = router;

@@ -4,7 +4,6 @@ var webpack = require('webpack');
 module.exports = {
   context: path.join(__dirname, ''),
   entry: {
-    template: './client/template/template',
     admin: './client/admin/admin'
   },
   output: {

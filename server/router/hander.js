@@ -8,6 +8,7 @@ router.get('/data', function (req, res) {
   var limit = req.query.limit || 30;
   var pastseconds = new Date();
   pastseconds.setSeconds(pastseconds.getSeconds() - 10);
+  pastseconds.setDate(pastseconds.getDate() - 1);
   var query = `select * from handler 
     where nuser = '${nuser}' 
     and nfunc = '${nfunc}'
@@ -31,7 +32,7 @@ router.get('/callcount', function (req, res) {
   var limit = req.query.limit || 30;
   var pastseconds = new Date();
   pastseconds.setSeconds(pastseconds.getSeconds() - 10);
-  //pastseconds.setDate(pastseconds.getDate() - 1);
+  pastseconds.setDate(pastseconds.getDate() - 1);
   var query = `select sum(num_invokes) from handler 
     where nuser = '${nuser}' 
     and nfunc = '${nfunc}'

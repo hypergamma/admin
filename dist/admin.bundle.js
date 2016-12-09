@@ -5998,8 +5998,8 @@
 	      var oldDataSet = _this.state;
 
 	      _superagent2.default.get('/api/handler/data').query({
-	        nuser: 'asdf1234',
-	        nfunc: 'sqrt'
+	        nuser: 'qwer',
+	        nfunc: 'powerof2'
 	      }).end(function (err, res) {
 	        if (!err) {
 	          var newData = [];
@@ -29025,8 +29025,8 @@
 	      var oldDataSet = _this.state;
 
 	      _superagent2.default.get('/api/handler/data').query({
-	        nuser: 'asdf1234',
-	        nfunc: 'sqrt'
+	        nuser: 'qwer',
+	        nfunc: 'powerof2'
 	      }).end(function (err, res) {
 	        if (!err) {
 	          var newData = [];
@@ -29109,8 +29109,8 @@
 	      var oldDataSet = _this.state;
 
 	      _superagent2.default.get('/api/handler/callcount').query({
-	        nuser: 'asdf1234',
-	        nfunc: 'sqrt'
+	        nuser: 'qwer',
+	        nfunc: 'powerof2'
 	      }).end(function (err, res) {
 	        if (!err) {
 	          var newData = [];

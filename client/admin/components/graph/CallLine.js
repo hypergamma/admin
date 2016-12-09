@@ -47,8 +47,8 @@ export default React.createClass({
         .get('/api/handler/callcount')
         .query(
           {
-            nuser:'asdf1234',
-            nfunc:'sqrt'
+            nuser:'qwer',
+            nfunc:'powerof2'
           })
         .end(function (err, res) {
           if(!err) {
